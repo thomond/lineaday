@@ -1,29 +1,33 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <el-container>
+    <el-header><nav-menu /></el-header>
+    <el-main><router-view/></el-main>
+  </el-container>
 </template>
 
+<script>
+// @ is an alias to /src
+import NavMenu from '@/components/NavMenu.vue';
+
+export default {
+  name: 'App',
+  components: {
+    NavMenu,
+  },
+};
+</script>
+
 <style lang="scss">
-#app {
+@import url('https://fonts.googleapis.com/css?family=Special+Elite');
+.logo {
+  font-family: 'Special Elite', cursive;
+}
+
+body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+
 </style>

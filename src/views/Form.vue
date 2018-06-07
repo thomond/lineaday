@@ -1,12 +1,15 @@
 <template>
   <div>
-    <h1>Today is {{ todaysDate }}</h1>
-    <el-form ref="form" :model="form" @submit="onSubmit">
-      <el-form-item>
-        <el-input placeholder="What do you have to say today?" v-model="form.text"></el-input>
+    <p class="date">{{ todaysDate }}</p>
+    <el-form ref="form" :model="form" @submit.native="onSubmit" class="form">
+      <el-form-item class="text-input">
+        <el-input
+          maxlength="140"
+          placeholder="What do you have to say today?"
+          v-model="form.text"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button round type="submit">Save</el-button>
+      <el-form-item class="submit-button">
+        <el-button round native-type="submit">Save</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -26,13 +29,14 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      console.log('submit!');
+    onSubmit(e) {
+      e.preventDefault();
+      console.log('submit!', this.form.text);
     },
   },
   computed: {
     todaysDate() {
-      return moment().format('MMMM Do, YYYY');
+      return moment().format('MMMM D, YYYY');
     },
   },
 };
@@ -40,5 +44,21 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Reenie+Beanie');
 
+.date {
+  font-family: 'Reenie Beanie', cursive;
+  font-size: 48px;
+  text-align: center;
+}
+
+.form {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+
+  .submit-button {
+    align-self: flex-end;
+  }
+}
 </style>
