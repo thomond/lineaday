@@ -3,7 +3,7 @@
     <h1 class="logo">Line a Day</h1>
     <div>
       <router-link to="/">Today</router-link>
-      <router-link to="/about">Past Days</router-link>
+      <router-link to="/list">Past Days</router-link>
     </div>
     <el-button type="text" @click="handleSignOut">Sign Out</el-button>
   </el-container>

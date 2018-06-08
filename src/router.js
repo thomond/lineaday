@@ -2,8 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import firebase from 'firebase';
 
-import About from './views/About.vue';
 import Form from './views/Form.vue';
+import List from './views/List.vue';
 import SignIn from './views/SignIn.vue';
 import SignUp from './views/SignUp.vue';
 
@@ -19,6 +19,12 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: '/list',
+      name: 'list',
+      component: List,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/signup',
       name: 'SignUp',
       component: SignUp
@@ -27,12 +33,7 @@ const router = new Router({
       path: '/signin',
       name: 'SignIn',
       component: SignIn
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: About
-    },
+    }
   ],
 });
 

@@ -1,4 +1,5 @@
-import { Message } from 'element-ui';
+import { Message } from 'element-ui'
+import get from 'lodash/get'
 import router from '@/router'
 import firebase, { db } from '@/firebase'
 
@@ -65,6 +66,7 @@ const actions = {
 }
 
 const getters = {
+  lines: state => get(state, 'data.lines', []),
   loading: state => state.loading,
   isAuthenticated(state) {
     return !!state.user
