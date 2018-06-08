@@ -30,7 +30,6 @@ const actions = {
     try {
       await db.collection('users').doc(state.user.uid).collection('lines').add(line)
       commit('addLine', line)
-      router.push('/list')
     } catch (err) {
       displayError(err)
     }

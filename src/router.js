@@ -3,8 +3,7 @@ import Router from 'vue-router';
 import firebase from 'firebase';
 
 import Home from './views/Home.vue';
-import SignIn from './views/SignIn.vue';
-import SignUp from './views/SignUp.vue';
+import Login from './views/Login.vue';
 
 Vue.use(Router);
 
@@ -18,14 +17,9 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/signup',
-      name: 'SignUp',
-      component: SignUp
-    },
-    {
-      path: '/signin',
-      name: 'SignIn',
-      component: SignIn
+      path: '/login',
+      name: 'Login',
+      component: Login
     }
   ],
 });

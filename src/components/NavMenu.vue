@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar" role="navigation" aria-label="main navigation" v-if="isAuthenticated">
     <div class="navbar-brand">
-      <h1 class="logo navbar-item">Line a Day</h1>
+      <h1 class="logo navbar-item">One Line a Day</h1>
     </div>
     <div class="navbar-menu">
       <div class="navbar-end">
