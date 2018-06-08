@@ -1,24 +1,22 @@
 <template>
   <div class="hero">
     <div class="hero-body">
-      <div class="container">
-        <h1 class="title date">{{ todaysDate }}</h1>
-        <form ref="form" @submit.prevent="onSubmit" class="form">
-          <b-field grouped>
-            <b-input
-              expanded
-              size="is-large"
-              maxlength="140"
-              placeholder="What do you have to say today?"
-              v-model="text"></b-input>
-            <p class="control">
-              <button class="button is-primary is-large" type="submit">
-                Save
-              </button>
-            </p>
-          </b-field>
-        </form>
-      </div>
+      <h1 class="title date">{{ todaysDate }}</h1>
+      <form ref="form" @submit.prevent="onSubmit" class="form">
+        <b-field grouped>
+          <b-input
+            expanded
+            size="is-large"
+            maxlength="140"
+            placeholder="What do you have to say today?"
+            v-model="text"></b-input>
+          <p class="control">
+            <button class="button is-primary is-large" type="submit">
+              Save
+            </button>
+          </p>
+        </b-field>
+      </form>
     </div>
   </div>
 </template>
@@ -28,7 +26,7 @@ import moment from 'moment';
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'Form',
+  name: 'LineForm',
   props: {},
   data() {
     return {

@@ -4,10 +4,6 @@
       <h1 class="logo navbar-item">Line a Day</h1>
     </div>
     <div class="navbar-menu">
-      <div class="navbar-start">
-        <router-link to="/" class="navbar-item">Today</router-link>
-        <router-link to="/list" class="navbar-item">Past Days</router-link>
-      </div>
       <div class="navbar-end">
         <a class="navbar-item" @click="handleSignOut">Sign Out</a>
       </div>

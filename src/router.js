@@ -2,8 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import firebase from 'firebase';
 
-import Form from './views/Form.vue';
-import List from './views/List.vue';
+import Home from './views/Home.vue';
 import SignIn from './views/SignIn.vue';
 import SignUp from './views/SignUp.vue';
 
@@ -14,14 +13,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'form',
-      component: Form,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/list',
-      name: 'list',
-      component: List,
+      name: 'home',
+      component: Home,
       meta: { requiresAuth: true }
     },
     {

@@ -1,17 +1,19 @@
 <template>
-  <div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <line-form />
+    <list />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import LineForm from '@/components/LineForm.vue';
+import List from '@/components/List.vue';
 
 export default {
   name: 'home',
   components: {
-    HelloWorld,
+    LineForm,
+    List
   },
 };
 </script>
