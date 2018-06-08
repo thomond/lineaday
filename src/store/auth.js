@@ -1,50 +1,18 @@
-import { Toast } from 'buefy'
 import router from '@/router'
 import firebase, { db } from '@/firebase'
 
+import { displayError } from './util'
+
 const initialState = {
-  lines: [],
   loading: false,
   user: null
 }
 
-function collectionQuerySnapshotToArray(snapshot) {
-  const docs = []
-  snapshot.forEach(doc => docs.push(doc.data()))
-  return docs
-}
-
-function displayError(err) {
-  Toast.open({
-    message: err.message,
-    position: 'is-bottom',
-    type: 'is-danger',
-    duration: 6000,
-  })
-}
-
 const actions = {
-  async addLine({ commit, state }, text) {
-    const createdAt = new Date()
-    const line = { text, createdAt }
+  async getUserFromAuthUser({ commit, dispatch }, authUser) {
     try {
-      await db.collection('users').doc(state.user.uid).collection('lines').add(line)
-      commit('addLine', line)
-    } catch (err) {
-      displayError(err)
-    }
-  },
-  async getUserFromAuthUser({ commit }, authUser) {
-    try {
-      const snapshot = await db
-        .collection('users')
-        .doc(authUser.uid)
-        .collection('lines')
-        .orderBy('createdAt', 'desc')
-        .get()
-      const data = collectionQuerySnapshotToArray(snapshot)
       commit('setUser', authUser)
-      commit('setLines', data)
+      dispatch('getLines', authUser)
     } catch (err) {
       displayError(err)
     }
@@ -75,25 +43,18 @@ const actions = {
   userSignOut({ commit }) {
     firebase.auth().signOut()
     commit('setUser', null)
-    router.push('/signin')
+    router.push('/login')
   }
 }
 
 const getters = {
-  lines: state => state.lines,
-  loading: state => state.loading,
+  authLoading: state => state.loading,
   isAuthenticated(state) {
     return !!state.user
   }
 }
 
 const mutations = {
-  addLine(state, line) {
-    state.lines.unshift(line)
-  },
-  setLines(state, payload) {
-    state.lines = payload
-  },
   setUser(state, payload) {
     state.user = payload
   },

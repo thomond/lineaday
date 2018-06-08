@@ -1,10 +1,8 @@
 <template>
-  <div class="container">
-    <div class="message is-primary">
-      <div class="message-body">
-        <p class="subtitle is-6">{{ date }}</p>
-        <p class="title is-4">{{ line.text }}</p>
-      </div>
+  <div class="message is-primary">
+    <div class="message-body">
+      <p class="subtitle is-6">{{ date }}</p>
+      <p class="title is-4">{{ line.text }}</p>
     </div>
   </div>
 </template>
@@ -28,6 +26,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .message {
-  margin: 20px;
+  margin: 20px 0;
 }
 </style>

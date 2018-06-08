@@ -33,8 +33,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.el-container {
-  align-items: center;
-  justify-content: space-between;
-}
+
 </style>

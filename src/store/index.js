@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 
 import auth from './auth'
+import lines from './lines'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
   },
   modules: {
     auth,
+    lines
   },
   mutations: {
 
