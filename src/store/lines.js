@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { waitFor } from 'vue-wait'
 import { db } from '@/firebase'
 
 import { displayError } from './util'
@@ -6,7 +7,6 @@ import { displayError } from './util'
 const initialState = {
   hasToday: false,
   lines: [],
-  loading: false,
 }
 
 function collectionQuerySnapshotToArray(snapshot) {
@@ -20,8 +20,11 @@ function hasToday(lines) {
   return (lines.filter(line => today.isSame(moment(line.createdAt.toDate()), 'd')).length > 0)
 }
 
+const waiter = 'loading lines'
+
 const actions = {
-  async addLine({ commit, rootState }, text) {
+  async addLine({ commit, dispatch, rootState }, text) {
+    dispatch('wait/start', waiter, { root: true });
     const createdAt = new Date()
     const line = { text, createdAt }
     try {
@@ -35,8 +38,10 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
+    dispatch('wait/end', waiter, { root: true });
   },
-  async getLines({ commit }, user) {
+  async getLines({ commit, dispatch }, user) {
+    dispatch('wait/start', waiter, { root: true });
     try {
       const snapshot = await db
         .collection('users')
@@ -50,13 +55,13 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
+    dispatch('wait/end', waiter, { root: true });
   }
 }
 
 const getters = {
   hasToday: state => state.hasToday,
   lines: state => state.lines,
-  linesLoading: state => state.loading,
 }
 
 const mutations = {

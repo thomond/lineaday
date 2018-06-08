@@ -11,7 +11,7 @@
     </b-field>
     <b-field horizontal>
       <p class="control">
-        <button class="button is-primary" type="submit" :disabled="loading">
+        <button class="button is-primary" type="submit">
           {{ buttonText }}
         </button>
       </p>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'SignIn',
@@ -31,11 +31,6 @@ export default {
       password: '',
       passwordConfirm: ''
     }
-  },
-  computed: {
-    ...mapGetters([
-      'loading'
-    ]),
   },
   methods: {
     ...mapActions([

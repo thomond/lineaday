@@ -4,7 +4,6 @@ import firebase, { db } from '@/firebase'
 import { displayError } from './util'
 
 const initialState = {
-  loading: false,
   user: null
 }
 
@@ -17,8 +16,7 @@ const actions = {
       displayError(err)
     }
   },
-  async userEmailSignIn({ commit, dispatch }, { email, password }) {
-    commit('setLoading', true)
+  async userEmailSignIn({ dispatch }, { email, password }) {
     try {
       const authUser = await firebase.auth().signInWithEmailAndPassword(email, password)
       dispatch('getUserFromAuthUser', authUser)
@@ -26,10 +24,8 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    commit('setLoading', false)
   },
   async userEmailSignUp({ commit }, { email, password }) {
-    commit('setLoading', true)
     try {
       const authUser = await firebase.auth().createUserWithEmailAndPassword(email, password)
       db.collection('users').doc(authUser.uid).set(authUser)
@@ -38,7 +34,6 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    commit('setLoading', false)
   },
   userSignOut({ commit }) {
     firebase.auth().signOut()
@@ -48,7 +43,6 @@ const actions = {
 }
 
 const getters = {
-  authLoading: state => state.loading,
   isAuthenticated(state) {
     return !!state.user
   }
@@ -57,9 +51,6 @@ const getters = {
 const mutations = {
   setUser(state, payload) {
     state.user = payload
-  },
-  setLoading(state, payload) {
-    state.loading = payload
   }
 }
 

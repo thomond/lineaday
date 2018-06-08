@@ -19,7 +19,7 @@ export default {
     ...mapGetters([
       'lines'
     ]),
-  },
+  }
 };
 </script>
 

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueWait from 'vue-wait'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 
@@ -11,6 +12,7 @@ import './registerServiceWorker'
 Vue.config.productionTip = false
 
 Vue.use(Buefy)
+Vue.use(VueWait)
 
 const unsubscribe = firebase.auth()
   .onAuthStateChanged((firebaseUser) => {
@@ -22,7 +24,14 @@ const unsubscribe = firebase.auth()
         if (firebaseUser) {
           store.dispatch('getUserFromAuthUser', firebaseUser)
         }
-      }
+      },
+      wait: new VueWait({
+        useVuex: true,
+        registerComponent: true,
+        componentName: 'v-wait',
+        registerDirective: true,
+        directiveName: 'wait',
+      }),
     }).$mount('#app')
     unsubscribe()
   })

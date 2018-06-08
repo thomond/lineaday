@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import LoginForm from '@/components/LogInForm.vue'
 
 export default {
@@ -36,11 +36,6 @@ export default {
     return {
       activeTab: 0
     }
-  },
-  computed: {
-    ...mapGetters([
-      'loading'
-    ]),
   },
   methods: {
     ...mapActions([
