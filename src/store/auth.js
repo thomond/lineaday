@@ -1,4 +1,4 @@
-import { Message } from 'element-ui'
+import { Toast } from 'buefy'
 import get from 'lodash/get'
 import router from '@/router'
 import firebase, { db } from '@/firebase'
@@ -17,10 +17,10 @@ const actions = {
       commit('setUser', authUser)
       commit('setData', data)
     } catch (err) {
-      Message({
-        showClose: true,
+      Toast.open({
         message: err.message,
-        type: 'error',
+        position: 'is-bottom',
+        type: 'is-danger',
         duration: 6000,
       })
     }
@@ -32,10 +32,10 @@ const actions = {
       dispatch('getUserFromAuthUser', authUser)
       router.push('/')
     } catch (error) {
-      Message({
-        showClose: true,
+      Toast.open({
         message: error.message,
-        type: 'error',
+        position: 'is-bottom',
+        type: 'is-danger',
         duration: 6000,
       })
     }
@@ -49,10 +49,10 @@ const actions = {
       commit('setUser', authUser)
       router.push('/')
     } catch (error) {
-      Message({
-        showClose: true,
+      Toast.open({
         message: error.message,
-        type: 'error',
+        position: 'is-bottom',
+        type: 'is-danger',
         duration: 6000,
       })
     }

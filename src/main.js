@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import Buefy from 'buefy'
+import 'buefy/lib/buefy.css'
 
 import App from './App.vue'
 import router from './router'
@@ -10,7 +10,7 @@ import './registerServiceWorker'
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI)
+Vue.use(Buefy)
 
 const unsubscribe = firebase.auth()
   .onAuthStateChanged((firebaseUser) => {

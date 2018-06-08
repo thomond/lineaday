@@ -1,12 +1,18 @@
 <template>
-  <el-container v-if="isAuthenticated">
-    <h1 class="logo">Line a Day</h1>
-    <div>
-      <router-link to="/">Today</router-link>
-      <router-link to="/list">Past Days</router-link>
+  <nav class="navbar" role="navigation" aria-label="main navigation" v-if="isAuthenticated">
+    <div class="navbar-brand">
+      <h1 class="logo navbar-item">Line a Day</h1>
     </div>
-    <el-button type="text" @click="handleSignOut">Sign Out</el-button>
-  </el-container>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <router-link to="/" class="navbar-item">Today</router-link>
+        <router-link to="/list" class="navbar-item">Past Days</router-link>
+      </div>
+      <div class="navbar-end">
+        <a class="navbar-item" @click="handleSignOut">Sign Out</a>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <script>

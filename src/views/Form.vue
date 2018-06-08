@@ -1,17 +1,25 @@
 <template>
-  <div>
-    <p class="date">{{ todaysDate }}</p>
-    <el-form ref="form" :model="form" @submit.native="onSubmit" class="form">
-      <el-form-item class="text-input">
-        <el-input
-          maxlength="140"
-          placeholder="What do you have to say today?"
-          v-model="form.text"></el-input>
-      </el-form-item>
-      <el-form-item class="submit-button">
-        <el-button round native-type="submit">Save</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title date">{{ todaysDate }}</h1>
+        <form ref="form" @submit.prevent="onSubmit" class="form">
+          <b-field grouped>
+            <b-input
+              expanded
+              size="is-large"
+              maxlength="140"
+              placeholder="What do you have to say today?"
+              v-model="text"></b-input>
+            <p class="control">
+              <button class="button is-primary is-large" type="submit">
+                Save
+              </button>
+            </p>
+          </b-field>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,15 +31,13 @@ export default {
   props: {},
   data() {
     return {
-      form: {
-        text: '',
-      },
+      text: '',
     };
   },
   methods: {
     onSubmit(e) {
       e.preventDefault();
-      console.log('submit!', this.form.text);
+      console.log('submit!', this.text);
     },
   },
   computed: {
@@ -48,7 +54,7 @@ export default {
 
 .date {
   font-family: 'Reenie Beanie', cursive;
-  font-size: 48px;
+  font-size: 5rem;
   text-align: center;
 }
 

@@ -1,8 +1,8 @@
 <template>
-  <el-container>
-    <el-header><nav-menu /></el-header>
-    <el-main><router-view/></el-main>
-  </el-container>
+  <div>
+    <nav-menu />
+    <router-view/>
+  </div>
 </template>
 
 <script>

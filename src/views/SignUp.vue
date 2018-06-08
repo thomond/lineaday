@@ -1,26 +1,28 @@
 <template>
-  <div>
-    <el-card>
-      <h1>Sign up</h1>
-      <el-form
-        ref="form"
-        @submit.native="onSubmit"
-        label-position="left"
-        label-width="150px">
-        <el-form-item label="Email">
-          <el-input v-model="email" type="email" autoComplete="email"></el-input>
-        </el-form-item>
-        <el-form-item label="Password">
-          <el-input v-model="password" type="password"></el-input>
-        </el-form-item>
-        <el-form-item label="Confirm Password">
-          <el-input v-model="passwordConfirm" type="password"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button round native-type="submit" :disabled="loading">Sign up</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
+  <div class="hero is-primary is-fullheight is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title is-4">Sign in</h1>
+        <form @submit.prevent="onSubmit">
+          <b-field label="Email" type="is-white" custom-class="has-text-white">
+            <b-input name="email" v-model="email" type="email" autoComplete="email"></b-input>
+          </b-field>
+          <b-field label="Password" type="is-white" custom-class="has-text-white">
+            <b-input name="password" v-model="password" type="password"></b-input>
+          </b-field>
+          <b-field label="Confirm Password" type="is-white" custom-class="has-text-white">
+            <b-input name="passwordConfirm" v-model="passwordConfirm" type="password"></b-input>
+          </b-field>
+          <b-field>
+            <p class="control">
+              <button class="button is-primary" type="submit" :disabled="loading">
+                Sign In
+              </button>
+            </p>
+          </b-field>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 

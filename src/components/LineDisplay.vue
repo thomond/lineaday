@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <div>
-      {{ date }}
-      {{ line.text }}
+  <div class="container">
+    <div class="message">
+      <div class="message-body">
+        <p class="subtitle">{{ date }}</p>
+        <p class="title">{{ line.text }}</p>
+      </div>
     </div>
   </div>
 </template>
