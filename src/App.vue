@@ -21,6 +21,7 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Special+Elite');
 .logo {
   font-family: 'Special Elite', cursive;
+  font-size: 1.5rem;
 }
 
 body {

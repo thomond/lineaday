@@ -25,6 +25,7 @@
 
 <script>
 import moment from 'moment';
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Form',
@@ -35,9 +36,12 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'addLine'
+    ]),
     onSubmit(e) {
       e.preventDefault();
-      console.log('submit!', this.text);
+      this.addLine(this.text);
     },
   },
   computed: {

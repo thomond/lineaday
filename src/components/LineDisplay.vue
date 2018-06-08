@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <div class="message">
+    <div class="message is-primary">
       <div class="message-body">
-        <p class="subtitle">{{ date }}</p>
-        <p class="title">{{ line.text }}</p>
+        <p class="subtitle is-6">{{ date }}</p>
+        <p class="title is-4">{{ line.text }}</p>
       </div>
     </div>
   </div>
@@ -17,7 +17,9 @@ export default {
   props: ['line'],
   computed: {
     date() {
-      return moment(this.line.createdAt.toDate()).format('MMMM D, YYYY')
+      const createdAt = this.line.createdAt.toDate ?
+        this.line.createdAt.toDate() : this.line.createdAt
+      return moment(createdAt).format('MMMM D, YYYY')
     }
   }
 };
@@ -25,5 +27,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+.message {
+  margin: 20px;
+}
 </style>

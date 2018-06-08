@@ -1,28 +1,53 @@
 import { Toast } from 'buefy'
-import get from 'lodash/get'
 import router from '@/router'
 import firebase, { db } from '@/firebase'
 
 const initialState = {
-  data: null,
+  lines: [],
   loading: false,
   user: null
 }
 
+function collectionQuerySnapshotToArray(snapshot) {
+  const docs = []
+  snapshot.forEach(doc => docs.push(doc.data()))
+  return docs
+}
+
+function displayError(err) {
+  Toast.open({
+    message: err.message,
+    position: 'is-bottom',
+    type: 'is-danger',
+    duration: 6000,
+  })
+}
+
 const actions = {
+  async addLine({ commit, state }, text) {
+    const createdAt = new Date()
+    const line = { text, createdAt }
+    try {
+      await db.collection('users').doc(state.user.uid).collection('lines').add(line)
+      commit('addLine', line)
+      router.push('/list')
+    } catch (err) {
+      displayError(err)
+    }
+  },
   async getUserFromAuthUser({ commit }, authUser) {
     try {
-      const doc = await db.collection('users').doc(authUser.uid).get()
-      const data = doc.data()
+      const snapshot = await db
+        .collection('users')
+        .doc(authUser.uid)
+        .collection('lines')
+        .orderBy('createdAt', 'desc')
+        .get()
+      const data = collectionQuerySnapshotToArray(snapshot)
       commit('setUser', authUser)
-      commit('setData', data)
+      commit('setLines', data)
     } catch (err) {
-      Toast.open({
-        message: err.message,
-        position: 'is-bottom',
-        type: 'is-danger',
-        duration: 6000,
-      })
+      displayError(err)
     }
   },
   async userEmailSignIn({ commit, dispatch }, { email, password }) {
@@ -31,13 +56,8 @@ const actions = {
       const authUser = await firebase.auth().signInWithEmailAndPassword(email, password)
       dispatch('getUserFromAuthUser', authUser)
       router.push('/')
-    } catch (error) {
-      Toast.open({
-        message: error.message,
-        position: 'is-bottom',
-        type: 'is-danger',
-        duration: 6000,
-      })
+    } catch (err) {
+      displayError(err)
     }
     commit('setLoading', false)
   },
@@ -48,13 +68,8 @@ const actions = {
       db.collection('users').doc(authUser.uid).set(authUser)
       commit('setUser', authUser)
       router.push('/')
-    } catch (error) {
-      Toast.open({
-        message: error.message,
-        position: 'is-bottom',
-        type: 'is-danger',
-        duration: 6000,
-      })
+    } catch (err) {
+      displayError(err)
     }
     commit('setLoading', false)
   },
@@ -66,7 +81,7 @@ const actions = {
 }
 
 const getters = {
-  lines: state => get(state, 'data.lines', []),
+  lines: state => state.lines,
   loading: state => state.loading,
   isAuthenticated(state) {
     return !!state.user
@@ -74,8 +89,11 @@ const getters = {
 }
 
 const mutations = {
-  setData(state, payload) {
-    state.data = payload
+  addLine(state, line) {
+    state.lines.unshift(line)
+  },
+  setLines(state, payload) {
+    state.lines = payload
   },
   setUser(state, payload) {
     state.user = payload
