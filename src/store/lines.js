@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { db } from '@/firebase'
 
 import { displayError } from './util'
@@ -14,6 +15,11 @@ function collectionQuerySnapshotToArray(snapshot) {
   return docs
 }
 
+function hasToday(lines) {
+  const today = moment()
+  return (lines.filter(line => today.isSame(moment(line.createdAt.toDate()), 'd')).length > 0)
+}
+
 const actions = {
   async addLine({ commit, rootState }, text) {
     const createdAt = new Date()
@@ -25,6 +31,7 @@ const actions = {
         .collection('lines')
         .add(line)
       commit('addLine', line)
+      commit('setHasToday', true)
     } catch (err) {
       displayError(err)
     }
@@ -38,6 +45,7 @@ const actions = {
         .orderBy('createdAt', 'desc')
         .get()
       const data = collectionQuerySnapshotToArray(snapshot)
+      commit('setHasToday', hasToday(data))
       commit('setLines', data)
     } catch (err) {
       displayError(err)
@@ -46,6 +54,7 @@ const actions = {
 }
 
 const getters = {
+  hasToday: state => state.hasToday,
   lines: state => state.lines,
   linesLoading: state => state.loading,
 }

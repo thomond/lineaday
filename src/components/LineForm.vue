@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="form-container" v-if="!hasToday">
     <h1 class="title date">{{ todaysDate }}</h1>
     <form ref="form" @submit.prevent="onSubmit" class="form">
       <b-field>
@@ -21,7 +21,7 @@
 
 <script>
 import moment from 'moment';
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'LineForm',
@@ -42,6 +42,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'hasToday'
+    ]),
     todaysDate() {
       return moment().format('MMMM D, YYYY');
     },
