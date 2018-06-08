@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { waitFor } from 'vue-wait'
 import { db } from '@/firebase'
 
 import { displayError } from './util'

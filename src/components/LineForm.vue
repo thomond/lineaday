@@ -37,8 +37,16 @@ export default {
     ]),
     onSubmit(e) {
       e.preventDefault();
-      this.addLine(this.text);
-      this.text = ''
+      if (this.text.length) {
+        this.addLine(this.text);
+        this.text = ''
+      } else {
+        this.$toast.open({
+          message: "You've got to say something!",
+          position: 'is-bottom',
+          type: 'is-primary'
+        })
+      }
     },
   },
   computed: {

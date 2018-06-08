@@ -18,8 +18,8 @@ const actions = {
   },
   async userEmailSignIn({ dispatch }, { email, password }) {
     try {
-      const authUser = await firebase.auth().signInWithEmailAndPassword(email, password)
-      dispatch('getUserFromAuthUser', authUser)
+      const doc = await firebase.auth().signInWithEmailAndPassword(email, password)
+      dispatch('getUserFromAuthUser', doc.user)
       router.push('/')
     } catch (err) {
       displayError(err)
@@ -35,8 +35,8 @@ const actions = {
       displayError(err)
     }
   },
-  userSignOut({ commit }) {
-    firebase.auth().signOut()
+  async userSignOut({ commit }) {
+    await firebase.auth().signOut()
     commit('setUser', null)
     router.push('/login')
   }
