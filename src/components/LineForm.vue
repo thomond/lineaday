@@ -3,7 +3,7 @@
     <div class="hero-body">
       <h1 class="title date">{{ todaysDate }}</h1>
       <form ref="form" @submit.prevent="onSubmit" class="form">
-        <b-field grouped>
+        <b-field>
           <b-input
             expanded
             size="is-large"
@@ -40,6 +40,7 @@ export default {
     onSubmit(e) {
       e.preventDefault();
       this.addLine(this.text);
+      this.text = ''
     },
   },
   computed: {

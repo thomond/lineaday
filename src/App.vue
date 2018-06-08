@@ -18,17 +18,30 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Special+Elite');
+@import url('https://fonts.googleapis.com/css?family=Special+Elite|Raleway');
 .logo {
   font-family: 'Special Elite', cursive;
   font-size: 1.5rem;
 }
 
 body {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
 }
 
+body, button, input, select, textarea {
+  color: #2c3e50;
+  font-family: 'Raleway', sans-serif;
+}
+
+.hero.is-primary .card .tabs li.is-active a,
+.hero.is-primary .card .tabs li.is-active a:hover {
+  background-color: #7957d5;
+  border-color: #7957d5;
+  color: white;
+}
+
+.hero.is-primary .card .tabs a {
+  color: #4a4a4a;
+}
 </style>

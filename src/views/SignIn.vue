@@ -2,22 +2,22 @@
   <div class="hero is-primary is-fullheight is-bold">
     <div class="hero-body">
       <div class="container">
-        <h1 class="title is-4">Sign in</h1>
-        <form @submit.prevent="onSubmit">
-          <b-field label="Email" type="is-white" custom-class="has-text-white">
-            <b-input name="email" v-model="email" type="email" autoComplete="email"></b-input>
-          </b-field>
-          <b-field label="Password" type="is-white" custom-class="has-text-white">
-            <b-input name="password" v-model="password" type="password"></b-input>
-          </b-field>
-          <b-field>
-            <p class="control">
-              <button class="button is-primary" type="submit" :disabled="loading">
-                Sign In
-              </button>
-            </p>
-          </b-field>
-        </form>
+        <h1 class="title logo has-text-light">One Line a Day</h1>
+        <div class="card">
+          <div class="card-content">
+            <b-tabs type="is-toggle" expanded v-model="activeTab">
+              <b-tab-item label="Log In">
+                <login-form :on-submit="handleSignIn" buttonText="Log in" />
+              </b-tab-item>
+              <b-tab-item label="Sign Up">
+                <login-form
+                  :on-submit="handleSignUp"
+                  :showConfirmPassword="true"
+                  buttonText="Sign up" />
+              </b-tab-item>
+            </b-tabs>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -25,13 +25,16 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import LoginForm from '@/components/LogInForm.vue'
 
 export default {
   name: 'SignIn',
+  components: {
+    LoginForm
+  },
   data() {
     return {
-      email: '',
-      password: '',
+      activeTab: 0
     }
   },
   computed: {
@@ -41,18 +44,33 @@ export default {
   },
   methods: {
     ...mapActions([
-      'userEmailSignIn'
+      'userEmailSignIn',
+      'userEmailSignUp'
     ]),
-    onSubmit(e) {
-      e.preventDefault()
-      if (this.email.length && this.password.length) {
-        this.userEmailSignIn({ email: this.email, password: this.password })
-      }
+    handleSignIn(user) {
+      this.userEmailSignIn(user)
+    },
+    handleSignUp(user) {
+      this.userEmailSignUp(user)
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+}
 
+.card {
+  border-radius: 4px;
+  width: 100%;
+}
+
+.logo {
+  font-size: 3rem;
+}
 </style>
