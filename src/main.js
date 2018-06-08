@@ -11,7 +11,9 @@ import './registerServiceWorker'
 
 Vue.config.productionTip = false
 
-Vue.use(Buefy)
+Vue.use(Buefy, {
+  defaultIconPack: 'fas',
+})
 Vue.use(VueWait)
 
 const unsubscribe = firebase.auth()

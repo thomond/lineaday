@@ -5,7 +5,15 @@
     </div>
     <div class="navbar-menu">
       <div class="navbar-end">
-        <a class="navbar-item" @click="handleSignOut">Sign Out</a>
+        <b-dropdown position="is-bottom-left">
+          <a class="navbar-item is-primary" slot="trigger">
+            <span>{{ userEmail }}</span>
+            <b-icon icon="caret-down"></b-icon>
+          </a>
+          <b-dropdown-item @click="handleSignOut">
+            Log Out
+          </b-dropdown-item>
+        </b-dropdown>
       </div>
     </div>
   </nav>
@@ -18,7 +26,8 @@ export default {
   name: 'NavMenu',
   computed: {
     ...mapGetters([
-      'isAuthenticated'
+      'isAuthenticated',
+      'userEmail'
     ]),
   },
   methods: {

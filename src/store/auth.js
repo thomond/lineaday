@@ -1,5 +1,6 @@
+import get from 'lodash/get'
 import router from '@/router'
-import firebase, { db } from '@/firebase'
+import firebase from '@/firebase'
 
 import { displayError } from './util'
 
@@ -27,9 +28,8 @@ const actions = {
   },
   async userEmailSignUp({ commit }, { email, password }) {
     try {
-      const authUser = await firebase.auth().createUserWithEmailAndPassword(email, password)
-      db.collection('users').doc(authUser.uid).set(authUser)
-      commit('setUser', authUser)
+      const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
+      commit('setUser', doc.user)
       router.push('/')
     } catch (err) {
       displayError(err)
@@ -43,9 +43,8 @@ const actions = {
 }
 
 const getters = {
-  isAuthenticated(state) {
-    return !!state.user
-  }
+  isAuthenticated: state => !!state.user,
+  userEmail: state => get(state, 'user.email', '')
 }
 
 const mutations = {
