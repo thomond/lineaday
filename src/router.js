@@ -5,6 +5,7 @@ import firebase from './firebase'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
+import Welcome from './views/Welcome.vue'
 
 Vue.use(Router);
 
@@ -13,6 +14,11 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'Welcome',
+      component: Welcome,
+    },
+    {
+      path: '/home',
       name: 'home',
       component: Home,
       meta: { requiresAuth: true }
@@ -36,7 +42,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !isAuthenticated) {
     next('/login')
   } else if (!requiresAuth && isAuthenticated) {
-    next('/')
+    next('/home')
   } else {
     next()
   }

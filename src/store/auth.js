@@ -21,7 +21,7 @@ const actions = {
     try {
       const doc = await firebase.auth().signInWithEmailAndPassword(email, password)
       dispatch('getUserFromAuthUser', doc.user)
-      router.push('/')
+      router.push('/home')
     } catch (err) {
       displayError(err)
     }
@@ -30,7 +30,7 @@ const actions = {
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
       commit('setUser', doc.user)
-      router.push('/')
+      router.push('/home')
     } catch (err) {
       displayError(err)
     }
