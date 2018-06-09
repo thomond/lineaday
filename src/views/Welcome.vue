@@ -1,23 +1,18 @@
 <template>
-  <section class="hero is-primary is-medium">
+  <section class="hero is-primary is-medium is-bold">
     <div class="hero-body">
       <div class="container">
         <div class="columns">
-          <div class="column">
-            <h1 class="title is-1 fancy">
-              One Line a Day
-            </h1>
-            <h2 class="subtitle is-3">
-              Hero subtitle
-            </h2>
-            <router-link class="button is-large is-light" to="/login">Get started</router-link>
-          </div>
-          <div class="column">
+          <div class="column is-three-fifths is-offset-one-fifth">
             <div class="card">
+              <h1 class="title is-1 fancy has-text-primary entry has-text-centered">
+                One Line a Day
+              </h1>
               <div v-for="entry in entries" :key="entry.date" class="entry">
                 <p class="subtitle is-6 has-text-dark">{{ entry.date }}</p>
                 <p class="title is-4 has-text-dark">{{ entry.text }}</p>
               </div>
+              <router-link class="button is-large is-primary" to="/login">Get started</router-link>
             </div>
           </div>
         </div>
@@ -52,14 +47,21 @@ export default {
 <style scoped lang="scss">
 .entry {
   height: 60px;
+  margin: 0;
 }
 
 .columns {
   align-items: center;
 }
 
+.button {
+  align-self: flex-end;
+}
+
 .card {
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
   padding: 37px 55px 27px;
   position: relative;
   border: 1px solid #B5B5B5;

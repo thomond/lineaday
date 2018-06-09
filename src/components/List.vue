@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div v-for="line in lines" :key="line.createdAt.seconds">
-      <line-display :line="line" />
+    <div v-for="entry in lines" :key="entry[0]">
+      <date-display :lines="entry[1]" :date="entry[0]" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import LineDisplay from '@/components/LineDisplay.vue'
+import DateDisplay from '@/components/DateDisplay.vue'
 
 export default {
   name: 'List',
   components: {
-    LineDisplay
+    DateDisplay
   },
   computed: {
     ...mapGetters([
