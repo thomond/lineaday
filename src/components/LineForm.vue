@@ -12,12 +12,15 @@
           :placeholder="placeholder"
           :class="{ 'placeholder-colored': !expanded }"
           @focus="expanded = true"
-          @blur="expanded = false"
+          @blur="onBlur"
           v-model="text"></b-input>
       </b-field>
       <b-field grouped position="is-right" v-if="expanded">
         <div class="control">
-          <button class="button is-primary is-large" type="submit">
+          <button
+            ref="submitButton"
+            class="button is-primary is-large"
+            type="submit">
             Save
           </button>
         </div>
@@ -44,8 +47,13 @@ export default {
     ...mapActions([
       'addLine'
     ]),
-    onSubmit(e) {
-      e.preventDefault();
+    onBlur(e) {
+      if (e.relatedTarget === this.$refs.submitButton) {
+        this.onSubmit()
+      }
+      this.expanded = false
+    },
+    onSubmit() {
       if (this.text.length) {
         this.addLine(this.text);
         this.text = ''
