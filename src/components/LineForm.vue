@@ -95,7 +95,7 @@ export default {
 }
 
 .date {
-  font-size: 5rem;
+  font-size: 2rem;
 }
 
 .placeholder-colored {

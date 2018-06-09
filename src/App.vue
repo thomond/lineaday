@@ -18,14 +18,14 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Special+Elite|Raleway|Reenie+Beanie');
+@import url('https://fonts.googleapis.com/css?family=Special+Elite|Raleway');
 .logo {
   font-family: 'Special Elite', cursive;
   font-size: 1.5rem;
 }
 
 .fancy {
-  font-family: 'Reenie Beanie', cursive;
+  font-family: 'Special Elite', cursive;
 }
 
 body {
