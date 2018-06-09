@@ -1,6 +1,6 @@
 <template>
   <div class="form-container" v-if="!hasToday">
-    <h1 class="title date fancy has-text-center-mobile">{{ todaysDate }}</h1>
+    <h1 class="title date fancy has-text-centered-mobile">{{ todaysDate }}</h1>
     <form @submit.prevent="onSubmit" class="form">
       <b-field>
         <b-input
@@ -63,7 +63,11 @@ export default {
       'hasToday'
     ]),
     rows() {
-      return this.expanded ? 2 : 1
+      let rows = 2
+      if (this.$mq.above(this.$mv.mobile)) {
+        rows = 1
+      }
+      return this.expanded ? rows + 1 : rows
     },
     todaysDate() {
       return moment().format('MMMM D, YYYY');

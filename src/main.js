@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueWait from 'vue-wait'
+import vMediaQuery from 'v-media-query'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 
@@ -15,6 +16,11 @@ Vue.use(Buefy, {
   defaultIconPack: 'fas',
 })
 Vue.use(VueWait)
+Vue.use(vMediaQuery, {
+  variables: {
+    mobile: 768
+  }
+})
 
 const unsubscribe = firebase.auth()
   .onAuthStateChanged((firebaseUser) => {
