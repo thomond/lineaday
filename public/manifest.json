@@ -1,5 +1,5 @@
 {
-  "name": "lineaday",
+  "name": "One Line a Day",
   "short_name": "lineaday",
   "icons": [
     {
@@ -16,5 +16,5 @@
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#4DBA87"
+  "theme_color": "#7957d5"
 }
