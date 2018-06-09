@@ -42,7 +42,7 @@ export default {
   name: 'WelcomeHero',
   data() {
     return {
-      entries: [{
+      allEntries: [{
         date: 'January 1',
         lines: [{
           year: 2017,
@@ -67,6 +67,15 @@ export default {
           text: 'Went to Edinburgh Castle in the morning and carried torches up Calton Hill in the evening!'
         }]
       }]
+    }
+  },
+  computed: {
+    entries() {
+      if (this.$mq.above(this.$mv.mobile)) {
+        return this.allEntries
+      }
+
+      return [this.allEntries[1]]
     }
   }
 };
@@ -106,6 +115,7 @@ export default {
   background: white;
   background: linear-gradient(to top, #DFE8EC 0%, white 8%) 0 57px;
   background-size: 100% 30px;
+  overflow: hidden;
 
   &:before {
     content:"";

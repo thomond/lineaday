@@ -6,7 +6,6 @@
     <div class="navbar-brand">
       <h1 class="logo navbar-item">One Line a Day</h1>
         <a
-          v-if="isAuthenticated"
           @click="isActive = !isActive"
           role="button"
           class="navbar-burger"
