@@ -35,9 +35,10 @@ const actions = {
       displayError(err)
     }
   },
-  async userSignOut({ commit }) {
+  async userSignOut({ commit, dispatch }) {
     await firebase.auth().signOut()
     commit('setUser', null)
+    dispatch('resetLines')
     router.push('/login')
   }
 }

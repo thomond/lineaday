@@ -11,7 +11,7 @@
     </b-field>
     <b-field horizontal>
       <p class="control">
-        <button class="button is-primary" type="submit">
+        <button class="button is-primary is-medium" type="submit">
           {{ buttonText }}
         </button>
       </p>

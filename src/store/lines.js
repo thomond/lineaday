@@ -55,6 +55,10 @@ const actions = {
       displayError(err)
     }
     dispatch('wait/end', waiter, { root: true });
+  },
+  resetLines({ commit }) {
+    commit('setLines', null)
+    commit('setHasToday', true)
   }
 }
 
