@@ -2,8 +2,18 @@
   <nav class="navbar" role="navigation" aria-label="main navigation" v-if="isAuthenticated">
     <div class="navbar-brand">
       <h1 class="logo navbar-item">One Line a Day</h1>
+        <a
+          @click="isActive = !isActive"
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
     </div>
-    <div class="navbar-menu is-active">
+    <div :class="{ 'navbar-menu': true, 'is-active': isActive }">
       <div class="navbar-end">
         <b-dropdown position="is-bottom-left">
           <a class="navbar-item is-primary" slot="trigger">
@@ -24,6 +34,11 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'NavMenu',
+  data() {
+    return {
+      isActive: false
+    }
+  },
   computed: {
     ...mapGetters([
       'isAuthenticated',

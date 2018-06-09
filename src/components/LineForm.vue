@@ -1,6 +1,6 @@
 <template>
   <div class="form-container" v-if="!hasToday">
-    <h1 class="title date fancy">{{ todaysDate }}</h1>
+    <h1 class="title date fancy has-text-center-mobile">{{ todaysDate }}</h1>
     <form @submit.prevent="onSubmit" class="form">
       <b-field>
         <b-input
@@ -84,16 +84,6 @@ export default {
 
 .date {
   font-size: 5rem;
-}
-
-.form {
-  align-items: stretch;
-  display: flex;
-  flex-direction: column;
-
-  .submit-button {
-    align-self: flex-end;
-  }
 }
 
 .placeholder-colored {
