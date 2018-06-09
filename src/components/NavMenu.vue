@@ -3,7 +3,7 @@
     <div class="navbar-brand">
       <h1 class="logo navbar-item">One Line a Day</h1>
     </div>
-    <div class="navbar-menu">
+    <div class="navbar-menu is-active">
       <div class="navbar-end">
         <b-dropdown position="is-bottom-left">
           <a class="navbar-item is-primary" slot="trigger">

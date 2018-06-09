@@ -1,6 +1,6 @@
 <template>
   <div class="form-container" v-if="!hasToday">
-    <h1 class="title date">{{ todaysDate }}</h1>
+    <h1 class="title date fancy">{{ todaysDate }}</h1>
     <form ref="form" @submit.prevent="onSubmit" class="form">
       <b-field>
         <b-input
@@ -62,8 +62,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Reenie+Beanie');
-
 .form-container {
   min-height: 40vh;
   display: flex;
@@ -72,7 +70,6 @@ export default {
 }
 
 .date {
-  font-family: 'Reenie Beanie', cursive;
   font-size: 5rem;
 }
 

@@ -1,9 +1,10 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import firebase from 'firebase';
+import Vue from 'vue'
+import Router from 'vue-router'
+import firebase from 'firebase'
 
-import Home from './views/Home.vue';
-import Login from './views/Login.vue';
+import Home from './views/Home.vue'
+import Login from './views/Login.vue'
+import NotFound from './views/NotFound.vue'
 
 Vue.use(Router);
 
@@ -20,6 +21,11 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '*',
+      component: NotFound,
+      meta: { requiresAuth: true }
     }
   ],
 });
