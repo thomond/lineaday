@@ -1,8 +1,12 @@
 <template>
-  <nav class="navbar" role="navigation" aria-label="main navigation" v-if="isAuthenticated">
+  <nav
+    :class="{ navbar: true, sticky: sticky }"
+    role="navigation"
+    aria-label="main navigation">
     <div class="navbar-brand">
       <h1 class="logo navbar-item">One Line a Day</h1>
         <a
+          v-if="isAuthenticated"
           @click="isActive = !isActive"
           role="button"
           class="navbar-burger"
@@ -15,7 +19,7 @@
     </div>
     <div :class="{ 'navbar-menu': true, 'is-active': isActive }">
       <div class="navbar-end">
-        <b-dropdown position="is-bottom-left">
+        <b-dropdown position="is-bottom-left" v-if="isAuthenticated">
           <a class="navbar-item is-primary" slot="trigger">
             <span>{{ userEmail }}</span>
             <b-icon icon="caret-down"></b-icon>
@@ -24,6 +28,7 @@
             Log Out
           </b-dropdown-item>
         </b-dropdown>
+        <router-link to="/login" class="is-primary navbar-item" v-else>Log in</router-link>
       </div>
     </div>
   </nav>
@@ -34,6 +39,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'NavMenu',
+  props: ['sticky'],
   data() {
     return {
       isActive: false
@@ -57,5 +63,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+.sticky {
+  position: sticky;
+  top: 0;
+}
 </style>

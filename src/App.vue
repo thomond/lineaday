@@ -1,18 +1,23 @@
 <template>
   <div>
-    <nav-menu />
+    <nav-menu v-if="isAuthenticated" />
     <router-view/>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+import { mapGetters } from 'vuex'
 import NavMenu from '@/components/NavMenu.vue';
 
 export default {
   name: 'App',
   components: {
     NavMenu,
+  },
+  computed: {
+    ...mapGetters([
+      'isAuthenticated',
+    ]),
   },
 };
 </script>
