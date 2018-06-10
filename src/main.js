@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueWait from 'vue-wait'
+import VueAnalytics from 'vue-analytics'
 import vMediaQuery from 'v-media-query'
 import vueSmoothScroll from 'vue2-smooth-scroll'
 import Buefy from 'buefy'
@@ -23,6 +24,13 @@ Vue.use(vMediaQuery, {
   }
 })
 Vue.use(vueSmoothScroll)
+
+if (process.env.NODE_ENV === 'production') {
+  Vue.use(VueAnalytics, {
+    id: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,
+    router
+  })
+}
 
 const unsubscribe = firebase.auth()
   .onAuthStateChanged((firebaseUser) => {

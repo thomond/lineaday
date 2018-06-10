@@ -16,6 +16,7 @@
     "register-service-worker": "^1.0.0",
     "v-media-query": "^1.0.3",
     "vue": "^2.5.16",
+    "vue-analytics": "^5.12.2",
     "vue-router": "^3.0.1",
     "vue-wait": "^1.1.4",
     "vue2-smooth-scroll": "^1.0.3",
