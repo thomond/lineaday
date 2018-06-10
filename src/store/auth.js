@@ -1,8 +1,7 @@
 import get from 'lodash/get'
 import router from '@/router'
 import firebase from '@/firebase'
-
-import { displayError } from './util'
+import { displayError } from '@/util'
 
 const initialState = {
   user: null

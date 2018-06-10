@@ -14,12 +14,26 @@
           @focus="expanded = true"
           @blur="onBlur"
           v-model="text"></b-input>
+          <p class="help" v-if="expanded">
+            <b-taglist v-if="tags.length">
+              <b-tag
+                rounded
+                ellipsis
+                type="is-primary"
+                v-for="tag in tags"
+                :key="tag">{{ tag }}</b-tag>
+            </b-taglist>
+            <span v-else>
+              Hint: type <b-tag rounded>#tag</b-tag> to
+              add <b-tag rounded type="is-primary">#tag</b-tag>s to your post.
+            </span>
+          </p>
       </b-field>
       <b-field grouped position="is-right" v-if="expanded">
         <div class="control">
           <button
             ref="submitButton"
-            class="button is-primary is-large"
+            class="button is-primary is-large is-rounded"
             type="submit">
             Save
           </button>
@@ -30,8 +44,9 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
+import { getTagsFromLine } from '@/util'
 
 export default {
   name: 'LineForm',
@@ -51,11 +66,11 @@ export default {
       if (e.relatedTarget === this.$refs.submitButton) {
         this.onSubmit()
       }
-      this.expanded = false
+      // this.expanded = false
     },
     onSubmit() {
       if (this.text.length) {
-        this.addLine(this.text);
+        this.addLine({ text: this.text, tags: this.tags });
         this.text = ''
       } else {
         this.$toast.open({
@@ -70,6 +85,9 @@ export default {
     ...mapGetters([
       'hasToday'
     ]),
+    tags() {
+      return getTagsFromLine(this.text)
+    },
     rows() {
       let rows = 2
       if (this.$mq.above(this.$mv.mobile)) {
@@ -103,6 +121,18 @@ export default {
     color: #7957d5;
     opacity: 1;
   }
+}
+
+.field.has-addons {
+  display: block;
+
+  .is-clearfix::after {
+    clear: none;
+  }
+}
+
+p.help {
+  margin-top: .35rem;
 }
 
 </style>

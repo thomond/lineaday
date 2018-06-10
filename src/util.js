@@ -1,6 +1,6 @@
 import { Toast } from 'buefy'
+import uniq from 'lodash/uniq'
 
-// eslint-disable-next-line import/prefer-default-export
 export function displayError(err) {
   Toast.open({
     message: err.message,
@@ -8,4 +8,10 @@ export function displayError(err) {
     type: 'is-danger',
     duration: 6000,
   })
+}
+
+export const tagRegExp = /#([^\s]+)/g
+export function getTagsFromLine(line) {
+  const matchesArray = line.match(tagRegExp)
+  return uniq(matchesArray)
 }

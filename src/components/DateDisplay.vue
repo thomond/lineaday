@@ -3,8 +3,8 @@
     <div class="message-body">
       <p class="title is-6 fancy">{{ date }}</p>
       <p v-for="line in lines" class="subtitle is-5" :key="key(line)">
-        <span class="subtitle is-6 has-text-grey">{{ year(line) }}:</span>
-        {{ line.text }}
+        <span class="subtitle is-6 has-text-grey">{{ year(line) }}: </span>
+        <span v-html="text(line.text)"></span>
       </p>
     </div>
   </div>
@@ -12,6 +12,7 @@
 
 <script>
 import moment from 'moment'
+import { tagRegExp } from '@/util'
 
 export default {
   name: 'DateDisplay',
@@ -22,7 +23,8 @@ export default {
       const createdAt = line.createdAt.toDate ?
         line.createdAt.toDate() : line.createdAt
       return moment(createdAt).format('YYYY')
-    }
+    },
+    text: () => lineText => lineText.replace(tagRegExp, match => `<span class="tag is-primary is-rounded is-medium">${match}</span>`)
   }
 };
 </script>

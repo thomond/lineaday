@@ -1,8 +1,7 @@
 import moment from 'moment'
 import get from 'lodash/get'
 import { db } from '@/firebase'
-
-import { displayError } from './util'
+import { displayError } from '@/util'
 
 const initialState = {
   hasToday: false,
@@ -54,13 +53,19 @@ function formatLineCollectionSnapshot(snapshot) {
 const waiter = 'loading lines'
 
 const actions = {
-  async addLine({ commit, dispatch, rootState }, text) {
+  async addLine({ commit, dispatch, rootState }, { text, tags }) {
     dispatch('wait/start', waiter, { root: true });
     const today = moment()
+    const createdAt = today.toDate()
+    const tagObject = tags.reduce((acc, curr) => {
+      acc[curr] = createdAt
+      return acc
+    }, {})
     const line = {
-      createdAt: today.toDate(),
+      createdAt,
       dayOfWeek: today.day(),
       ...today.toObject(),
+      tags: tagObject,
       text,
     }
     try {
