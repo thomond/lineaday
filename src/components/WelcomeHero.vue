@@ -33,13 +33,20 @@
         </div>
       </div>
     </div>
+    <div class="hero-foot">
+      <welcome-benefits />
+    </div>
   </section>
 </template>
 
 <script>
+import WelcomeBenefits from '@/components/WelcomeBenefits.vue'
 
 export default {
   name: 'WelcomeHero',
+  components: {
+    WelcomeBenefits,
+  },
   data() {
     return {
       allEntries: [{

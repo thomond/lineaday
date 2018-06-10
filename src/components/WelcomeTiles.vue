@@ -5,14 +5,14 @@
         <h3 class="title">Track your...</h3>
         <div class="columns is-multiline is-centered is-mobile">
           <div
-            class="column is-2-desktop is-one-third-tablet is-half-mobile"
+            class="column is-2-tablet is-3-mobile"
             v-for="tile in tiles"
             :key="tile.icon">
-            <div class="box icon-tile">
+            <div class="icon-tile">
               <div>
-                <b-icon :icon="tile.icon" type="is-grey-light" size="is-large"></b-icon>
+                <b-icon :icon="tile.icon" size="is-large"></b-icon>
               </div>
-              <p class="subtitle is-4 has-text-primary">{{ tile.label }}</p>
+              <p class="subtitle is-4">{{ tile.label }}</p>
             </div>
           </div>
         </div>

@@ -1,13 +1,7 @@
 <template>
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container">
-        <ul class="list">
-          <li class="subtitle is-4" v-for="benefit in benefits" :key="benefit">{{ benefit }}</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+  <ul class="list">
+    <li class="subtitle is-5" v-for="benefit in benefits" :key="benefit">{{ benefit }}</li>
+  </ul>
 </template>
 
 <script>
@@ -38,7 +32,6 @@ li:not(:last-child) {
   &:after {
     content: '•';
     padding: 0 20px;
-    color: #7957d5;
   }
 }
 </style>
