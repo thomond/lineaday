@@ -7356,6 +7356,10 @@ vue-wait@^1.1.4:
   dependencies:
     matcher "^1.1.1"
 
+vue2-smooth-scroll@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/vue2-smooth-scroll/-/vue2-smooth-scroll-1.0.3.tgz#11b504ce885cd0216fe0e1d9f08b7f90f258930a"
+
 vue@^2.5.16:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.16.tgz#07edb75e8412aaeed871ebafa99f4672584a0085"

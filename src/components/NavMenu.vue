@@ -1,6 +1,6 @@
 <template>
   <nav
-    :class="{ navbar: true, sticky: sticky }"
+    :class="{ navbar: true, sticky: sticky, 'is-primary': isPrimary }"
     role="navigation"
     aria-label="main navigation">
     <div class="navbar-brand">
@@ -38,7 +38,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'NavMenu',
-  props: ['sticky'],
+  props: ['sticky', 'isPrimary'],
   data() {
     return {
       isActive: false

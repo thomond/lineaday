@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-light">
+  <section class="hero is-medium" id="tiles">
     <div class="hero-body">
       <div class="container">
         <h3 class="title">Track your...</h3>
@@ -16,14 +16,20 @@
             </div>
           </div>
         </div>
+        <down-arrow anchor="signup" :is-primary="true" />
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import DownArrow from './DownArrow.vue'
+
 export default {
   name: 'WelcomeTiles',
+  components: {
+    DownArrow
+  },
   data() {
     return {
       tiles: [{
@@ -72,6 +78,10 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
+}
+
+.subtitle {
+  margin-top: 15px;
 }
 </style>
 

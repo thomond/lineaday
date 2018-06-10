@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueWait from 'vue-wait'
 import vMediaQuery from 'v-media-query'
+import vueSmoothScroll from 'vue2-smooth-scroll'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 
@@ -21,6 +22,7 @@ Vue.use(vMediaQuery, {
     mobile: 768
   }
 })
+Vue.use(vueSmoothScroll)
 
 const unsubscribe = firebase.auth()
   .onAuthStateChanged((firebaseUser) => {
