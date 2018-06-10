@@ -8,7 +8,7 @@
         <a
           @click="isActive = !isActive"
           role="button"
-          class="navbar-burger"
+          :class="{ 'navbar-burger': true, 'has-text-white': isPrimary }"
           aria-label="menu"
           aria-expanded="false">
           <span aria-hidden="true"></span>
