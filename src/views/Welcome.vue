@@ -2,6 +2,17 @@
   <div>
     <welcome-hero />
     <nav-menu :sticky="true" :is-primary="true" />
+    <section class="hero is-medium" id="tinythoughts">
+      <div class="hero-body">
+        <div class="container">
+          <p class="is-size-1 has-text-centered">
+            <span class="fancy">tinythoughts</span> is
+            a <strong class="has-text-primary">sentence a day</strong> journal
+          </p>
+          <down-arrow anchor="notebook" :is-primary="true" />
+        </div>
+      </div>
+    </section>
     <section class="hero is-light is-medium" id="notebook">
       <div class="hero-body">
         <div class="container">

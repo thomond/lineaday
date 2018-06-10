@@ -3,7 +3,7 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title is-1 fancy">
-          One Line a Day
+          tinythoughts
         </h1>
         <h2 class="subtitle is-3">
           Because keeping a journal is hard
@@ -23,7 +23,7 @@
     </div>
     <div class="hero-foot has-text-centered">
       <welcome-benefits />
-      <down-arrow anchor="notebook" />
+      <down-arrow anchor="tinythoughts" />
     </div>
   </section>
 </template>

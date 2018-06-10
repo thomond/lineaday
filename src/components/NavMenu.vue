@@ -4,7 +4,7 @@
     role="navigation"
     aria-label="main navigation">
     <div class="navbar-brand">
-      <h1 class="logo navbar-item">One Line a Day</h1>
+      <h1 class="logo navbar-item">tinythoughts</h1>
         <a
           @click="isActive = !isActive"
           role="button"
@@ -27,7 +27,7 @@
             Log Out
           </b-dropdown-item>
         </b-dropdown>
-        <router-link to="/login" class="is-primary navbar-item" v-else>Log in</router-link>
+        <router-link to="/login" class="is-primary navbar-item" v-else>Sign up/Log in</router-link>
       </div>
     </div>
   </nav>

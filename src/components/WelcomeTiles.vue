@@ -2,13 +2,13 @@
   <section class="hero is-medium" id="tiles">
     <div class="hero-body">
       <div class="container">
-        <h3 class="title">Track your...</h3>
+        <h3 class="title"><span class="fancy">tinythoughts</span> can be about...</h3>
         <div class="columns is-multiline is-centered is-mobile">
           <div
             class="column is-2-tablet is-4-mobile"
             v-for="tile in tiles"
             :key="tile.icon">
-            <div class="icon-tile">
+            <div class="box icon-tile">
               <div>
                 <b-icon :icon="tile.icon" size="is-large"></b-icon>
               </div>
@@ -65,6 +65,9 @@ export default {
       }, {
         icon: 'bed',
         label: 'Dreams'
+      }, {
+        icon: 'briefcase',
+        label: 'Career'
       }]
     }
   }
@@ -78,6 +81,10 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
+}
+
+.hero {
+  background: #9b67df17;
 }
 
 .subtitle {
