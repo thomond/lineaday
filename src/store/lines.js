@@ -56,8 +56,13 @@ const waiter = 'loading lines'
 const actions = {
   async addLine({ commit, dispatch, rootState }, text) {
     dispatch('wait/start', waiter, { root: true });
-    const createdAt = new Date()
-    const line = { text, createdAt }
+    const today = moment()
+    const line = {
+      createdAt: today.toDate(),
+      dayOfWeek: today.day(),
+      ...today.toObject(),
+      text,
+    }
     try {
       await db
         .collection('users')
