@@ -12,7 +12,7 @@
               <div>
                 <b-icon :icon="tile.icon" size="is-large"></b-icon>
               </div>
-              <p class="subtitle is-4">{{ tile.label }}</p>
+              <p class="subtitle is-4 is-size-6-mobile">{{ tile.label }}</p>
             </div>
           </div>
         </div>
