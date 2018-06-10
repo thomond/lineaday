@@ -5,7 +5,7 @@
         <h3 class="title">Track your...</h3>
         <div class="columns is-multiline is-centered is-mobile">
           <div
-            class="column is-2-tablet is-3-mobile"
+            class="column is-2-tablet is-4-mobile"
             v-for="tile in tiles"
             :key="tile.icon">
             <div class="icon-tile">

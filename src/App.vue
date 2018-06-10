@@ -53,4 +53,8 @@ body, button, input, select, textarea {
 .hero.is-primary .card .tabs a {
   color: #4a4a4a;
 }
+
+.hero-body {
+  overflow: hidden;
+}
 </style>
