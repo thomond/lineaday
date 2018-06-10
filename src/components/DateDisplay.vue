@@ -24,7 +24,7 @@ export default {
         line.createdAt.toDate() : line.createdAt
       return moment(createdAt).format('YYYY')
     },
-    text: () => lineText => lineText.replace(tagRegExp, match => `<span class="tag is-primary is-rounded is-medium">${match}</span>`)
+    text: () => lineText => lineText.replace(tagRegExp, match => `<span class="tag is-primary is-rounded is-medium">${match.replace('#', '')}</span>`)
   }
 };
 </script>

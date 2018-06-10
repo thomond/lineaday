@@ -25,7 +25,7 @@
             </b-taglist>
             <span v-else>
               Hint: type <b-tag rounded>#tag</b-tag> to
-              add <b-tag rounded type="is-primary">#tag</b-tag>s to your post.
+              add <b-tag rounded type="is-primary">tag</b-tag> to your post.
             </span>
           </p>
       </b-field>
@@ -66,7 +66,7 @@ export default {
       if (e.relatedTarget === this.$refs.submitButton) {
         this.onSubmit()
       }
-      // this.expanded = false
+      this.expanded = false
     },
     onSubmit() {
       if (this.text.length) {

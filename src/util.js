@@ -13,5 +13,5 @@ export function displayError(err) {
 export const tagRegExp = /#([^\s]+)/g
 export function getTagsFromLine(line) {
   const matchesArray = line.match(tagRegExp)
-  return uniq(matchesArray)
+  return uniq(matchesArray).map(match => match.replace('#', ''))
 }

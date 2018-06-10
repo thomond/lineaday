@@ -8,10 +8,9 @@ const initialState = {
 }
 
 const actions = {
-  async getUserFromAuthUser({ commit, dispatch }, authUser) {
+  async getUserFromAuthUser({ commit }, authUser) {
     try {
       commit('setUser', authUser)
-      dispatch('getLines', authUser)
     } catch (err) {
       displayError(err)
     }

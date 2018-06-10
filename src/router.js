@@ -18,10 +18,11 @@ const router = new Router({
       component: Welcome,
     },
     {
-      path: '/home',
+      path: '/home/:tag?',
       name: 'home',
       component: Home,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      props: true
     },
     {
       path: '/login',

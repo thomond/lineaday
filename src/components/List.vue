@@ -7,18 +7,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import DateDisplay from '@/components/DateDisplay.vue'
 
 export default {
   name: 'List',
+  props: ['lines'],
   components: {
     DateDisplay
-  },
-  computed: {
-    ...mapGetters([
-      'lines'
-    ]),
   }
 };
 </script>
