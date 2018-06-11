@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-menu v-if="isAuthenticated" />
-    <router-view/>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 

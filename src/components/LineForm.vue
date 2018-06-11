@@ -15,17 +15,14 @@
           @blur="onBlur"
           v-model="text"></b-input>
           <p class="help" v-if="expanded">
-            <b-taglist v-if="tags.length">
-              <b-tag
-                rounded
-                ellipsis
-                type="is-primary"
+            <span v-if="tags.length">
+              <span class="has-text-primary hashtag"
                 v-for="tag in tags"
-                :key="tag">{{ tag }}</b-tag>
-            </b-taglist>
+                :key="tag">#{{ tag }}</span>
+            </span>
             <span v-else>
               Hint: type <b-tag rounded>#tag</b-tag> to
-              add <b-tag rounded type="is-primary">tag</b-tag> to your post.
+              add <span class="has-text-primary">#tag</span> to your post.
             </span>
           </p>
       </b-field>
@@ -133,6 +130,10 @@ export default {
 
 p.help {
   margin-top: .35rem;
+}
+
+.hashtag {
+  margin-right: 3px;
 }
 
 </style>

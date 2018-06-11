@@ -123,7 +123,8 @@ const actions = {
 
 const getters = {
   hasToday: state => state.hasToday,
-  lines: state => state.lines
+  lines: state => state.lines,
+  tags: state => state.tags
 }
 
 const mutations = {
@@ -136,7 +137,7 @@ const mutations = {
     }
   },
   addTags(state, tags) {
-    state.tags.concat(tags)
+    state.tags = uniq(state.tags.concat(tags)).sort()
   },
   setHasToday(state, payload) {
     state.hasToday = payload
@@ -145,7 +146,7 @@ const mutations = {
     state.lines = payload
   },
   setTags(state, tags) {
-    state.tags = uniq(tags)
+    state.tags = uniq(tags).sort()
   },
 }
 

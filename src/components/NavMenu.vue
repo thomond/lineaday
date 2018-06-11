@@ -4,7 +4,7 @@
     role="navigation"
     aria-label="main navigation">
     <div class="navbar-brand">
-      <h1 class="logo navbar-item">tinythoughts</h1>
+      <router-link class="logo navbar-item" to="/home">tinythoughts</router-link>
         <a
           @click="isActive = !isActive"
           role="button"

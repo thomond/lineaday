@@ -3,8 +3,7 @@
     <div class="message-body">
       <p class="title is-6 fancy">{{ date }}</p>
       <p v-for="line in lines" class="subtitle is-5" :key="key(line)">
-        <span class="subtitle is-6 has-text-grey">{{ year(line) }}: </span>
-        <span v-html="text(line.text)"></span>
+        <line-display :year="year(line)" :text="line.text" />
       </p>
     </div>
   </div>
@@ -12,19 +11,21 @@
 
 <script>
 import moment from 'moment'
-import { tagRegExp } from '@/util'
+import LineDisplay from './LineDisplay.vue'
 
 export default {
   name: 'DateDisplay',
   props: ['lines', 'date'],
+  components: {
+    LineDisplay
+  },
   computed: {
     key: () => line => line.createdAt.seconds || line.createdAt.toISOString(),
     year: () => (line) => {
       const createdAt = line.createdAt.toDate ?
         line.createdAt.toDate() : line.createdAt
       return moment(createdAt).format('YYYY')
-    },
-    text: () => lineText => lineText.replace(tagRegExp, match => `<span class="tag is-primary is-rounded is-medium">${match.replace('#', '')}</span>`)
+    }
   }
 };
 </script>

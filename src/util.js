@@ -15,3 +15,7 @@ export function getTagsFromLine(line) {
   const matchesArray = line.match(tagRegExp)
   return uniq(matchesArray).map(match => match.replace('#', ''))
 }
+
+export function tagToUrl(tag) {
+  return `/home/${tag.replace('#', '')}`
+}
