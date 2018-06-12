@@ -64,8 +64,4 @@ export default {
 span {
   margin: 1px;
 }
-
-.message a.link {
-  text-decoration: none;
-}
 </style>

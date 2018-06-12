@@ -5,12 +5,20 @@
         <p :class="{ title: true,  'is-6': !isPurple, 'is-2': isPurple, fancy: true }">
           {{ date }}
         </p>
-        <button
-          @click="setEditingLine"
-          class="edit button small is-text has-text-primary"
-          v-if="isPurple">
-            edit
-        </button>
+        <span v-if="isPurple">
+          <a
+            @click="resetEditing"
+            class="edit has-text-primary"
+            v-if="isEditing">
+            cancel
+          </a>
+          <a
+            @click="setEditingLine"
+            class="edit has-text-primary"
+            v-else>
+              edit
+          </a>
+        </span>
       </div>
       <p v-for="line in lines" class="subtitle is-5" :key="line.id">
         <line-display :year="year(line)" :text="line.text" :id="line.id" />
@@ -27,16 +35,16 @@ import LineDisplay from './LineDisplay.vue'
 
 export default {
   name: 'DateDisplay',
-  props: ['lines', 'date'],
+  props: ['isPurpleable', 'lines', 'date'],
   components: {
     LineDisplay
   },
   computed: {
     ...mapGetters([
-      'hasToday'
+      'isEditing'
     ]),
     isPurple() {
-      return this.hasToday && moment().format(groupByDateFormat) === this.date
+      return this.isPurpleable && moment().format(groupByDateFormat) === this.date
     },
     year: () => (line) => {
       const createdAt = line.createdAt.toDate ?
@@ -46,6 +54,7 @@ export default {
   },
   methods: {
     ...mapMutations([
+      'resetEditing',
       'setEditing'
     ]),
     setEditingLine() {
@@ -72,6 +81,5 @@ export default {
 
 .edit {
   margin-left: 10px;
-  text-decoration: none;
 }
 </style>

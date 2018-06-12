@@ -11,7 +11,7 @@
     </div>
     <div class="columns">
       <div class="column is is-three-fifths is is-offset-one-fifth">
-        <list :lines="lines" />
+        <list :lines="lines" :is-purpleable="isPurpleable" />
         <b-loading :is-full-page="true" :active.sync="loading"></b-loading>
       </div>
       <div class="column is-one-fifth tag-column">
@@ -55,6 +55,9 @@ export default {
       'lines',
       'tags'
     ]),
+    isPurpleable() {
+      return this.hasToday && !this.tag
+    },
     showForm() {
       return !this.loading && !this.tag && !this.hasToday
     },

@@ -57,4 +57,8 @@ body, button, input, select, textarea {
 .hero-body {
   overflow: hidden;
 }
+
+.message a:not(.button):not(.tag) {
+  text-decoration: none;
+}
 </style>

@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-for="entry in lines" :key="entry[0]">
-      <date-display :lines="entry[1]" :date="entry[0]" />
+      <date-display
+        :is-purpleable="isPurpleable"
+        :lines="entry[1]"
+        :date="entry[0]" />
     </div>
   </div>
 </template>
@@ -11,7 +14,7 @@ import DateDisplay from '@/components/DateDisplay.vue'
 
 export default {
   name: 'List',
-  props: ['lines'],
+  props: ['isPurpleable', 'lines'],
   components: {
     DateDisplay
   }
