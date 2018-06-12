@@ -165,7 +165,7 @@ const mutations = {
     state.hasToday = payload
   },
   setLine(state, newLineProps) {
-    state.lines[0][0] = { ...state.lines[0][0], ...newLineProps }
+    state.lines[0][1][0] = { ...state.lines[0][1][0], ...newLineProps }
   },
   setLines(state, payload) {
     state.lines = payload

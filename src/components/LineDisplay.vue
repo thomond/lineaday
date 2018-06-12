@@ -2,7 +2,7 @@
   <div>
     <span class="subtitle is-6 has-text-grey">{{ year }}</span>
     <div v-if="isEditing">
-      <line-form :custom-on-blur="handleBlur" />
+      <line-form :handle-blur="handleBlur" :handle-submit="handleSubmit" />
     </div>
     <div v-else>
       <span v-for="(word, index) in words" :key="index">
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { tagToUrl } from '@/util'
 import LineForm from './LineForm.vue'
 
@@ -41,6 +41,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'editLine'
+    ]),
     ...mapMutations([
       'resetEditing'
     ]),
@@ -48,6 +51,9 @@ export default {
       if (text === this.text) {
         this.resetEditing()
       }
+    },
+    handleSubmit({ text, tags }) {
+      this.editLine({ text, tags, id: this.id })
     }
   }
 };

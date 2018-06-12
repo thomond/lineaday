@@ -1,12 +1,13 @@
 <template>
   <div class="form-container">
     <h1 class="title date fancy has-text-centered-mobile">{{ todaysDate }}</h1>
-    <line-form />
+    <line-form :handle-submit="addLine" />
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import { mapActions } from 'vuex'
 import LineForm from './LineForm.vue'
 
 export default {
@@ -19,6 +20,11 @@ export default {
       return moment().format('MMMM D, YYYY');
     },
   },
+  methods: {
+    ...mapActions([
+      'addLine'
+    ]),
+  }
 };
 </script>
 

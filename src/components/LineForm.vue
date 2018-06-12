@@ -39,12 +39,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { getTagsFromLine } from '@/util'
 
 export default {
   name: 'LineForm',
-  props: ['customOnBlur'],
+  props: ['handleBlur', 'handleSubmit'],
   data() {
     return {
       expanded: false,
@@ -60,9 +60,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'addLine'
-    ]),
     onBlur(e) {
       if (e.relatedTarget === this.$refs.submitButton) {
         this.onSubmit()
@@ -70,12 +67,12 @@ export default {
       this.expanded = false
 
       if (this.onBlur) {
-        this.customOnBlur(this.text)
+        this.handleBlur(this.text)
       }
     },
     onSubmit() {
       if (this.text.length) {
-        this.addLine({ text: this.text, tags: this.tags });
+        this.handleSubmit({ text: this.text, tags: this.tags });
         this.text = ''
       } else {
         this.$toast.open({
