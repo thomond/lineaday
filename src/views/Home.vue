@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns">
       <div class="column is-three-fifths is-offset-one-fifth">
-        <line-form v-if="showForm" />
+        <new-line-form v-if="showForm" />
         <div v-if="tag" class="tag-container">
           <h1 class="title is-1 fancy">#{{ tag }}</h1>
           <router-link to="/home" class="subtitle is-6 has-text-primary">clear</router-link>
@@ -26,7 +26,7 @@
 <script>
 import { mapWaitingGetters } from 'vue-wait'
 import { mapActions, mapGetters } from 'vuex'
-import LineForm from '@/components/LineForm.vue'
+import NewLineForm from '@/components/NewLineForm.vue'
 import List from '@/components/List.vue'
 import { tagToUrl } from '@/util'
 
@@ -34,8 +34,8 @@ export default {
   name: 'home',
   props: ['tag'],
   components: {
-    LineForm,
-    List
+    List,
+    NewLineForm
   },
   mounted() {
     this.getLines({ tag: this.tag })
@@ -51,6 +51,7 @@ export default {
     }),
     ...mapGetters([
       'hasToday',
+      'isEditing',
       'lines',
       'tags'
     ]),

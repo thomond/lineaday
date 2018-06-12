@@ -1,11 +1,16 @@
 <template>
-  <div :class="{ message: true, 'is-primary': isToday }">
+  <div :class="{ message: true, 'is-primary': isPurple }">
     <div class="message-body">
       <div class="title-container">
-        <p :class="{ title: true,  'is-6': !isToday, 'is-2': isToday, fancy: true }">
+        <p :class="{ title: true,  'is-6': !isPurple, 'is-2': isPurple, fancy: true }">
           {{ date }}
         </p>
-        <button class="edit button small is-text has-text-primary" v-if="isToday">edit</button>
+        <button
+          @click="setEditingLine"
+          class="edit button small is-text has-text-primary"
+          v-if="isPurple">
+            edit
+        </button>
       </div>
       <p v-for="line in lines" class="subtitle is-5" :key="key(line)">
         <line-display :year="year(line)" :text="line.text" />
@@ -16,6 +21,7 @@
 
 <script>
 import moment from 'moment'
+import { mapGetters, mapMutations } from 'vuex'
 import { groupByDateFormat } from '@/util'
 import LineDisplay from './LineDisplay.vue'
 
@@ -26,14 +32,25 @@ export default {
     LineDisplay
   },
   computed: {
-    isToday() {
-      return moment().format(groupByDateFormat) === this.date
+    ...mapGetters([
+      'hasToday'
+    ]),
+    isPurple() {
+      return this.hasToday && moment().format(groupByDateFormat) === this.date
     },
     key: () => line => line.createdAt.seconds || line.createdAt.toISOString(),
     year: () => (line) => {
       const createdAt = line.createdAt.toDate ?
         line.createdAt.toDate() : line.createdAt
       return moment(createdAt).format('YYYY')
+    }
+  },
+  methods: {
+    ...mapMutations([
+      'setEditing'
+    ]),
+    setEditingLine() {
+      this.setEditing(this.lines[0])
     }
   }
 };

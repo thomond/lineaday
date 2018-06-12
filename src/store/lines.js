@@ -28,6 +28,14 @@ function getLineArray(lines) {
   return lineArray
 }
 
+function getTagObjectFromArray(tags) {
+  const today = moment()
+  return tags.reduce((acc, curr) => {
+    acc[curr] = today.valueOf()
+    return acc
+  }, {})
+}
+
 function formatLineCollectionSnapshot(snapshot) {
   const today = moment()
   const lines = {}
@@ -58,12 +66,9 @@ const waiter = 'loading lines'
 
 const actions = {
   async addLine({ commit, dispatch, rootState }, { text, tags }) {
-    dispatch('wait/start', waiter, { root: true });
+    dispatch('wait/start', waiter, { root: true })
     const today = moment()
-    const tagObject = tags.reduce((acc, curr) => {
-      acc[curr] = today.valueOf()
-      return acc
-    }, {})
+    const tagObject = getTagObjectFromArray(tags)
     const line = {
       createdAt: today.toDate(),
       dayOfWeek: today.day(),
@@ -84,7 +89,24 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    dispatch('wait/end', waiter, { root: true });
+    dispatch('wait/end', waiter, { root: true })
+  },
+  async editLine({ commit, dispatch, rootState }, { id, text, tags }) {
+    dispatch('wait/start', waiter, { root: true })
+
+    const tagObject = getTagObjectFromArray(tags)
+    const lineRef = db
+      .collection('users')
+      .doc(rootState.auth.user.uid)
+      .collection('lines')
+      .doc(id);
+
+    const newLineProps = { text, tags: tagObject }
+    await lineRef.set(newLineProps, { merge: true })
+    commit('addTags', tags)
+    commit('setLine', newLineProps)
+    commit('resetEditing')
+    dispatch('wait/end', waiter, { root: true })
   },
   async getLines({ commit, dispatch, rootState }, { tag }) {
     const { user } = rootState.auth
@@ -141,6 +163,9 @@ const mutations = {
   },
   setHasToday(state, payload) {
     state.hasToday = payload
+  },
+  setLine(state, newLineProps) {
+    state.lines[0][0] = { ...state.lines[0][0], ...newLineProps }
   },
   setLines(state, payload) {
     state.lines = payload

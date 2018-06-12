@@ -1,48 +1,45 @@
 <template>
-  <div class="form-container">
-    <h1 class="title date fancy has-text-centered-mobile">{{ todaysDate }}</h1>
-    <form @submit.prevent="onSubmit" class="form">
-      <b-field>
-        <b-input
-          expanded
-          size="is-large"
-          type="textarea"
-          maxlength="140"
-          :rows="rows"
-          :placeholder="placeholder"
-          :class="{ 'placeholder-colored': !expanded }"
-          @focus="expanded = true"
-          @blur="onBlur"
-          v-model="text"></b-input>
-          <p class="help" v-if="expanded">
-            <span v-if="tags.length">
-              <span class="has-text-primary hashtag"
-                v-for="tag in tags"
-                :key="tag">#{{ tag }}</span>
-            </span>
-            <span v-else>
-              Hint: type <b-tag rounded>#tag</b-tag> to
-              add <span class="has-text-primary">#tag</span> to your post.
-            </span>
-          </p>
-      </b-field>
-      <b-field grouped position="is-right" v-if="expanded">
-        <div class="control">
-          <button
-            ref="submitButton"
-            class="button is-primary is-large is-rounded"
-            type="submit">
-            Save
-          </button>
-        </div>
-      </b-field>
-    </form>
-  </div>
+  <form @submit.prevent="onSubmit" class="form">
+    <b-field>
+      <b-input
+        expanded
+        size="is-large"
+        type="textarea"
+        maxlength="140"
+        ref="textBox"
+        :rows="rows"
+        :placeholder="placeholder"
+        :class="{ 'placeholder-colored': !expanded }"
+        @focus="expanded = true"
+        @blur="onBlur"
+        v-model="text"></b-input>
+        <p class="help" v-if="expanded">
+          <span v-if="tags.length">
+            <span class="has-text-primary hashtag"
+              v-for="tag in tags"
+              :key="tag">#{{ tag }}</span>
+          </span>
+          <span v-else>
+            Hint: type <b-tag rounded>#tag</b-tag> to
+            add <span class="has-text-primary">#tag</span> to your post.
+          </span>
+        </p>
+    </b-field>
+    <b-field grouped position="is-right" v-if="expanded">
+      <div class="control">
+        <button
+          ref="submitButton"
+          class="button is-primary is-large is-rounded"
+          type="submit">
+          Save
+        </button>
+      </div>
+    </b-field>
+  </form>
 </template>
 
 <script>
-import moment from 'moment'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { getTagsFromLine } from '@/util'
 
 export default {
@@ -54,6 +51,13 @@ export default {
       placeholder: 'What do you want to say today?',
       text: '',
     };
+  },
+  mounted() {
+    if (this.getEditingLine) {
+      this.text = this.getEditingLine.text
+      this.expanded = true
+      this.$refs.textBox.$el.focus()
+    }
   },
   methods: {
     ...mapActions([
@@ -79,6 +83,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'getEditingLine'
+    ]),
     tags() {
       return getTagsFromLine(this.text)
     },
@@ -89,27 +96,12 @@ export default {
       }
       return this.expanded ? rows + 1 : rows
     },
-    todaysDate() {
-      return moment().format('MMMM D, YYYY');
-    },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.form-container {
-  min-height: 40vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  margin-bottom: 40px;
-}
-
-.date {
-  font-size: 2rem;
-}
-
 .placeholder-colored {
   ::placeholder {
     color: #7957d5;
