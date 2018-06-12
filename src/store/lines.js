@@ -37,10 +37,11 @@ function formatLineCollectionSnapshot(snapshot) {
   snapshot.forEach((doc) => {
     const data = doc.data()
     const date = moment(data.createdAt.toDate()).format(groupByDateFormat)
+    const line = { ...data, id: doc.id }
     if (lines[date]) {
-      lines[date].push(data)
+      lines[date].push(line)
     } else {
-      lines[date] = [data]
+      lines[date] = [line]
     }
     if (today.isSame(moment(data.createdAt.toDate()), 'd')) {
       hasToday = true
@@ -71,12 +72,13 @@ const actions = {
       text,
     }
     try {
-      await db
+      const { id } = await db
         .collection('users')
         .doc(rootState.auth.user.uid)
         .collection('lines')
         .add(line)
-      commit('addLine', line)
+
+      commit('addLine', { ...line, id })
       commit('addTags', tags)
       commit('setHasToday', true)
     } catch (err) {
