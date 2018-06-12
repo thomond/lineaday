@@ -2,15 +2,13 @@ import moment from 'moment'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import { db } from '@/firebase'
-import { displayError } from '@/util'
+import { displayError, groupByDateFormat } from '@/util'
 
 const initialState = {
   hasToday: false,
   lines: [],
   tags: []
 }
-
-const groupByDateFormat = 'MMMM DD'
 
 function getIndexOfToday(lineArray) {
   const today = moment().format(groupByDateFormat)

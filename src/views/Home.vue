@@ -50,11 +50,12 @@ export default {
       loading: 'loading lines',
     }),
     ...mapGetters([
+      'hasToday',
       'lines',
       'tags'
     ]),
     showForm() {
-      return !this.loading && !this.tag
+      return !this.loading && !this.tag && !this.hasToday
     },
     tagUrl: () => tagToUrl
   }

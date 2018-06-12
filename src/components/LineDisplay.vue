@@ -1,15 +1,17 @@
 <template>
-  <span>
-    <span class="subtitle is-6 has-text-grey">{{ year }}:</span>
-    <span v-for="(word, index) in words" :key="index">
-      <span v-if="word.startsWith('#')">
-        <router-link class="has-text-primary link" :to="url(word)">
-          {{ word }}
-        </router-link>
+  <div>
+    <span class="subtitle is-6 has-text-grey">{{ year }}</span>
+    <div>
+      <span v-for="(word, index) in words" :key="index">
+        <span v-if="word.startsWith('#')">
+          <router-link class="has-text-primary link" :to="url(word)">
+            {{ word }}
+          </router-link>
+        </span>
+        <span v-else>{{ word }}</span>
       </span>
-      <span v-else>{{ word }}</span>
-    </span>
-  </span>
+    </div>
+  </div>
 </template>
 
 <script>

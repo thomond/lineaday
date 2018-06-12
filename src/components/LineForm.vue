@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container" v-if="!hasToday">
+  <div class="form-container">
     <h1 class="title date fancy has-text-centered-mobile">{{ todaysDate }}</h1>
     <form @submit.prevent="onSubmit" class="form">
       <b-field>
@@ -42,7 +42,7 @@
 
 <script>
 import moment from 'moment'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { getTagsFromLine } from '@/util'
 
 export default {
@@ -79,9 +79,6 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'hasToday'
-    ]),
     tags() {
       return getTagsFromLine(this.text)
     },
