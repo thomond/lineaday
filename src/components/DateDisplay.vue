@@ -12,8 +12,8 @@
             edit
         </button>
       </div>
-      <p v-for="line in lines" class="subtitle is-5" :key="key(line)">
-        <line-display :year="year(line)" :text="line.text" />
+      <p v-for="line in lines" class="subtitle is-5" :key="line.id">
+        <line-display :year="year(line)" :text="line.text" :id="line.id" />
       </p>
     </div>
   </div>
@@ -38,7 +38,6 @@ export default {
     isPurple() {
       return this.hasToday && moment().format(groupByDateFormat) === this.date
     },
-    key: () => line => line.createdAt.seconds || line.createdAt.toISOString(),
     year: () => (line) => {
       const createdAt = line.createdAt.toDate ?
         line.createdAt.toDate() : line.createdAt

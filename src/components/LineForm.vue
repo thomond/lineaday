@@ -44,7 +44,7 @@ import { getTagsFromLine } from '@/util'
 
 export default {
   name: 'LineForm',
-  props: {},
+  props: ['customOnBlur'],
   data() {
     return {
       expanded: false,
@@ -56,7 +56,7 @@ export default {
     if (this.getEditingLine) {
       this.text = this.getEditingLine.text
       this.expanded = true
-      this.$refs.textBox.$el.focus()
+      this.$refs.textBox.focus()
     }
   },
   methods: {
@@ -68,6 +68,10 @@ export default {
         this.onSubmit()
       }
       this.expanded = false
+
+      if (this.onBlur) {
+        this.customOnBlur(this.text)
+      }
     },
     onSubmit() {
       if (this.text.length) {
