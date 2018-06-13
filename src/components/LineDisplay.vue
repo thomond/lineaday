@@ -4,7 +4,7 @@
     <div v-if="isEditing">
       <line-form :handle-blur="handleBlur" :handle-submit="handleSubmit" />
     </div>
-    <div v-else>
+    <div v-else class="word-container">
       <span v-for="(word, index) in words" :key="index">
         <span v-if="word.startsWith('#')">
           <router-link class="has-text-primary link" :to="url(word)">
@@ -37,7 +37,7 @@ export default {
     },
     url: () => tagToUrl,
     words() {
-      return this.text.split(' ')
+      return this.text.split(/\s/)
     }
   },
   methods: {
@@ -63,5 +63,10 @@ export default {
 <style scoped lang="scss">
 span {
   margin: 1px;
+}
+
+.word-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
