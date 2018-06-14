@@ -1,6 +1,14 @@
 import { Toast } from 'buefy'
 import uniq from 'lodash/uniq'
 
+export function displayMessage(message) {
+  Toast.open({
+    duration: 6000,
+    message,
+    position: 'is-bottom',
+  })
+}
+
 export function displayError(err) {
   Toast.open({
     message: err.message,

@@ -1,19 +1,49 @@
 import get from 'lodash/get'
 import router from '@/router'
-import firebase from '@/firebase'
-import { displayError } from '@/util'
+import firebase, { db, messaging } from '@/firebase'
+import { displayError, displayMessage } from '@/util'
 
 const initialState = {
   user: null
 }
 
 const actions = {
-  async getUserFromAuthUser({ commit }, authUser) {
+  async getUserFromAuthUser({ commit, dispatch }, authUser) {
     try {
       commit('setUser', authUser)
+      dispatch('requestMessagingPermission')
     } catch (err) {
       displayError(err)
     }
+  },
+  async requestMessagingPermission({ dispatch }) {
+    try {
+      await messaging.requestPermission()
+      dispatch('setMessagingToken')
+      messaging.onTokenRefresh(() => {
+        dispatch('setMessagingToken')
+      })
+    } catch (err) {
+      console.log('Unable to get permission to notify.', err)
+      displayMessage('You can turn notifications on in user settings.')
+    }
+  },
+  async setMessagingToken({ dispatch }) {
+    let messagingToken = null
+    try {
+      messagingToken = await messaging.getToken()
+    } catch (err) {
+      console.log('Unable to get permission to notify.', err)
+      displayError(err)
+    }
+    dispatch('updateUser', { messagingToken })
+  },
+  async updateUser({ commit, state }, attributes) {
+    await db
+      .collection('users')
+      .doc(state.user.uid)
+      .set(attributes, { merge: true })
+    commit('modifyUser', attributes)
   },
   async userEmailSignIn({ dispatch }, { email, password }) {
     try {
@@ -47,6 +77,9 @@ const getters = {
 }
 
 const mutations = {
+  modifyUser(state, attributes) {
+    state.user = { ...state.user, attributes }
+  },
   setUser(state, payload) {
     state.user = payload
   }

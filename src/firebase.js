@@ -18,16 +18,7 @@ const settings = { timestampsInSnapshots: true }
 db.settings(settings)
 
 // messaging
-const messaging = firebase.messaging()
+export const messaging = firebase.messaging()
 messaging.usePublicVapidKey(process.env.VUE_APP_FIREBASE_VAPID_KEY)
-
-
-messaging.requestPermission().then(() => {
-  console.log('Notification permission granted.');
-  // TODO(developer): Retrieve an Instance ID token for use with FCM.
-  // ...
-}).catch((err) => {
-  console.log('Unable to get permission to notify.', err);
-});
 
 export default firebase
