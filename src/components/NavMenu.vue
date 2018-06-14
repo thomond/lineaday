@@ -23,6 +23,9 @@
             <span>{{ userEmail }}</span>
             <b-icon icon="caret-down"></b-icon>
           </a>
+          <b-dropdown-item has-link>
+            <router-link to="/settings">Settings</router-link>
+          </b-dropdown-item>
           <b-dropdown-item @click="handleSignOut">
             Log Out
           </b-dropdown-item>
