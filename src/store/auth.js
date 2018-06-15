@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import router from '@/router'
 import firebase, { db, messaging } from '@/firebase'
-import { displayError, displayMessage } from '@/util'
+import { displayError, displayMessage, hourToUTC } from '@/util'
 
 const initialState = {
   user: null
@@ -32,11 +32,19 @@ const actions = {
     let messagingToken = null
     try {
       messagingToken = await messaging.getToken()
+      console.log('token: ', messagingToken)
+      messaging.onMessage((payload) => {
+        console.log('Message received. ', payload);
+        // ...
+      });
     } catch (err) {
       console.log('Unable to get permission to notify.', err)
       displayError(err)
     }
-    dispatch('updateUser', { messagingToken })
+    dispatch('updateUser', {
+      messagingTokens: { [messagingToken]: true },
+      sendNotifications: true
+    })
   },
   async updateUser({ commit, state }, attributes) {
     await db
@@ -44,6 +52,10 @@ const actions = {
       .doc(state.user.uid)
       .set(attributes, { merge: true })
     commit('modifyUser', attributes)
+  },
+  async updateUserSettings({ dispatch }, { sendNotifications, reminderTime }) {
+    const hour = hourToUTC(reminderTime)
+    dispatch('updateUser', { sendNotifications, reminderTime: hour })
   },
   async userEmailSignIn({ dispatch }, { email, password }) {
     try {

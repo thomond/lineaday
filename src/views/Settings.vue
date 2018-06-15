@@ -11,11 +11,11 @@
         <form @submit.prevent="onSubmit">
           <h2 class="subtitle is-5">Notifications</h2>
           <b-field grouped>
-            <b-switch v-model="sendReminders">
+            <b-switch v-model="sendNotifications">
               {{ reminderText }}
             </b-switch>
             <b-select
-              :class="{ time: true, invisible: !sendReminders }"
+              :class="{ time: true, invisible: !sendNotifications }"
               v-model="reminderTime"
               icon="clock"
               icon-pack="fas">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import range from 'lodash/range'
 import moment from 'moment'
 
@@ -49,9 +49,9 @@ export default {
   name: 'Settings',
   data() {
     return {
-      sendReminders: true,
+      sendNotifications: true,
       reminderTime: 20,
-      times: range(0, 23)
+      times: range(0, 24)
     }
   },
   computed: {
@@ -59,7 +59,7 @@ export default {
       'userEmail'
     ]),
     reminderText() {
-      if (this.sendReminders) {
+      if (this.sendNotifications) {
         return 'Send me daily reminders at'
       }
 
@@ -67,11 +67,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'updateUserSettings'
+    ]),
     formatTime(hour) {
       return moment().startOf('day').hour(hour).format('hh:mm a')
     },
     onSubmit() {
-      console.log('submitted!')
+      this.updateUserSettings({
+        sendNotifications: this.sendNotifications,
+        reminderTime: this.reminderTime
+      })
     }
   }
 };

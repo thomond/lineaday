@@ -66,7 +66,7 @@ export default {
       }
       this.expanded = false
 
-      if (this.onBlur) {
+      if (this.handleBlur) {
         this.handleBlur(this.text)
       }
     },
