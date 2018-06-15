@@ -1,6 +1,5 @@
 import { Toast } from 'buefy'
 import uniq from 'lodash/uniq'
-import moment from 'moment'
 
 export function displayMessage(message) {
   Toast.open({
@@ -30,11 +29,3 @@ export function tagToUrl(tag) {
 }
 
 export const groupByDateFormat = 'MMMM DD'
-
-export function hourToUTC(hour) {
-  return moment()
-    .startOf('hour')
-    .hour(hour)
-    .utc()
-    .hour()
-}

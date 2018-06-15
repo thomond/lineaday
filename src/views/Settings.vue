@@ -10,6 +10,11 @@
         <hr />
         <form @submit.prevent="onSubmit">
           <h2 class="subtitle is-5">Notifications</h2>
+          <b-message v-if="blockedInBrowser && sendNotifications">
+            You have blocked notifications in your current browser.
+            You will still receive notifications on other devices.
+            Use the form to turn off all notifications on all devices.
+          </b-message>
           <b-field grouped>
             <b-switch v-model="sendNotifications">
               {{ reminderText }}
@@ -27,7 +32,7 @@
           <b-field grouped position="is-right">
             <div class="control">
               <button
-                class="button is-primary is-rounded"
+                :class="buttonClasses"
                 type="submit">
                 Save
               </button>
@@ -42,6 +47,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { mapWaitingGetters } from 'vue-wait'
 import range from 'lodash/range'
 import moment from 'moment'
 
@@ -54,10 +60,28 @@ export default {
       times: range(0, 24)
     }
   },
+  mounted() {
+    this.getUserSettings().then(({ reminderTime, sendNotifications }) => {
+      this.sendNotifications = sendNotifications
+      this.reminderTime = reminderTime
+    })
+  },
   computed: {
     ...mapGetters([
-      'userEmail'
+      'blockedInBrowser',
+      'userEmail',
     ]),
+    ...mapWaitingGetters({
+      loading: 'user update',
+    }),
+    buttonClasses() {
+      return {
+        button: true,
+        'is-loading': this.loading,
+        'is-primary': true,
+        'is-rounded': true
+      }
+    },
     reminderText() {
       if (this.sendNotifications) {
         return 'Send me daily reminders at'
@@ -68,10 +92,16 @@ export default {
   },
   methods: {
     ...mapActions([
+      'getUserSettings',
       'updateUserSettings'
     ]),
     formatTime(hour) {
-      return moment().startOf('day').hour(hour).format('hh:mm a')
+      return moment()
+        .utc()
+        .startOf('day')
+        .hour(hour)
+        .local()
+        .format('hh:mm a')
     },
     onSubmit() {
       this.updateUserSettings({

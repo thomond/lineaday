@@ -1,11 +1,18 @@
 import get from 'lodash/get'
 import router from '@/router'
 import firebase, { db, messaging } from '@/firebase'
-import { displayError, displayMessage, hourToUTC } from '@/util'
+import { displayError, displayMessage } from '@/util'
 
 const initialState = {
+  blockedInBrowser: false,
+  settings: {
+    reminderTime: 16,
+    sendNotifications: false,
+  },
   user: null
 }
+
+const waiter = 'user update'
 
 const actions = {
   async getUserFromAuthUser({ commit, dispatch }, authUser) {
@@ -16,7 +23,19 @@ const actions = {
       displayError(err)
     }
   },
-  async requestMessagingPermission({ dispatch }) {
+  async getUserSettings({ commit, dispatch, state }) {
+    dispatch('wait/start', waiter, { root: true })
+    const doc = await db
+      .collection('users')
+      .doc(state.user.uid)
+      .get()
+
+    const { reminderTime, sendNotifications } = doc.data()
+    commit('modifyUserSettings', { reminderTime, sendNotifications })
+    dispatch('wait/end', waiter, { root: true })
+    return { reminderTime, sendNotifications }
+  },
+  async requestMessagingPermission({ commit, dispatch }) {
     try {
       await messaging.requestPermission()
       dispatch('setMessagingToken')
@@ -24,26 +43,27 @@ const actions = {
         dispatch('setMessagingToken')
       })
     } catch (err) {
+      commit('setBlockedInBrowser', true)
       console.log('Unable to get permission to notify.', err)
-      displayMessage('You can turn notifications on in user settings.')
     }
   },
   async setMessagingToken({ dispatch }) {
-    let messagingToken = null
+    let messagingTokens = null
     try {
-      messagingToken = await messaging.getToken()
-      console.log('token: ', messagingToken)
+      const messagingToken = await messaging.getToken()
       messaging.onMessage((payload) => {
         console.log('Message received. ', payload);
         // ...
       });
+
+      messagingTokens = { [messagingToken]: true }
     } catch (err) {
       console.log('Unable to get permission to notify.', err)
       displayError(err)
     }
     dispatch('updateUser', {
-      messagingTokens: { [messagingToken]: true },
-      sendNotifications: true
+      messagingTokens,
+      sendNotifications: !!messagingTokens
     })
   },
   async updateUser({ commit, state }, attributes) {
@@ -51,11 +71,17 @@ const actions = {
       .collection('users')
       .doc(state.user.uid)
       .set(attributes, { merge: true })
-    commit('modifyUser', attributes)
+    commit('modifyUserSettings', attributes)
   },
   async updateUserSettings({ dispatch }, { sendNotifications, reminderTime }) {
-    const hour = hourToUTC(reminderTime)
-    dispatch('updateUser', { sendNotifications, reminderTime: hour })
+    dispatch('wait/start', waiter, { root: true })
+    try {
+      await dispatch('updateUser', { sendNotifications, reminderTime })
+      displayMessage('Notification settings updated!')
+    } catch (err) {
+      displayError(err)
+    }
+    dispatch('wait/end', waiter, { root: true })
   },
   async userEmailSignIn({ dispatch }, { email, password }) {
     try {
@@ -75,22 +101,30 @@ const actions = {
       displayError(err)
     }
   },
-  async userSignOut({ commit, dispatch }) {
+  async userSignOut({ commit }) {
     await firebase.auth().signOut()
-    commit('setUser', null)
-    dispatch('resetLines')
+    commit('resetUser')
+    commit('resetLines')
     router.push('/login')
   }
 }
 
 const getters = {
+  blockedInBrowser: state => state.blockedInBrowser,
   isAuthenticated: state => !!state.user,
-  userEmail: state => get(state, 'user.email', '')
+  userEmail: state => get(state, 'user.email', ''),
+  userSettings: state => state.settings
 }
 
 const mutations = {
-  modifyUser(state, attributes) {
-    state.user = { ...state.user, attributes }
+  setBlockedInBrowser(state, blockedInBrowser) {
+    state.blockedInBrowser = blockedInBrowser
+  },
+  modifyUserSettings(state, { sendNotifications, reminderTime }) {
+    state.settings = { ...state.settings, sendNotifications, reminderTime }
+  },
+  resetUser(state) {
+    state.user = null
   },
   setUser(state, payload) {
     state.user = payload

@@ -137,10 +137,6 @@ const actions = {
     }
     dispatch('wait/end', waiter, { root: true });
   },
-  resetLines({ commit }) {
-    commit('setLines', {})
-    commit('setHasToday', false)
-  }
 }
 
 const getters = {
@@ -160,6 +156,10 @@ const mutations = {
   },
   addTags(state, tags) {
     state.tags = uniq(state.tags.concat(tags)).sort()
+  },
+  resetLines(state) {
+    state.lines = {}
+    state.hasToday = false
   },
   setHasToday(state, payload) {
     state.hasToday = payload
