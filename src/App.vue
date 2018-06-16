@@ -1,18 +1,21 @@
 <template>
   <div>
     <nav-menu v-if="isAuthenticated" />
+    <notification-banner v-if="isAuthenticated" />
     <router-view :key="$route.fullPath" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import NavMenu from '@/components/NavMenu.vue';
+import NavMenu from '@/components/NavMenu.vue'
+import NotificationBanner from '@/components/NotificationBanner.vue'
 
 export default {
   name: 'App',
   components: {
     NavMenu,
+    NotificationBanner
   },
   computed: {
     ...mapGetters([

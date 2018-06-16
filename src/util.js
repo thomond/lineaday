@@ -29,3 +29,5 @@ export function tagToUrl(tag) {
 }
 
 export const groupByDateFormat = 'MMMM DD'
+
+export const defaultReminderTime = 0

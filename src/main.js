@@ -40,7 +40,7 @@ const unsubscribe = firebase.auth()
       render: h => h(App),
       created() {
         if (firebaseUser) {
-          store.dispatch('getUserFromAuthUser', firebaseUser)
+          store.dispatch('onUserLogin', firebaseUser)
         }
       },
       wait: new VueWait({

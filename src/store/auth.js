@@ -1,29 +1,35 @@
 import get from 'lodash/get'
+import omitBy from 'lodash/omitBy'
 import router from '@/router'
 import firebase, { db, messaging } from '@/firebase'
-import { displayError, displayMessage } from '@/util'
+import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
 const initialState = {
   blockedInBrowser: false,
   settings: {
-    reminderTime: 16,
-    sendNotifications: false,
+    reminderTime: defaultReminderTime,
   },
   user: null
 }
 
-const waiter = 'user update'
-
 const actions = {
-  async getUserFromAuthUser({ commit, dispatch }, authUser) {
+  async onUserLogin({ commit, dispatch, state }, authUser) {
     try {
       commit('setUser', authUser)
-      dispatch('requestMessagingPermission')
+      await dispatch('getUserSettings')
+
+      // user hasn't explicitly turned off notifications
+      if (state.settings.sendNotifications === true) {
+        dispatch('requestMessagingPermission')
+      } else if (state.settings.sendNotifications === undefined) {
+        commit('toggleNotificationBanner', true)
+      }
     } catch (err) {
       displayError(err)
     }
   },
   async getUserSettings({ commit, dispatch, state }) {
+    const waiter = 'get user settings'
     dispatch('wait/start', waiter, { root: true })
     const doc = await db
       .collection('users')
@@ -33,7 +39,6 @@ const actions = {
     const { reminderTime, sendNotifications } = doc.data()
     commit('modifyUserSettings', { reminderTime, sendNotifications })
     dispatch('wait/end', waiter, { root: true })
-    return { reminderTime, sendNotifications }
   },
   async requestMessagingPermission({ commit, dispatch }) {
     try {
@@ -67,13 +72,15 @@ const actions = {
     })
   },
   async updateUser({ commit, state }, attributes) {
+    const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
     await db
       .collection('users')
       .doc(state.user.uid)
-      .set(attributes, { merge: true })
-    commit('modifyUserSettings', attributes)
+      .set(nonEmptyAttributes, { merge: true })
+    commit('modifyUserSettings', nonEmptyAttributes)
   },
   async updateUserSettings({ dispatch }, { sendNotifications, reminderTime }) {
+    const waiter = 'user update'
     dispatch('wait/start', waiter, { root: true })
     try {
       await dispatch('updateUser', { sendNotifications, reminderTime })
@@ -86,16 +93,18 @@ const actions = {
   async userEmailSignIn({ dispatch }, { email, password }) {
     try {
       const doc = await firebase.auth().signInWithEmailAndPassword(email, password)
-      dispatch('getUserFromAuthUser', doc.user)
+      dispatch('onUserLogin', doc.user)
       router.push('/home')
     } catch (err) {
       displayError(err)
     }
   },
-  async userEmailSignUp({ commit }, { email, password }) {
+  async userEmailSignUp({ commit, dispatch }, { email, password }) {
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
       commit('setUser', doc.user)
+      commit('toggleNotificationBanner')
+      dispatch('updateUser', { reminderTime: defaultReminderTime })
       router.push('/home')
     } catch (err) {
       displayError(err)
@@ -105,6 +114,7 @@ const actions = {
     await firebase.auth().signOut()
     commit('resetUser')
     commit('resetLines')
+    commit('toggleNotificationBanner', false)
     router.push('/login')
   }
 }
@@ -120,10 +130,13 @@ const mutations = {
   setBlockedInBrowser(state, blockedInBrowser) {
     state.blockedInBrowser = blockedInBrowser
   },
-  modifyUserSettings(state, { sendNotifications, reminderTime }) {
-    state.settings = { ...state.settings, sendNotifications, reminderTime }
+  modifyUserSettings(state, attributes) {
+    const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
+    state.settings = { ...state.settings, ...nonEmptyAttributes }
   },
   resetUser(state) {
+    state.blockedInBrowser = false
+    state.settings = {}
     state.user = null
   },
   setUser(state, payload) {
