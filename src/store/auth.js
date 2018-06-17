@@ -47,6 +47,8 @@ const actions = {
       messaging.onTokenRefresh(() => {
         dispatch('setMessagingToken')
       })
+
+      displayMessage('Successfully subscribed to notifications!')
     } catch (err) {
       commit('setBlockedInBrowser', true)
       console.log('Unable to get permission to notify.', err)
@@ -56,11 +58,6 @@ const actions = {
     let messagingTokens = null
     try {
       const messagingToken = await messaging.getToken()
-      messaging.onMessage((payload) => {
-        console.log('Message received. ', payload);
-        // ...
-      });
-
       messagingTokens = { [messagingToken]: true }
     } catch (err) {
       console.log('Unable to get permission to notify.', err)
