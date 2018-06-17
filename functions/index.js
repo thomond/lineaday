@@ -1,11 +1,20 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const moment = require('moment')
+const secureCompare = require('secure-compare')
 
 admin.initializeApp()
 
 exports.sendNotifications = functions.https.onRequest((req, res) => {
+  const key = (req.get('Authorization') || '').split('Basic ')[1]
   const hour = moment().utc().hour()
+
+  if (!secureCompare(key, functions.config().cron.key)) {
+    console.log('The key provided in the request does not match the key set in the environment.');
+    res.status(403).send('Security key does not match. Make sure your "key" URL query parameter matches the ' +
+        'cron.key environment variable.');
+    return null;
+  }
 
   console.log('Checking for notifications for hour ', hour)
 

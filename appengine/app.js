@@ -4,7 +4,11 @@ const axios = require('axios')
 const app = express()
 
 app.get('/hourly-check', (req, res) => {
-  axios.get('https://us-central1-lineaday-11542.cloudfunctions.net/sendNotifications')
+  axios.get(`${process.env.FIREBASE_BASE_URL}/sendNotifications`, {
+    headers: {
+      Authorization: `Basic ${process.env.FIREBASE_KEY}`
+    }
+  })
     .then(() => {
       res.end()
     })
