@@ -1,14 +1,13 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const moment = require('moment')
 
 admin.initializeApp()
 
 exports.sendNotifications = functions.https.onRequest((req, res) => {
-  const { hour } = req.body
+  const hour = moment().utc().hour()
 
-  if (typeof hour !== 'number') {
-    return res.status(422).send('Hour is required to be a number.')
-  }
+  console.log('Checking for notifications for hour ', hour)
 
   return getUsersForHour(hour)
     .then(sendNotificationsToAllUsers)
