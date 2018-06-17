@@ -45,7 +45,7 @@ export default {
     },
     yes() {
       this.toggleNotificationBanner()
-      this.requestMessagingPermission()
+      this.requestMessagingPermission({ notify: true })
     }
   }
 };

@@ -40,7 +40,7 @@ const actions = {
     commit('modifyUserSettings', { reminderTime, sendNotifications })
     dispatch('wait/end', waiter, { root: true })
   },
-  async requestMessagingPermission({ commit, dispatch }) {
+  async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
     try {
       await messaging.requestPermission()
       dispatch('setMessagingToken')
@@ -48,7 +48,9 @@ const actions = {
         dispatch('setMessagingToken')
       })
 
-      displayMessage('Successfully subscribed to notifications!')
+      if (notify) {
+        displayMessage('Successfully subscribed to notifications!')
+      }
     } catch (err) {
       commit('setBlockedInBrowser', true)
       console.log('Unable to get permission to notify.', err)
