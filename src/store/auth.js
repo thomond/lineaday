@@ -6,6 +6,7 @@ import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
 const initialState = {
   blockedInBrowser: false,
+  encryptionKey: null,
   loading: false,
   settings: {
     reminderTime: defaultReminderTime,
@@ -18,7 +19,7 @@ const actions = {
     try {
       commit('setUser', authUser)
       await dispatch('getUserSettings')
-
+      await dispatch('getEncryptionKey')
       // user hasn't explicitly turned off notifications
       if (state.settings.sendNotifications === true) {
         dispatch('requestMessagingPermission')
@@ -27,6 +28,14 @@ const actions = {
       }
     } catch (err) {
       displayError(err)
+    }
+  },
+  async getEncryptionKey({ commit }) {
+    try {
+      const { claims } = await firebase.auth().currentUser.getIdTokenResult()
+      commit('setEncryptionKey', claims.encryptionKey)
+    } catch (err) {
+      console.log(err)
     }
   },
   async getUserSettings({ commit, state }) {
@@ -98,6 +107,7 @@ const actions = {
   async userEmailSignUp({ commit, dispatch }, { email, password }) {
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
+      await dispatch('getEncryptionKey')
       commit('setUser', doc.user)
       commit('toggleNotificationBanner')
       dispatch('updateUser', { reminderTime: defaultReminderTime })
@@ -135,6 +145,9 @@ const mutations = {
   },
   setBlockedInBrowser(state, blockedInBrowser) {
     state.blockedInBrowser = blockedInBrowser
+  },
+  setEncryptionKey(state, key) {
+    state.encryptionKey = key
   },
   setLoading(state, isLoading) {
     state.loading = isLoading
