@@ -1,7 +1,7 @@
 import moment from 'moment'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
-import { db } from '@/firebase'
+import { plugins } from '@/firebase'
 import { displayError, groupByDateFormat } from '@/util'
 
 const initialState = {
@@ -76,7 +76,7 @@ const actions = {
       text,
     }
     try {
-      const { id } = await db
+      const { id } = await plugins.db
         .collection('users')
         .doc(rootState.auth.user.uid)
         .collection('lines')
@@ -94,7 +94,7 @@ const actions = {
     commit('setLoading', true)
 
     const tagObject = getTagObjectFromArray(tags)
-    const lineRef = db
+    const lineRef = plugins.db
       .collection('users')
       .doc(rootState.auth.user.uid)
       .collection('lines')
@@ -111,7 +111,7 @@ const actions = {
     const { user } = rootState.auth
     commit('setLoading', true)
     try {
-      let snapshotPromise = db
+      let snapshotPromise = plugins.db
         .collection('users')
         .doc(user.uid)
         .collection('lines')

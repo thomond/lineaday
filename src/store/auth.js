@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import omitBy from 'lodash/omitBy'
 import router from '@/router'
-import firebase, { db, messaging } from '@/firebase'
+import firebase, { plugins } from '@/firebase'
 import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
 const initialState = {
@@ -29,23 +29,23 @@ const actions = {
       displayError(err)
     }
   },
-  async getUserSettings({ commit, dispatch, state }) {
+  async getUserSettings({ commit, state }) {
     // const waiter = 'get user settings'
     // dispatch('wait/start', waiter, { root: true })
-    const doc = await db
+    const doc = await plugins.db
       .collection('users')
       .doc(state.user.uid)
       .get()
 
     const { reminderTime, sendNotifications } = doc.data()
-    // commit('modifyUserSettings', { reminderTime, sendNotifications })
+    commit('modifyUserSettings', { reminderTime, sendNotifications })
     // dispatch('wait/end', waiter, { root: true })
   },
   async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
     try {
-      await messaging.requestPermission()
+      await plugins.messaging.requestPermission()
       dispatch('setMessagingToken')
-      messaging.onTokenRefresh(() => {
+      plugins.messaging.onTokenRefresh(() => {
         dispatch('setMessagingToken')
       })
 
@@ -60,7 +60,7 @@ const actions = {
   async setMessagingToken({ dispatch }) {
     let messagingTokens = null
     try {
-      const messagingToken = await messaging.getToken()
+      const messagingToken = await plugins.messaging.getToken()
       messagingTokens = { [messagingToken]: true }
     } catch (err) {
       console.log('Unable to get permission to notify.', err)
@@ -73,7 +73,7 @@ const actions = {
   },
   async updateUser({ commit, state }, attributes) {
     const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
-    await db
+    await plugins.db
       .collection('users')
       .doc(state.user.uid)
       .set(nonEmptyAttributes, { merge: true })

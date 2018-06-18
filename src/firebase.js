@@ -12,13 +12,24 @@ firebase.initializeApp({
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID
 })
 
+const plugins = {}
+
 // database
-export const db = firebase.firestore()
+const db = firebase.firestore()
 const settings = { timestampsInSnapshots: true }
 db.settings(settings)
+plugins.db = db
+
 
 // messaging
-export const messaging = firebase.messaging()
-messaging.usePublicVapidKey(process.env.VUE_APP_FIREBASE_VAPID_KEY)
+let messaging
+if ('PushManager' in window) {
+  messaging = firebase.messaging()
+  messaging.usePublicVapidKey(process.env.VUE_APP_FIREBASE_VAPID_KEY)
+}
+
+plugins.messaging = messaging
 
 export default firebase
+
+export { plugins }
