@@ -89,10 +89,6 @@ function removeToken(userId, token) {
 }
 
 exports.setEncryptionKey = functions.https.onRequest((req, res) => {
-  res.header('Content-Type','application/json')
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Content-Type')
-
   // Get the ID token passed.
   const idToken = req.body.data.idToken;
   const encryptionKey = uuid()
