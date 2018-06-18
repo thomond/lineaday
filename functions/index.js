@@ -3,6 +3,9 @@ const admin = require('firebase-admin')
 const moment = require('moment')
 const secureCompare = require('secure-compare')
 const uuid = require('uuid/v4')
+const cors = require('cors')({
+  origin: 'https://tinythoughts.me'
+})
 
 admin.initializeApp(functions.config().firebase)
 
@@ -89,22 +92,24 @@ function removeToken(userId, token) {
 }
 
 exports.setEncryptionKey = functions.https.onRequest((req, res) => {
-  // Get the ID token passed.
-  const idToken = req.body.data.idToken;
-  const encryptionKey = uuid()
-  // Verify the ID token and decode its payload.
-  admin.auth().verifyIdToken(idToken)
-    .then((claims) => {
-      return admin.auth().setCustomUserClaims(claims.sub, {
-        encryptionKey
+  cors(req, res, () => {
+    // Get the ID token passed.
+    const idToken = req.body.data.idToken;
+    const encryptionKey = uuid()
+    // Verify the ID token and decode its payload.
+    admin.auth().verifyIdToken(idToken)
+      .then((claims) => {
+        return admin.auth().setCustomUserClaims(claims.sub, {
+          encryptionKey
+        })
       })
-    })
-    .then(() => {
-      res.json({ encryptionKey })
-      return null
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).send(err)
-    })
+      .then(() => {
+        res.json({ encryptionKey })
+        return null
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).send(err)
+      })
+  })
 })

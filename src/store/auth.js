@@ -112,7 +112,7 @@ const actions = {
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
       const idToken = await doc.user.getIdToken()
-      const { data } = await axios.post('/setEncryptionKey', {
+      const { data } = await axios.post(`${process.env.VUE_APP_API_URL}/setEncryptionKey`, {
         data: {
           idToken
         }
