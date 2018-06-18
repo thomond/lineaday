@@ -1,24 +1,26 @@
 <template>
-  <div class="container" v-if="!!encryptionKey">
-    <div class="columns" v-if="showForm || tag">
-      <div class="column is-three-fifths is-offset-one-fifth">
-        <new-line-form v-if="showForm" />
-        <div v-if="tag" class="tag-container">
-          <h1 class="title is-1 fancy">#{{ tag }}</h1>
-          <router-link to="/home" class="subtitle is-6 has-text-primary">clear</router-link>
+  <div>
+    <div class="container" v-if="!!encryptionKey">
+      <div class="columns" v-if="showForm || tag">
+        <div class="column is-three-fifths is-offset-one-fifth">
+          <new-line-form v-if="showForm" />
+          <div v-if="tag" class="tag-container">
+            <h1 class="title is-1 fancy">#{{ tag }}</h1>
+            <router-link to="/home" class="subtitle is-6 has-text-primary">clear</router-link>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="columns">
-      <div class="column mobile-tags" v-if="isMobile">
-        <router-link :to="tagUrl(t)" :key="t" v-for="t in tags">#{{ t }}</router-link>
-      </div>
-      <div class="column is is-three-fifths is is-offset-one-fifth">
-        <list :is-purpleable="isPurpleable" />
-      </div>
-      <div class="column is-one-fifth tag-column" v-if="!isMobile">
-        <div :key="t" v-for="t in tags">
-          <router-link :to="tagUrl(t)" >#{{ t }}</router-link>
+      <div class="columns">
+        <div class="column mobile-tags" v-if="isMobile">
+          <router-link :to="tagUrl(t)" :key="t" v-for="t in tags">#{{ t }}</router-link>
+        </div>
+        <div class="column is is-three-fifths is is-offset-one-fifth">
+          <list :is-purpleable="isPurpleable" :tag="tag" />
+        </div>
+        <div class="column is-one-fifth tag-column" v-if="!isMobile">
+          <div :key="t" v-for="t in tags">
+            <router-link :to="tagUrl(t)" >#{{ t }}</router-link>
+          </div>
         </div>
       </div>
     </div>

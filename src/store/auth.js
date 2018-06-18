@@ -16,7 +16,7 @@ const initialState = {
 
 const actions = {
   async onUserLogin({ commit, dispatch, state }, authUser) {
-    commit('setLoading', true)
+    commit('setUserLoading', true)
     try {
       commit('setUser', authUser)
       await dispatch('getUserSettings')
@@ -30,7 +30,7 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    commit('setLoading', false)
+    commit('setUserLoading', false)
   },
   async getEncryptionKey({ commit }) {
     try {
@@ -88,14 +88,14 @@ const actions = {
     commit('modifyUserSettings', nonEmptyAttributes)
   },
   async updateUserSettings({ commit, dispatch }, { sendNotifications, reminderTime }) {
-    commit('setLoading', true)
+    commit('setUserLoading', true)
     try {
       await dispatch('updateUser', { sendNotifications, reminderTime })
       displayMessage('Notification settings updated!')
     } catch (err) {
       displayError(err)
     }
-    commit('setLoading', false)
+    commit('setUserLoading', false)
   },
   async userEmailSignIn({ dispatch }, { email, password }) {
     try {
@@ -152,7 +152,7 @@ const mutations = {
   setEncryptionKey(state, key) {
     state.encryptionKey = key
   },
-  setLoading(state, isLoading) {
+  setUserLoading(state, isLoading) {
     state.loading = isLoading
   },
   setUser(state, payload) {

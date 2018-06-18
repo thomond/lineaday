@@ -68,7 +68,7 @@ function formatLineCollectionSnapshot(snapshot, encryptionKey) {
 
 const actions = {
   async addLine({ commit, rootState }, { text, tags }) {
-    commit('setLoading', true)
+    commit('setLinesLoading', true)
     const today = moment()
     const tagObject = getTagObjectFromArray(tags)
     const encryptedText = CryptoJS.AES.encrypt(text, rootState.auth.encryptionKey).toString()
@@ -92,10 +92,10 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    commit('setLoading', false)
+    commit('setLinesLoading', false)
   },
   async editLine({ commit, rootState }, { id, text, tags }) {
-    commit('setLoading', true)
+    commit('setLinesLoading', true)
 
     const tagObject = getTagObjectFromArray(tags)
     const lineRef = plugins.db
@@ -109,11 +109,11 @@ const actions = {
     commit('addTags', tags)
     commit('setLine', newLineProps)
     commit('resetEditing')
-    commit('setLoading', false)
+    commit('setLinesLoading', false)
   },
   async getLines({ commit, rootState }, { tag }) {
     const { user, encryptionKey } = rootState.auth
-    commit('setLoading', true)
+    commit('setLinesLoading', true)
     try {
       let snapshotPromise = plugins.db
         .collection('users')
@@ -138,7 +138,7 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    commit('setLoading', false)
+    commit('setLinesLoading', false)
   },
 }
 
@@ -175,7 +175,7 @@ const mutations = {
   setLines(state, payload) {
     state.lines = payload
   },
-  setLoading(state, isLoading) {
+  setLinesLoading(state, isLoading) {
     state.loading = isLoading
   },
   setTags(state, tags) {

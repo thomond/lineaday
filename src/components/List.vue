@@ -15,7 +15,7 @@ import DateDisplay from '@/components/DateDisplay.vue'
 
 export default {
   name: 'List',
-  props: ['isPurpleable'],
+  props: ['isPurpleable', 'tag'],
   components: {
     DateDisplay
   },
