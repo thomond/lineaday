@@ -1,13 +1,14 @@
 import moment from 'moment'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
+import CryptoJS from 'crypto-js'
 import { plugins } from '@/firebase'
 import { displayError, groupByDateFormat } from '@/util'
 
 const initialState = {
   hasToday: false,
   lines: [],
-  loading: false,
+  loading: true,
   tags: []
 }
 
@@ -37,7 +38,7 @@ function getTagObjectFromArray(tags) {
   }, {})
 }
 
-function formatLineCollectionSnapshot(snapshot) {
+function formatLineCollectionSnapshot(snapshot, encryptionKey) {
   const today = moment()
   const lines = {}
   const tags = []
@@ -46,7 +47,9 @@ function formatLineCollectionSnapshot(snapshot) {
   snapshot.forEach((doc) => {
     const data = doc.data()
     const date = moment(data.createdAt.toDate()).format(groupByDateFormat)
-    const line = { ...data, id: doc.id }
+    const textBytes = CryptoJS.AES.decrypt(data.text, encryptionKey)
+    const text = textBytes.toString(CryptoJS.enc.Utf8)
+    const line = { ...data, text, id: doc.id }
     if (lines[date]) {
       lines[date].push(line)
     } else {
@@ -68,12 +71,13 @@ const actions = {
     commit('setLoading', true)
     const today = moment()
     const tagObject = getTagObjectFromArray(tags)
+    const encryptedText = CryptoJS.AES.encrypt(text, rootState.auth.encryptionKey).toString()
     const line = {
       createdAt: today.toDate(),
       dayOfWeek: today.day(),
       ...today.toObject(),
       tags: tagObject,
-      text,
+      text: encryptedText,
     }
     try {
       const { id } = await plugins.db
@@ -82,7 +86,7 @@ const actions = {
         .collection('lines')
         .add(line)
 
-      commit('addLine', { ...line, id })
+      commit('addLine', { ...line, text, id })
       commit('addTags', tags)
       commit('setHasToday', true)
     } catch (err) {
@@ -108,7 +112,7 @@ const actions = {
     commit('setLoading', false)
   },
   async getLines({ commit, rootState }, { tag }) {
-    const { user } = rootState.auth
+    const { user, encryptionKey } = rootState.auth
     commit('setLoading', true)
     try {
       let snapshotPromise = plugins.db
@@ -127,7 +131,7 @@ const actions = {
 
       const snapshot = await snapshotPromise.get()
 
-      const { hasToday, lines, tags } = formatLineCollectionSnapshot(snapshot)
+      const { hasToday, lines, tags } = formatLineCollectionSnapshot(snapshot, encryptionKey)
       commit('setHasToday', hasToday)
       commit('setLines', lines)
       commit('setTags', tags)

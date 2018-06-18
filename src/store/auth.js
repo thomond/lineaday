@@ -7,7 +7,7 @@ import { defaultReminderTime, displayError, displayMessage } from '@/util'
 const initialState = {
   blockedInBrowser: false,
   encryptionKey: null,
-  loading: false,
+  loading: true,
   settings: {
     reminderTime: defaultReminderTime,
   },
@@ -16,6 +16,7 @@ const initialState = {
 
 const actions = {
   async onUserLogin({ commit, dispatch, state }, authUser) {
+    commit('setLoading', true)
     try {
       commit('setUser', authUser)
       await dispatch('getUserSettings')
@@ -29,6 +30,7 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
+    commit('setLoading', false)
   },
   async getEncryptionKey({ commit }) {
     try {
@@ -127,6 +129,7 @@ const actions = {
 
 const getters = {
   blockedInBrowser: state => state.blockedInBrowser,
+  encryptionKey: state => state.encryptionKey,
   isAuthenticated: state => !!state.user,
   userEmail: state => get(state, 'user.email', ''),
   userIsLoading: state => state.loading,

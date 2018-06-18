@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="!!encryptionKey">
     <div class="columns" v-if="showForm || tag">
       <div class="column is-three-fifths is-offset-one-fifth">
         <new-line-form v-if="showForm" />
@@ -14,8 +14,7 @@
         <router-link :to="tagUrl(t)" :key="t" v-for="t in tags">#{{ t }}</router-link>
       </div>
       <div class="column is is-three-fifths is is-offset-one-fifth">
-        <list :lines="lines" :is-purpleable="isPurpleable" />
-        <b-loading :is-full-page="true" :active.sync="linesAreLoading"></b-loading>
+        <list :is-purpleable="isPurpleable" />
       </div>
       <div class="column is-one-fifth tag-column" v-if="!isMobile">
         <div :key="t" v-for="t in tags">
@@ -23,11 +22,12 @@
         </div>
       </div>
     </div>
+    <b-loading :is-full-page="true" :active.sync="loading"></b-loading>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import NewLineForm from '@/components/NewLineForm.vue'
 import List from '@/components/List.vue'
 import { tagToUrl } from '@/util'
@@ -39,20 +39,13 @@ export default {
     List,
     NewLineForm
   },
-  mounted() {
-    this.getLines({ tag: this.tag })
-  },
-  methods: {
-    ...mapActions([
-      'getLines'
-    ]),
-  },
   computed: {
     ...mapGetters([
       'hasToday',
+      'encryptionKey',
       'isEditing',
-      'lines',
       'linesAreLoading',
+      'userIsLoading',
       'tags'
     ]),
     isMobile() {
@@ -60,6 +53,9 @@ export default {
     },
     isPurpleable() {
       return this.hasToday && !this.tag
+    },
+    loading() {
+      return this.userIsLoading || !this.encryptionKey || this.linesAreLoading
     },
     showForm() {
       return !this.linesAreLoading && !this.tag && !this.hasToday

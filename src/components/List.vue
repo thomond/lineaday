@@ -10,14 +10,29 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import DateDisplay from '@/components/DateDisplay.vue'
 
 export default {
   name: 'List',
-  props: ['isPurpleable', 'lines'],
+  props: ['isPurpleable'],
   components: {
     DateDisplay
-  }
+  },
+  mounted() {
+    this.getLines({ tag: this.tag })
+  },
+  computed: {
+    ...mapGetters([
+      'lines',
+      'linesAreLoading',
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'getLines'
+    ]),
+  },
 };
 </script>
 
