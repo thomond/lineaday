@@ -8,6 +8,9 @@
         :key="line.year">
         <span class="subtitle is-6 has-text-grey">{{ line.year }}:</span>
         {{ line.text }}
+        <span class="has-text-primary" v-for="tag in line.tags" :key="tag">
+          #{{ tag }}
+        </span>
       </p>
     </div>
   </div>
@@ -26,22 +29,26 @@ export default {
           text: 'Lazy day off, cuddling with the cats.'
         }, {
           year: 2016,
-          text: 'Woke up late and went to Scot:Lands and then ate chocolate covered strawberries from the Christmas market'
+          text: 'Went to Scot:Lands and then ate chocolate covered strawberries from the Christmas market',
+          tags: ['vacation', 'food']
         }]
       }, {
         date: 'December 31',
         lines: [{
           year: 2017,
-          text: 'Ate dinner with the folks and then watched the ball drop from my couch!',
+          text: 'Dinner at Fiola with the folks and then watched the ball drop from my couch!',
+          tags: ['restaurants']
         }, {
           year: 2016,
-          text: 'Visited the botanical gardens in the morning and then danced in the new year at the ceilidh.'
+          text: 'Visited the botanical gardens in the morning and then danced in the new year at the ceilidh.',
+          tags: ['botanicalgardens', 'vacation']
         }]
       }, {
         date: 'December 30',
         lines: [{
           year: 2016,
-          text: 'Went to Edinburgh Castle in the morning and carried torches up Calton Hill in the evening!'
+          text: 'Went to Edinburgh Castle in the morning and carried torches up Calton Hill in the evening!',
+          tags: ['vacation']
         }]
       }]
     }
