@@ -1,3 +1,4 @@
+import axios from 'axios'
 import get from 'lodash/get'
 import omitBy from 'lodash/omitBy'
 import router from '@/router'
@@ -7,7 +8,7 @@ import { defaultReminderTime, displayError, displayMessage } from '@/util'
 const initialState = {
   blockedInBrowser: false,
   encryptionKey: null,
-  loading: true,
+  loading: false,
   settings: {
     reminderTime: defaultReminderTime,
   },
@@ -107,16 +108,25 @@ const actions = {
     }
   },
   async userEmailSignUp({ commit, dispatch }, { email, password }) {
+    commit('setUserLoading', true)
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
-      await dispatch('getEncryptionKey')
+      const idToken = await doc.user.getIdToken()
+      const { data } = await axios.post('/setEncryptionKey', {
+        data: {
+          idToken
+        }
+      })
+      firebase.auth().currentUser.getIdToken(true)
+      commit('setEncryptionKey', data.encryptionKey)
       commit('setUser', doc.user)
-      commit('toggleNotificationBanner')
+      commit('toggleNotificationBanner', true)
       dispatch('updateUser', { reminderTime: defaultReminderTime })
       router.push('/home')
     } catch (err) {
       displayError(err)
     }
+    commit('setUserLoading', false)
   },
   async userSignOut({ commit }) {
     await firebase.auth().signOut()

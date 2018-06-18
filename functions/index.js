@@ -88,14 +88,27 @@ function removeToken(userId, token) {
   })
 }
 
-exports.processSignUp = functions.auth.user().onCreate(user => {
-  const customClaims = {
-    encryptionKey: uuid()
-  }
+exports.setEncryptionKey = functions.https.onRequest((req, res) => {
+  res.header('Content-Type','application/json')
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
 
-  // Set custom user claims on this newly created user.
-  return admin.auth().setCustomUserClaims(user.uid, customClaims)
-    .catch(error => {
-      console.log(error)
+  // Get the ID token passed.
+  const idToken = req.body.data.idToken;
+  const encryptionKey = uuid()
+  // Verify the ID token and decode its payload.
+  admin.auth().verifyIdToken(idToken)
+    .then((claims) => {
+      return admin.auth().setCustomUserClaims(claims.sub, {
+        encryptionKey
+      })
+    })
+    .then(() => {
+      res.json({ encryptionKey })
+      return null
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send(err)
     })
 })

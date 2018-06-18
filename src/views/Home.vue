@@ -57,7 +57,7 @@ export default {
       return this.hasToday && !this.tag
     },
     loading() {
-      return this.userIsLoading || !this.encryptionKey || this.linesAreLoading
+      return this.userIsLoading || !this.encryptionKey
     },
     showForm() {
       return !this.linesAreLoading && !this.tag && !this.hasToday

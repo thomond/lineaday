@@ -1,5 +1,5 @@
 const initialState = {
-  showNotificationBanner: null
+  showNotificationBanner: false
 }
 
 const getters = {
@@ -8,7 +8,7 @@ const getters = {
 
 const mutations = {
   toggleNotificationBanner(state, payload) {
-    if (payload) {
+    if (payload !== undefined) {
       state.showNotificationBanner = payload
     } else {
       state.showNotificationBanner = !state.showNotificationBanner
