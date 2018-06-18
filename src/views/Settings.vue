@@ -8,9 +8,7 @@
           <b-input :value="userEmail" disabled></b-input>
         </b-field>
         <hr />
-        <v-wait for='get user settings'>
-          <notification-settings />
-        </v-wait>
+        <notification-settings />
         <hr />
       </div>
     </div>

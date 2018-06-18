@@ -2,9 +2,9 @@
   <form @submit.prevent="onSubmit">
     <h2 class="subtitle is-5">Notifications</h2>
     <b-message v-if="blockedInBrowser && sendNotifications">
-      You have blocked notifications in your current browser.
-      You will still receive notifications on other devices.
-      Use the form to turn off all notifications on all devices.
+      <p>{{ blockedInBrowserMessage }}</p>
+      <p>You will still receive notifications on other devices.
+      Use the form to turn off all notifications on all devices.</p>
     </b-message>
     <div class="columns">
       <div class="column is-narrow">
@@ -45,6 +45,8 @@ import { mapGetters, mapActions } from 'vuex'
 import range from 'lodash/range'
 import moment from 'moment'
 
+import { browserHasPush } from '@/util'
+
 export default {
   name: 'NotificationSettings',
   data() {
@@ -57,6 +59,13 @@ export default {
       'blockedInBrowser',
       'userIsLoading'
     ]),
+    blockedInBrowserMessage() {
+      if (browserHasPush()) {
+        return 'You have blocked notifications in your current browser.'
+      }
+
+      return 'Your browser does not support push notifications. If you would like to receive notifications, please switch to Chrome or Firefox.'
+    },
     sendNotifications: {
       get() {
         return this.$store.state.auth.settings.sendNotifications

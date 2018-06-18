@@ -30,8 +30,6 @@ const actions = {
     }
   },
   async getUserSettings({ commit, state }) {
-    // const waiter = 'get user settings'
-    // dispatch('wait/start', waiter, { root: true })
     const doc = await plugins.db
       .collection('users')
       .doc(state.user.uid)
@@ -39,7 +37,6 @@ const actions = {
 
     const { reminderTime, sendNotifications } = doc.data()
     commit('modifyUserSettings', { reminderTime, sendNotifications })
-    // dispatch('wait/end', waiter, { root: true })
   },
   async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
     try {
