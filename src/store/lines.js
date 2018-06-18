@@ -7,6 +7,7 @@ import { displayError, groupByDateFormat } from '@/util'
 const initialState = {
   hasToday: false,
   lines: [],
+  loading: false,
   tags: []
 }
 
@@ -62,11 +63,9 @@ function formatLineCollectionSnapshot(snapshot) {
   return { lines: lineArray, hasToday, tags }
 }
 
-const waiter = 'loading lines'
-
 const actions = {
-  async addLine({ commit, dispatch, rootState }, { text, tags }) {
-    dispatch('wait/start', waiter, { root: true })
+  async addLine({ commit, rootState }, { text, tags }) {
+    commit('setLoading', true)
     const today = moment()
     const tagObject = getTagObjectFromArray(tags)
     const line = {
@@ -89,10 +88,10 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    dispatch('wait/end', waiter, { root: true })
+    commit('setLoading', false)
   },
-  async editLine({ commit, dispatch, rootState }, { id, text, tags }) {
-    dispatch('wait/start', waiter, { root: true })
+  async editLine({ commit, rootState }, { id, text, tags }) {
+    commit('setLoading', true)
 
     const tagObject = getTagObjectFromArray(tags)
     const lineRef = db
@@ -106,11 +105,11 @@ const actions = {
     commit('addTags', tags)
     commit('setLine', newLineProps)
     commit('resetEditing')
-    dispatch('wait/end', waiter, { root: true })
+    commit('setLoading', false)
   },
-  async getLines({ commit, dispatch, rootState }, { tag }) {
+  async getLines({ commit, rootState }, { tag }) {
     const { user } = rootState.auth
-    dispatch('wait/start', waiter, { root: true });
+    commit('setLoading', true)
     try {
       let snapshotPromise = db
         .collection('users')
@@ -135,13 +134,14 @@ const actions = {
     } catch (err) {
       displayError(err)
     }
-    dispatch('wait/end', waiter, { root: true });
+    commit('setLoading', false)
   },
 }
 
 const getters = {
   hasToday: state => state.hasToday,
   lines: state => state.lines,
+  linesAreLoading: state => state.loading,
   tags: state => state.tags
 }
 
@@ -170,6 +170,9 @@ const mutations = {
   },
   setLines(state, payload) {
     state.lines = payload
+  },
+  setLoading(state, isLoading) {
+    state.loading = isLoading
   },
   setTags(state, tags) {
     state.tags = uniq(tags).sort()

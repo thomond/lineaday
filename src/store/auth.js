@@ -6,6 +6,7 @@ import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
 const initialState = {
   blockedInBrowser: false,
+  loading: false,
   settings: {
     reminderTime: defaultReminderTime,
   },
@@ -29,16 +30,16 @@ const actions = {
     }
   },
   async getUserSettings({ commit, dispatch, state }) {
-    const waiter = 'get user settings'
-    dispatch('wait/start', waiter, { root: true })
+    // const waiter = 'get user settings'
+    // dispatch('wait/start', waiter, { root: true })
     const doc = await db
       .collection('users')
       .doc(state.user.uid)
       .get()
 
     const { reminderTime, sendNotifications } = doc.data()
-    commit('modifyUserSettings', { reminderTime, sendNotifications })
-    dispatch('wait/end', waiter, { root: true })
+    // commit('modifyUserSettings', { reminderTime, sendNotifications })
+    // dispatch('wait/end', waiter, { root: true })
   },
   async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
     try {
@@ -78,16 +79,15 @@ const actions = {
       .set(nonEmptyAttributes, { merge: true })
     commit('modifyUserSettings', nonEmptyAttributes)
   },
-  async updateUserSettings({ dispatch }, { sendNotifications, reminderTime }) {
-    const waiter = 'user update'
-    dispatch('wait/start', waiter, { root: true })
+  async updateUserSettings({ commit, dispatch }, { sendNotifications, reminderTime }) {
+    commit('setLoading', true)
     try {
       await dispatch('updateUser', { sendNotifications, reminderTime })
       displayMessage('Notification settings updated!')
     } catch (err) {
       displayError(err)
     }
-    dispatch('wait/end', waiter, { root: true })
+    commit('setLoading', false)
   },
   async userEmailSignIn({ dispatch }, { email, password }) {
     try {
@@ -122,13 +122,11 @@ const getters = {
   blockedInBrowser: state => state.blockedInBrowser,
   isAuthenticated: state => !!state.user,
   userEmail: state => get(state, 'user.email', ''),
+  userIsLoading: state => state.loading,
   userSettings: state => state.settings
 }
 
 const mutations = {
-  setBlockedInBrowser(state, blockedInBrowser) {
-    state.blockedInBrowser = blockedInBrowser
-  },
   modifyUserSettings(state, attributes) {
     const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
     state.settings = { ...state.settings, ...nonEmptyAttributes }
@@ -137,6 +135,12 @@ const mutations = {
     state.blockedInBrowser = false
     state.settings = {}
     state.user = null
+  },
+  setBlockedInBrowser(state, blockedInBrowser) {
+    state.blockedInBrowser = blockedInBrowser
+  },
+  setLoading(state, isLoading) {
+    state.loading = isLoading
   },
   setUser(state, payload) {
     state.user = payload

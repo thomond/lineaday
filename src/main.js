@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import VueWait from 'vue-wait'
 import VueAnalytics from 'vue-analytics'
 import vMediaQuery from 'v-media-query'
 import vueSmoothScroll from 'vue2-smooth-scroll'
@@ -17,7 +16,6 @@ Vue.config.productionTip = false
 Vue.use(Buefy, {
   defaultIconPack: 'fas',
 })
-Vue.use(VueWait)
 Vue.use(vMediaQuery, {
   variables: {
     mobile: 768
@@ -43,13 +41,6 @@ const unsubscribe = firebase.auth()
           store.dispatch('onUserLogin', firebaseUser)
         }
       },
-      wait: new VueWait({
-        useVuex: true,
-        registerComponent: true,
-        componentName: 'v-wait',
-        registerDirective: true,
-        directiveName: 'wait',
-      }),
     }).$mount('#app')
     unsubscribe()
   })

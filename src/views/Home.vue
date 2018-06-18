@@ -15,7 +15,7 @@
       </div>
       <div class="column is is-three-fifths is is-offset-one-fifth">
         <list :lines="lines" :is-purpleable="isPurpleable" />
-        <b-loading :is-full-page="true" :active.sync="loading"></b-loading>
+        <b-loading :is-full-page="true" :active.sync="linesAreLoading"></b-loading>
       </div>
       <div class="column is-one-fifth tag-column" v-if="!isMobile">
         <div :key="t" v-for="t in tags">
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { mapWaitingGetters } from 'vue-wait'
 import { mapActions, mapGetters } from 'vuex'
 import NewLineForm from '@/components/NewLineForm.vue'
 import List from '@/components/List.vue'
@@ -49,13 +48,11 @@ export default {
     ]),
   },
   computed: {
-    ...mapWaitingGetters({
-      loading: 'loading lines',
-    }),
     ...mapGetters([
       'hasToday',
       'isEditing',
       'lines',
+      'linesAreLoading',
       'tags'
     ]),
     isMobile() {
@@ -65,7 +62,7 @@ export default {
       return this.hasToday && !this.tag
     },
     showForm() {
-      return !this.loading && !this.tag && !this.hasToday
+      return !this.linesAreLoading && !this.tag && !this.hasToday
     },
     tagUrl: () => tagToUrl
   }

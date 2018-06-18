@@ -42,7 +42,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { mapWaitingGetters } from 'vue-wait'
 import range from 'lodash/range'
 import moment from 'moment'
 
@@ -56,10 +55,8 @@ export default {
   computed: {
     ...mapGetters([
       'blockedInBrowser',
+      'userIsLoading'
     ]),
-    ...mapWaitingGetters({
-      loading: 'user update',
-    }),
     sendNotifications: {
       get() {
         return this.$store.state.auth.settings.sendNotifications
@@ -79,7 +76,7 @@ export default {
     buttonClasses() {
       return {
         button: true,
-        'is-loading': this.loading,
+        'is-loading': this.userIsLoading,
         'is-primary': true,
         'is-rounded': true
       }
