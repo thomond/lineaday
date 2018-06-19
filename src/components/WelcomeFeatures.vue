@@ -125,6 +125,7 @@ export default {
   .icon {
     align-self: center;
     font-size: 2.5rem;
+    height: auto;
   }
 }
 </style>
