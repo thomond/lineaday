@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        <down-arrow anchor="signup" :is-primary="true" />
+        <down-arrow anchor="features" :is-primary="true" />
       </div>
     </div>
   </section>

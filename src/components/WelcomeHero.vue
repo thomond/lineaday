@@ -23,7 +23,7 @@
     </div>
     <div class="hero-foot has-text-centered">
       <welcome-benefits />
-      <down-arrow anchor="tinythoughts" />
+      <down-arrow anchor="notebook" />
     </div>
   </section>
 </template>
