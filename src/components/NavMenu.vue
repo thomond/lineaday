@@ -4,17 +4,20 @@
     role="navigation"
     aria-label="main navigation">
     <div class="navbar-brand">
-      <router-link class="logo navbar-item" to="/home">tinythoughts</router-link>
-        <a
-          @click="isActive = !isActive"
-          role="button"
-          :class="{ 'navbar-burger': true, 'has-text-white': isPrimary }"
-          aria-label="menu"
-          aria-expanded="false">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
+      <router-link class="navbar-item home" to="/home">
+        <b-icon icon="home" v-if="isAuthenticated"></b-icon>
+        <span class="logo">tinythoughts</span>
+      </router-link>
+      <a
+        @click="isActive = !isActive"
+        role="button"
+        :class="{ 'navbar-burger': true, 'has-text-white': isPrimary }"
+        aria-label="menu"
+        aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
     <div :class="{ 'navbar-menu': true, 'is-active': isActive }">
       <div class="navbar-end">
@@ -68,5 +71,14 @@ export default {
 .sticky {
   position: sticky;
   top: 0;
+}
+
+.home {
+  align-items: baseline;
+  display: flex;
+
+  .icon {
+    margin-right: 10px;
+  }
 }
 </style>

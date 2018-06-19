@@ -5,7 +5,7 @@
         <p :class="{ title: true,  'is-6': !isPurple, 'is-2': isPurple, fancy: true }">
           {{ date }}
         </p>
-        <span v-if="isPurple">
+        <span v-if="false && isPurple">
           <a
             @click="resetEditing"
             class="edit has-text-primary"
