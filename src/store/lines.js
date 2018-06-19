@@ -66,12 +66,16 @@ function formatLineCollectionSnapshot(snapshot, encryptionKey) {
   return { lines: lineArray, hasToday, tags }
 }
 
+function encryptText(text, key) {
+  return CryptoJS.AES.encrypt(text, key).toString()
+}
+
 const actions = {
   async addLine({ commit, rootState }, { text, tags }) {
     commit('setLinesLoading', true)
     const today = moment()
     const tagObject = getTagObjectFromArray(tags)
-    const encryptedText = CryptoJS.AES.encrypt(text, rootState.auth.encryptionKey).toString()
+    const encryptedText = encryptText(text, rootState.auth.encryptionKey)
     const line = {
       createdAt: today.toDate(),
       dayOfWeek: today.day(),
@@ -104,8 +108,9 @@ const actions = {
       .collection('lines')
       .doc(id);
 
+    const encryptedText = encryptText(text, rootState.auth.encryptionKey)
     const newLineProps = { text, tags: tagObject }
-    await lineRef.set(newLineProps, { merge: true })
+    await lineRef.set({ ...newLineProps, text: encryptedText }, { merge: true })
     commit('addTags', tags)
     commit('setLine', newLineProps)
     commit('resetEditing')

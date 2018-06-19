@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
       console.log('New content is available; please refresh.');
       Toast.open({
         duration: 600000,
-        message: 'New content is available; please refresh.',
+        message: 'New content is available; please refresh the page.',
         position: 'is-bottom',
       })
     },
