@@ -2,29 +2,18 @@
   <div>
     <welcome-hero />
     <nav-menu :sticky="true" :is-primary="true" />
-    <section class="hero is-medium" id="tinythoughts">
-      <div class="hero-body">
-        <div class="container">
-          <p class="is-size-1 has-text-centered">
-            <span class="fancy">tinythoughts</span> is
-            a <strong class="has-text-primary">sentence a day</strong> journal
-          </p>
-          <down-arrow anchor="notebook" :is-primary="true" />
-        </div>
-      </div>
-    </section>
     <section class="hero is-light is-medium" id="notebook">
       <div class="hero-body">
         <div class="container">
           <div class="columns is-8 is-variable">
-            <div class="column">
-              <notebook />
-            </div>
             <div class="column quote">
-              <p class="title is-1 has-text-primary">
-                &ldquo;The little things? The little moments? They aren’t little.&rdquo;
+              <p class="is-size-1 has-text-right">
+                <span class="fancy">tinythoughts</span> is
+                a <strong class="has-text-primary">sentence a day</strong> journal
               </p>
-              <p class="subtitle is-3 has-text-right">&ndash; Jon Kabat-Zinn</p>
+            </div>
+            <div class="column">
+              <notebook :entries="notebookEntries" />
             </div>
           </div>
           <down-arrow anchor="tiles" :is-primary="true" />
@@ -32,6 +21,7 @@
       </div>
     </section>
     <welcome-tiles />
+    <welcome-features />
     <section class="hero is-primary" id="signup">
       <div class="hero-body">
         <div class="columns is-centered">
@@ -49,6 +39,7 @@ import DownArrow from '@/components/DownArrow.vue'
 import LoginSignupForm from '@/components/LoginSignupForm.vue'
 import NavMenu from '@/components/NavMenu.vue'
 import Notebook from '@/components/Notebook.vue'
+import WelcomeFeatures from '@/components/WelcomeFeatures.vue'
 import WelcomeHero from '@/components/WelcomeHero.vue'
 import WelcomeTiles from '@/components/WelcomeTiles.vue'
 
@@ -59,9 +50,43 @@ export default {
     LoginSignupForm,
     NavMenu,
     Notebook,
+    WelcomeFeatures,
     WelcomeHero,
     WelcomeTiles
-  }
+  },
+  data() {
+    return {
+      notebookEntries: [{
+        date: 'January 1',
+        lines: [{
+          year: 2017,
+          text: 'Lazy day off, cuddling with the cats.'
+        }, {
+          year: 2016,
+          text: 'Went to Scot:Lands and then ate chocolate covered strawberries from the Christmas market',
+          tags: ['vacation', 'food']
+        }]
+      }, {
+        date: 'December 31',
+        lines: [{
+          year: 2017,
+          text: 'Dinner at Fiola with the folks and then watched the ball drop from my couch!',
+          tags: ['restaurants']
+        }, {
+          year: 2016,
+          text: 'Visited the botanical gardens in the morning and then danced in the new year at the ceilidh.',
+          tags: ['botanicalgardens', 'vacation']
+        }]
+      }, {
+        date: 'December 30',
+        lines: [{
+          year: 2016,
+          text: 'Went to Edinburgh Castle in the morning and carried torches up Calton Hill in the evening!',
+          tags: ['vacation']
+        }]
+      }]
+    }
+  },
 };
 </script>
 

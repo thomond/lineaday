@@ -1,12 +1,12 @@
 <template>
-  <div class="card">
-    <div v-for="entry in entries" :key="entry.date" class="entry">
-      <p class="title is-5 fancy has-text-dark">{{ entry.date }}</p>
+  <div :class="{ card: true, small: small }">
+    <div v-for="(entry, i) in someEntries" :key="entry.date || i" class="entry">
+      <p class="title is-5 fancy has-text-dark" v-if="entry.date">{{ entry.date }}</p>
       <p
         class="subtitle is-4 has-text-dark"
-        v-for="line in entry.lines"
-        :key="line.year">
-        <span class="subtitle is-6 has-text-grey">{{ line.year }}:</span>
+        v-for="(line, j) in entry.lines"
+        :key="line.year || j">
+        <span class="subtitle is-6 has-text-grey" v-if="line.year">{{ line.year }}:</span>
         {{ line.text }}
         <span class="has-text-primary" v-for="tag in line.tags" :key="tag">
           #{{ tag }}
@@ -20,46 +20,14 @@
 
 export default {
   name: 'Notebook',
-  data() {
-    return {
-      allEntries: [{
-        date: 'January 1',
-        lines: [{
-          year: 2017,
-          text: 'Lazy day off, cuddling with the cats.'
-        }, {
-          year: 2016,
-          text: 'Went to Scot:Lands and then ate chocolate covered strawberries from the Christmas market',
-          tags: ['vacation', 'food']
-        }]
-      }, {
-        date: 'December 31',
-        lines: [{
-          year: 2017,
-          text: 'Dinner at Fiola with the folks and then watched the ball drop from my couch!',
-          tags: ['restaurants']
-        }, {
-          year: 2016,
-          text: 'Visited the botanical gardens in the morning and then danced in the new year at the ceilidh.',
-          tags: ['botanicalgardens', 'vacation']
-        }]
-      }, {
-        date: 'December 30',
-        lines: [{
-          year: 2016,
-          text: 'Went to Edinburgh Castle in the morning and carried torches up Calton Hill in the evening!',
-          tags: ['vacation']
-        }]
-      }]
-    }
-  },
+  props: ['entries', 'small'],
   computed: {
-    entries() {
+    someEntries() {
       if (this.$mq.above(this.$mv.mobile)) {
-        return this.allEntries
+        return this.entries
       }
 
-      return [this.allEntries[1]]
+      return [this.entries[1]]
     }
   }
 };
@@ -113,6 +81,15 @@ export default {
     left: 50px;
     bottom: 0;
     border-left: 1px solid #F8D3D3;
+  }
+
+  &.small {
+    padding-left: 37px;
+    padding-right: 20px;
+
+    &:after {
+      left: 22px;
+    }
   }
 }
 </style>

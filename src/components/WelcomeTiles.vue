@@ -1,18 +1,18 @@
 <template>
-  <section class="hero is-medium" id="tiles">
+  <section class="hero" id="tiles">
     <div class="hero-body">
       <div class="container">
         <h3 class="title"><span class="fancy">tinythoughts</span> can be about...</h3>
         <div class="columns is-multiline is-centered is-mobile">
           <div
-            class="column is-3-tablet is-6-mobile"
+            class="column"
             v-for="tile in tiles"
             :key="tile.icon">
-            <div class="box icon-tile">
+            <div class="icon-tile">
               <div>
                 <b-icon :icon="tile.icon" size="is-large"></b-icon>
               </div>
-              <p class="subtitle is-4 is-size-6-mobile">{{ tile.label }}</p>
+              <p class="subtitle is-5 is-size-6-mobile has-text-primary">#{{ tile.label }}</p>
             </div>
           </div>
         </div>
@@ -83,12 +83,9 @@ export default {
   height: 100%;
 }
 
-.hero {
-  background: #9b67df17;
-}
-
 .subtitle {
   margin-top: 15px;
+  word-break: keep-all;
 }
 </style>
 
