@@ -153,6 +153,7 @@ const mutations = {
   },
   resetUser(state) {
     state.blockedInBrowser = false
+    state.encryptionKey = null
     state.settings = {}
     state.user = null
   },

@@ -4,7 +4,7 @@
       <div class="container">
         <h3 class="title fancy has-text-centered">Features</h3>
         <div class="columns is-centered is-multiline">
-          <div class="column is-one-third-desktop is-half-tablet">
+          <div class="column is-half">
             <div class="box">
               <p class="title is-5 has-text-centered">Reminders</p>
               <div class="push">
@@ -20,7 +20,7 @@
               </p>
             </div>
           </div>
-          <div class="column is-one-third-desktop is-half-tablet hashtag">
+          <div class="column is-half hashtag">
             <div class="box">
               <p class="title is-5 has-text-centered">Tags</p>
               <notebook :entries="hashtagEntries" :small="true" />
@@ -29,7 +29,7 @@
               </p>
             </div>
           </div>
-          <div class="column is-one-third-desktop is-half-tablet privacy">
+          <div class="column is-half privacy">
             <div class="box">
               <p class="title is-5 has-text-centered">Privacy</p>
                 <b-icon icon="user-secret" size="is-large"></b-icon>
@@ -39,13 +39,22 @@
               </p>
             </div>
           </div>
+          <div class="column is-half backup">
+            <div class="box">
+              <p class="title is-5 has-text-centered">Export Backups</p>
+                <b-icon icon="cloud-download-alt" size="is-large"></b-icon>
+              <p class="subtitle is-6">
+                Download your data in CSV format.
+              </p>
+            </div>
+          </div>
         </div>
         <div class="columns is-centered">
           <div class="column is-one-third-desktop">
             <p class="title is-4 has-text-centered">...and more!</p>
             <p class="subtitle is-6 has-text-centered">
               We are continually rolling out new features. Some features coming up
-              include exporting entries, visualizations, image uploads, login with facebook
+              include visualizations, image uploads, login with facebook
               or google, and more!
             </p>
           </div>
@@ -121,11 +130,13 @@ export default {
   }
 }
 
+.backup,
 .privacy {
   .icon {
     align-self: center;
     font-size: 2.5rem;
     height: auto;
+    margin-bottom: 20px;
   }
 }
 </style>
