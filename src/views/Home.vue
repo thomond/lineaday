@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container" v-if="!!encryptionKey">
+    <div class="container">
       <div class="columns" v-if="showForm || tag">
         <div class="column is-three-fifths is-offset-one-fifth">
           <new-line-form v-if="showForm" />

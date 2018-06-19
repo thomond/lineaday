@@ -94,6 +94,7 @@ const actions = {
       commit('addTags', tags)
       commit('setHasToday', true)
     } catch (err) {
+      console.log(err)
       displayError(err)
     }
     commit('setLinesLoading', false)
@@ -116,7 +117,7 @@ const actions = {
     commit('resetEditing')
     commit('setLinesLoading', false)
   },
-  async getLines({ commit, rootState }, { tag }) {
+  async getLines({ commit, rootState }, { tag } = {}) {
     const { user, encryptionKey } = rootState.auth
     commit('setLinesLoading', true)
     try {
@@ -141,6 +142,7 @@ const actions = {
       commit('setLines', lines)
       commit('setTags', tags)
     } catch (err) {
+      console.log(err)
       displayError(err)
     }
     commit('setLinesLoading', false)
