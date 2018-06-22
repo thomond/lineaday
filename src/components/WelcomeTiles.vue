@@ -81,6 +81,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
+  padding: 40px;
 }
 
 .subtitle {

@@ -39,6 +39,10 @@ export default {
     margin-top: -7px;
   }
 
+  &:not(:last-of-type) {
+    margin-bottom: 30px;
+  }
+
   p {
     line-height: 30px;
   }
@@ -57,7 +61,7 @@ export default {
   position: relative;
   border: 1px solid #B5B5B5;
   background: white;
-  background: linear-gradient(to top, #DFE8EC 0%, white 8%) 0 57px;
+  background: linear-gradient(to top, #dfe8ec3d 0%, white 8%) 0 57px;
   background-size: 100% 30px;
   overflow: hidden;
 
@@ -71,16 +75,6 @@ export default {
     bottom:-3px; left:0;
     background: white;
     border:1px solid #B5B5B5;
-  }
-
-  &:after {
-    content: '';
-    position: absolute;
-    width: 0px;
-    top: 0;
-    left: 50px;
-    bottom: 0;
-    border-left: 1px solid #F8D3D3;
   }
 
   &.small {

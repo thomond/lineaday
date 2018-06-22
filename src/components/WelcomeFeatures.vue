@@ -159,7 +159,7 @@ export default {
   border-radius: 200px;
   display: inline-block;
   margin: 0 60px;
-  padding: 20px;
+  padding: 15px;
 
   .icon {
     color: #fff;
