@@ -3,6 +3,7 @@ import get from 'lodash/get'
 import omitBy from 'lodash/omitBy'
 import router from '@/router'
 import firebase, { plugins } from '@/firebase'
+import bugsnagClient from '@/bugsnag'
 import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
 const initialState = {
@@ -29,6 +30,7 @@ const actions = {
         commit('toggleNotificationBanner', true)
       }
     } catch (err) {
+      bugsnagClient.notify(err)
       displayError(err)
     }
     commit('setUserLoading', false)
@@ -38,6 +40,7 @@ const actions = {
       const { claims } = await firebase.auth().currentUser.getIdTokenResult()
       commit('setEncryptionKey', claims.encryptionKey)
     } catch (err) {
+      bugsnagClient.notify(err)
       console.log(err)
     }
   },
@@ -94,6 +97,7 @@ const actions = {
       await dispatch('updateUser', { sendNotifications, reminderTime })
       displayMessage('Notification settings updated!')
     } catch (err) {
+      bugsnagClient.notify(err)
       displayError(err)
     }
     commit('setUserLoading', false)
@@ -104,6 +108,7 @@ const actions = {
       dispatch('onUserLogin', doc.user)
       router.push('/home')
     } catch (err) {
+      bugsnagClient.notify(err)
       displayError(err)
     }
   },
@@ -124,6 +129,7 @@ const actions = {
       dispatch('updateUser', { reminderTime: defaultReminderTime })
       router.push('/home')
     } catch (err) {
+      bugsnagClient.notify(err)
       displayError(err)
     }
     commit('setUserLoading', false)

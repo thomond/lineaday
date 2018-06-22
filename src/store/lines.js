@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import CryptoJS from 'crypto-js'
 import { plugins } from '@/firebase'
-import { displayError, groupByDateFormat } from '@/util'
+import { groupByDateFormat } from '@/util'
 
 const initialState = {
   hasToday: false,
@@ -83,20 +83,15 @@ const actions = {
       tags: tagObject,
       text: encryptedText,
     }
-    try {
-      const { id } = await plugins.db
-        .collection('users')
-        .doc(rootState.auth.user.uid)
-        .collection('lines')
-        .add(line)
+    const { id } = await plugins.db
+      .collection('users')
+      .doc(rootState.auth.user.uid)
+      .collection('lines')
+      .add(line)
 
-      commit('addLine', { ...line, text, id })
-      commit('addTags', tags)
-      commit('setHasToday', true)
-    } catch (err) {
-      console.log(err)
-      displayError(err)
-    }
+    commit('addLine', { ...line, text, id })
+    commit('addTags', tags)
+    commit('setHasToday', true)
     commit('setLinesLoading', false)
   },
   async editLine({ commit, rootState }, { id, text, tags }) {
@@ -120,31 +115,26 @@ const actions = {
   async getLines({ commit, rootState }, { tag } = {}) {
     const { user, encryptionKey } = rootState.auth
     commit('setLinesLoading', true)
-    try {
-      let snapshotPromise = plugins.db
-        .collection('users')
-        .doc(user.uid)
-        .collection('lines')
+    let snapshotPromise = plugins.db
+      .collection('users')
+      .doc(user.uid)
+      .collection('lines')
 
-      if (tag) {
-        snapshotPromise = snapshotPromise
-          .where(`tags.${tag}`, '>', 0)
-          .orderBy(`tags.${tag}`, 'desc')
-      } else {
-        snapshotPromise = snapshotPromise
-          .orderBy('createdAt', 'desc')
-      }
-
-      const snapshot = await snapshotPromise.get()
-
-      const { hasToday, lines, tags } = formatLineCollectionSnapshot(snapshot, encryptionKey)
-      commit('setHasToday', hasToday)
-      commit('setLines', lines)
-      commit('setTags', tags)
-    } catch (err) {
-      console.log(err)
-      displayError(err)
+    if (tag) {
+      snapshotPromise = snapshotPromise
+        .where(`tags.${tag}`, '>', 0)
+        .orderBy(`tags.${tag}`, 'desc')
+    } else {
+      snapshotPromise = snapshotPromise
+        .orderBy('createdAt', 'desc')
     }
+
+    const snapshot = await snapshotPromise.get()
+
+    const { hasToday, lines, tags } = formatLineCollectionSnapshot(snapshot, encryptionKey)
+    commit('setHasToday', hasToday)
+    commit('setLines', lines)
+    commit('setTags', tags)
     commit('setLinesLoading', false)
   },
 }
