@@ -32,6 +32,7 @@
         </div>
       </div>
     </section>
+    <tiny-footer />
   </div>
 </template>
 
@@ -40,6 +41,7 @@ import DownArrow from '@/components/DownArrow.vue'
 import LoginSignupForm from '@/components/LoginSignupForm.vue'
 import NavMenu from '@/components/NavMenu.vue'
 import Notebook from '@/components/Notebook.vue'
+import TinyFooter from '@/components/Footer.vue'
 import WelcomeFeatures from '@/components/WelcomeFeatures.vue'
 import WelcomeHero from '@/components/WelcomeHero.vue'
 import WelcomeTiles from '@/components/WelcomeTiles.vue'
@@ -51,9 +53,10 @@ export default {
     LoginSignupForm,
     NavMenu,
     Notebook,
+    TinyFooter,
     WelcomeFeatures,
     WelcomeHero,
-    WelcomeTiles
+    WelcomeTiles,
   },
   data() {
     return {

@@ -5,7 +5,7 @@
         <h3 class="title"><span class="fancy">tinythoughts</span> can be about...</h3>
         <div class="columns is-multiline is-centered is-mobile">
           <div
-            class="column"
+            class="column is-2-desktop is-3-tablet"
             v-for="tile in tiles"
             :key="tile.icon">
             <div class="icon-tile">
