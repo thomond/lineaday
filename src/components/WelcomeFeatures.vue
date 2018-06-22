@@ -1,58 +1,74 @@
 <template>
-  <section class="hero is-medium is-light" id="features">
+  <section class="hero is-medium" id="features">
     <div class="hero-body">
       <div class="container">
         <h3 class="title fancy has-text-centered">Features</h3>
-        <div class="columns is-centered is-multiline">
-          <div class="column is-half">
-            <div class="box">
-              <p class="title is-5 has-text-centered">Reminders</p>
-              <div class="push">
-                <img :src="pushImage" />
-                <div>
-                  <p class="title is-6">tinythoughts</p>
-                  <p class="subtitle is-6">It's time to write in your journal today!</p>
-                </div>
+        <div class="columns is-mobile">
+          <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
+            <div class="icon-container">
+              <b-icon icon="bell" :size="iconSize"></b-icon>
+            </div>
+          </div>
+          <div class="column is-two-thirds-tablet is-three-quarters-mobile">
+            <p class="title is-3">Reminders</p>
+            <p class="subtitle is-5">
+              Choose a time and we'll send you a notification to remind you
+              to write down your thoughts.
+            </p>
+            <div class="push">
+              <img :src="pushImage" />
+              <div>
+                <p class="title is-6">tinythoughts</p>
+                <p class="subtitle is-6">It's time to write in your journal today!</p>
               </div>
-              <p class="subtitle is-6">
-                Choose a time and we'll send you a notification to remind you
-                to write down your thoughts.
-              </p>
-            </div>
-          </div>
-          <div class="column is-half hashtag">
-            <div class="box">
-              <p class="title is-5 has-text-centered">Tags</p>
-              <notebook :entries="hashtagEntries" :small="true" />
-              <p class="subtitle is-6">
-                Add tags to your thoughts to filter by specific categories.
-              </p>
-            </div>
-          </div>
-          <div class="column is-half privacy">
-            <div class="box">
-              <p class="title is-5 has-text-centered">Privacy</p>
-                <b-icon icon="user-secret" size="is-large"></b-icon>
-              <p class="subtitle is-6">
-                No telepathy here. We use end-to-end encryption on your entries, so no one
-                can read your thoughts but you.
-              </p>
-            </div>
-          </div>
-          <div class="column is-half backup">
-            <div class="box">
-              <p class="title is-5 has-text-centered">Export Backups</p>
-                <b-icon icon="cloud-download-alt" size="is-large"></b-icon>
-              <p class="subtitle is-6">
-                Download your data in CSV format.
-              </p>
             </div>
           </div>
         </div>
+        <div class="columns is-mobile">
+          <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
+            <div class="icon-container">
+              <b-icon icon="hashtag" :size="iconSize"></b-icon>
+            </div>
+          </div>
+          <div class="column is-two-thirds-tablet is-three-quarters-mobile">
+            <p class="title is-3">Tags</p>
+            <p class="subtitle is-5">
+              Add tags to your thoughts to filter by specific categories.
+            </p>
+            <notebook :entries="hashtagEntries" :small="true" :mobile-entry="0" />
+          </div>
+        </div>
+        <div class="columns is-mobile">
+          <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
+            <div class="icon-container">
+              <b-icon icon="user-secret" :size="iconSize"></b-icon>
+            </div>
+          </div>
+          <div class="column is-two-thirds-tablet is-three-quarters-mobile">
+            <p class="title is-3">Privacy</p>
+            <p class="subtitle is-5">
+              No telepathy here. We use end-to-end encryption on your entries, so no one
+              can read your thoughts but you.
+            </p>
+          </div>
+        </div>
+        <div class="columns is-mobile">
+          <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
+            <div class="icon-container">
+              <b-icon icon="cloud-download-alt" :size="iconSize"></b-icon>
+            </div>
+          </div>
+          <div class="column is-two-thirds-tablet is-three-quarters-mobile">
+            <p class="title is-3">Export Backups</p>
+            <p class="subtitle is-5">
+              Download your data in CSV format.
+            </p>
+          </div>
+        </div>
         <div class="columns is-centered">
-          <div class="column is-one-third-desktop">
-            <p class="title is-4 has-text-centered">...and more!</p>
-            <p class="subtitle is-6 has-text-centered">
+          <div class="column is-two-thirds is-offset-one-third">
+            <p class="title is-3">...and more!</p>
+            <p class="subtitle is-5">
               We are continually rolling out new features. Some features coming up
               include visualizations, image uploads, login with facebook
               or google, and more!
@@ -92,28 +108,35 @@ export default {
         }]
       }]
     }
+  },
+  computed: {
+    iconSize() {
+      if (this.$mq.above(this.$mv.mobile)) {
+        return 'is-large'
+      }
+
+      return 'is-medium'
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.box {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.hero {
+  background-color: #f5f5f57d;
 }
 
-.hashtag .subtitle {
-  background: white;
-  margin: -20px -5px 0;
-  padding: 20px 5px 0;
-  position: relative;
-  z-index: 1;
+.container {
+  max-width: 800px;
+}
+
+.columns {
+  margin-bottom: 80px;
 }
 
 .push {
   align-items: center;
+  background-color: #fff;
   border-radius: 2px;
   box-shadow: 2px 2px 8px 1px gray;
   display: flex;
@@ -130,14 +153,23 @@ export default {
   }
 }
 
-.backup,
-.privacy {
+.icon-container {
+  background: #7957d5;
+  border: 5px solid #9b67df;
+  border-radius: 200px;
+  display: inline-block;
+  margin: 0 60px;
+  padding: 20px;
+
   .icon {
-    align-self: center;
-    font-size: 2.5rem;
-    height: auto;
-    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  @media only screen and (max-device-width : 768px) {
+    margin: 0;
+    padding: 10px;
   }
 }
+
 </style>
 

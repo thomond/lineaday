@@ -13,7 +13,7 @@
               </p>
             </div>
             <div class="column">
-              <notebook :entries="notebookEntries" />
+              <notebook :entries="notebookEntries" :mobile-entry="1" />
             </div>
           </div>
           <down-arrow anchor="tiles" :is-primary="true" />
@@ -26,6 +26,7 @@
       <div class="hero-body">
         <div class="columns is-centered">
           <div class="column is-half-desktop">
+            <h3 class="title">Try it now, for free!</h3>
             <login-signup-form :starting-tab="1" />
           </div>
         </div>

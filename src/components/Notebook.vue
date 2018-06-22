@@ -20,14 +20,14 @@
 
 export default {
   name: 'Notebook',
-  props: ['entries', 'small'],
+  props: ['entries', 'small', 'mobileEntry'],
   computed: {
     someEntries() {
       if (this.$mq.above(this.$mv.mobile)) {
         return this.entries
       }
 
-      return [this.entries[1]]
+      return [this.entries[this.mobileEntry]]
     }
   }
 };
