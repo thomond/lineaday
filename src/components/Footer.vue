@@ -16,6 +16,10 @@
             <b-icon icon="envelope-square" size="is-large"></b-icon>
           </a>
         </div>
+        <div class="privacy-links">
+          <router-link to="/terms-and-conditions">Terms & Conditions</router-link> |
+          <router-link to="/privacy-policy">Privacy Policy</router-link>
+        </div>
       </div>
     </div>
   </footer>
@@ -32,5 +36,9 @@ export default {
 <style scoped lang="scss">
 p {
   margin-bottom: 20px;
+}
+
+.privacy-links {
+  margin-top: 40px;
 }
 </style>

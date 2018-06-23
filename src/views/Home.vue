@@ -18,8 +18,14 @@
           <list :is-purpleable="isPurpleable" :tag="tag" />
         </div>
         <div class="column is-one-fifth tag-column" v-if="!isMobile">
-          <div :key="t" v-for="t in tags">
-            <router-link :to="tagUrl(t)" >#{{ t }}</router-link>
+          <div>
+            <div :key="t" v-for="t in tags">
+              <router-link :to="tagUrl(t)" >#{{ t }}</router-link>
+            </div>
+          </div>
+          <div class="links">
+            <router-link to="/terms-and-conditions"><small>Terms</small></router-link>
+            <router-link to="/privacy-policy"><small>Privacy Policy</small></router-link>
           </div>
         </div>
       </div>
@@ -99,6 +105,14 @@ export default {
 
 .tag-column {
   margin: 20px;
+}
+
+.links {
+  margin-top: 150px;
+
+  a {
+    margin-left: 5px;
+  }
 }
 </style>
 

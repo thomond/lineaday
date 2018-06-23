@@ -19,6 +19,7 @@ const router = new Router({
       path: '/',
       name: 'Welcome',
       component: Welcome,
+      meta: { requiresNoAuth: true },
     },
     {
       path: '/home/:tag?',
@@ -30,7 +31,8 @@ const router = new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
+      meta: { requiresNoAuth: true },
     },
     {
       path: '/privacy-policy',
@@ -58,10 +60,11 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresNoAuth = to.matched.some(record => record.meta.requiresNoAuth)
   const isAuthenticated = firebase.auth().currentUser
   if (requiresAuth && !isAuthenticated) {
     next('/login')
-  } else if (!requiresAuth && isAuthenticated) {
+  } else if (requiresNoAuth && isAuthenticated) {
     next('/home')
   } else {
     next()

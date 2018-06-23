@@ -1,6 +1,5 @@
 <template>
   <div>
-    <nav-menu />
     <div class="container">
       <h1 class="title is-4 fancy">Privacy Policy</h1>
       <p>
