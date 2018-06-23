@@ -7,6 +7,7 @@ import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import Settings from './views/Settings.vue'
+import Terms from './views/Terms.vue'
 import Welcome from './views/Welcome.vue'
 
 Vue.use(Router);
@@ -41,6 +42,11 @@ const router = new Router({
       name: 'Settings',
       component: Settings,
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/terms-and-conditions',
+      name: 'Terms',
+      component: Terms,
     },
     {
       path: '*',

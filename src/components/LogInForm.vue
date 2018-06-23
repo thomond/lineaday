@@ -11,7 +11,8 @@
     </b-field>
     <b-field horizontal v-if="isSignUp">
       <b-checkbox v-model="privacyPolicy" required>
-        I have read and agree to the
+        I have read and understand the
+        <router-link to="/terms-and-conditions" target="_blank">Terms & Conditions</router-link> and
         <router-link to="/privacy-policy" target="_blank">Privacy Policy</router-link>.
       </b-checkbox>
     </b-field>
