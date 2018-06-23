@@ -5,6 +5,7 @@ import firebase from './firebase'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
+import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import Settings from './views/Settings.vue'
 import Welcome from './views/Welcome.vue'
 
@@ -29,6 +30,11 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/privacy-policy',
+      name: 'PrivacyPolicy',
+      component: PrivacyPolicy,
     },
     {
       path: '/settings',
