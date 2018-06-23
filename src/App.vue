@@ -1,8 +1,7 @@
 <template>
   <div>
-    <nav-menu />
     <notification-banner v-if="isAuthenticated" />
-    <router-view :key="$route.fullPath" v-if="!!encryptionKey === isAuthenticated" />
+    <router-view v-if="!!encryptionKey === isAuthenticated" />
     <b-loading :is-full-page="true" :active="true" v-else></b-loading>
   </div>
 </template>
