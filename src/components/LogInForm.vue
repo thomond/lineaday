@@ -6,8 +6,14 @@
     <b-field horizontal label="Password">
       <b-input name="password" v-model="password" type="password" required></b-input>
     </b-field>
-    <b-field horizontal v-if="showConfirmPassword" label="Confirm Password">
+    <b-field horizontal v-if="isSignUp" label="Confirm Password">
       <b-input name="passwordConfirm" v-model="passwordConfirm" type="password" required></b-input>
+    </b-field>
+    <b-field horizontal v-if="isSignUp">
+      <b-checkbox v-model="privacyPolicy" required>
+        I have read and agree to the
+        <router-link to="/privacy-policy" target="_blank">Privacy Policy</router-link>.
+      </b-checkbox>
     </b-field>
     <b-field horizontal>
       <p class="control">
@@ -24,12 +30,13 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'SignIn',
-  props: ['buttonText', 'onSubmit', 'showConfirmPassword'],
+  props: ['buttonText', 'onSubmit', 'isSignUp'],
   data() {
     return {
       email: '',
       password: '',
-      passwordConfirm: ''
+      passwordConfirm: '',
+      privacyPolicy: false,
     }
   },
   computed: {
@@ -51,11 +58,17 @@ export default {
     ]),
     formIsValid() {
       return (this.email.length && this.password.length &&
-        (this.showConfirmPassword && (this.password === this.passwordConfirm)))
+        (!!this.isSignUp === ((this.password === this.passwordConfirm) && this.privacyPolicy)))
     },
     handleSubmit() {
-      if (this.email.length && this.password.length) {
+      if (this.formIsValid()) {
         this.onSubmit({ email: this.email, password: this.password })
+      } else {
+        this.$toast.open({
+          message: 'You must agree to the Privacy Policy in order to sign up.',
+          position: 'is-bottom',
+          type: 'is-danger'
+        })
       }
     }
   }

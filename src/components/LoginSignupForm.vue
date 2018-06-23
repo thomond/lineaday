@@ -8,7 +8,7 @@
         <b-tab-item label="Sign Up">
           <login-form
             :on-submit="handleSignUp"
-            :showConfirmPassword="true"
+            :is-sign-up="true"
             buttonText="Sign up" />
         </b-tab-item>
       </b-tabs>
