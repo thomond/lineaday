@@ -6,6 +6,7 @@
         :lines="entry[1]"
         :date="entry[0]" />
     </div>
+    <b-loading :active="linesAreLoading"></b-loading>
   </div>
 </template>
 

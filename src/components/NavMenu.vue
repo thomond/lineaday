@@ -4,8 +4,7 @@
     role="navigation"
     aria-label="main navigation">
     <div class="navbar-brand">
-      <router-link class="navbar-item home" to="/home">
-        <b-icon icon="home" v-if="isAuthenticated"></b-icon>
+      <router-link class="navbar-item" to="/home">
         <span class="logo">tinythoughts</span>
       </router-link>
       <a
@@ -71,14 +70,5 @@ export default {
 .sticky {
   position: sticky;
   top: 0;
-}
-
-.home {
-  align-items: baseline;
-  display: flex;
-
-  .icon {
-    margin-right: 10px;
-  }
 }
 </style>

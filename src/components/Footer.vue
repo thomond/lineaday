@@ -17,8 +17,12 @@
           </a>
         </div>
         <div class="privacy-links">
-          <router-link to="/terms-and-conditions">Terms & Conditions</router-link> |
-          <router-link to="/privacy-policy">Privacy Policy</router-link>
+          <small>
+            <router-link to="/terms-and-conditions">Terms & Conditions</router-link>
+          </small> |
+          <small>
+            <router-link to="/privacy-policy">Privacy Policy</router-link>
+          </small>
         </div>
       </div>
     </div>

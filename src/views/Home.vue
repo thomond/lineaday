@@ -25,14 +25,6 @@
           </div>
         </div>
       </div>
-      <div class="column">
-        <div class="column is-one-fifth is-offset-four-fifths">
-          <div class="links">
-            <router-link to="/terms-and-conditions"><small>Terms</small></router-link>
-            <router-link to="/privacy-policy"><small>Privacy Policy</small></router-link>
-          </div>
-        </div>
-      </div>
     </div>
     <b-loading :is-full-page="true" :active.sync="loading"></b-loading>
   </div>
@@ -109,12 +101,6 @@ export default {
 
 .tag-column {
   margin: 20px;
-}
-
-.links {
-  a {
-    margin-left: 5px;
-  }
 }
 </style>
 
