@@ -5,7 +5,11 @@
         <div v-if="!promptsAreLoading">
           <h2 class="subtitle fancy is-4">{{ today }}</h2>
           <h1 class="title is-2">{{ prompt }}</h1>
-          <line-form :always-expanded="true" :hide-placeholder="true" :tall="true" />
+          <line-form
+            :always-expanded="true"
+            :hide-placeholder="true"
+            :handle-submit="handleSubmit"
+            :tall="true" />
         </div>
       </div>
     </div>
@@ -39,6 +43,7 @@ import LineForm from './LineForm.vue'
 
 export default {
   name: 'WelcomeLineForm',
+  props: ['handleSubmit'],
   components: {
     DownArrow,
     LineForm,

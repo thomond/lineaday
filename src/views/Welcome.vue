@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <welcome-line-form />
+  <div :class="{ 'overflow-hidden': modalActive }">
+    <welcome-line-form :handle-submit="handleSubmit" />
     <nav-menu :sticky="true" />
     <welcome-hero />
     <section class="hero is-light is-medium" id="notebook">
@@ -34,6 +34,9 @@
       </div>
     </section>
     <tiny-footer />
+      <b-modal :active.sync="modalActive" has-modal-card>
+        <welcome-modal />
+      </b-modal>
   </div>
 </template>
 
@@ -46,6 +49,7 @@ import TinyFooter from '@/components/Footer.vue'
 import WelcomeFeatures from '@/components/WelcomeFeatures.vue'
 import WelcomeHero from '@/components/WelcomeHero.vue'
 import WelcomeLineForm from '@/components/WelcomeLineForm.vue'
+import WelcomeModal from '@/components/WelcomeModal.vue'
 import WelcomeTiles from '@/components/WelcomeTiles.vue'
 
 export default {
@@ -59,10 +63,17 @@ export default {
     WelcomeFeatures,
     WelcomeHero,
     WelcomeLineForm,
+    WelcomeModal,
     WelcomeTiles,
+  },
+  methods: {
+    handleSubmit() {
+      this.modalActive = true
+    }
   },
   data() {
     return {
+      modalActive: false,
       notebookEntries: [{
         date: 'January 1',
         lines: [{
@@ -102,6 +113,10 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }
 </style>
 

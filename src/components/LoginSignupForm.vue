@@ -1,6 +1,7 @@
 <template>
   <div class="card">
     <div class="card-content">
+      <slot></slot>
       <b-tabs type="is-toggle" expanded v-model="activeTab">
         <b-tab-item label="Log In">
           <login-form :on-submit="handleSignIn" buttonText="Log in" />
