@@ -2,7 +2,7 @@
   <div class="hero is-primary is-fullheight is-bold">
     <div class="hero-body">
       <div class="container">
-        <h1 class="title logo has-text-light">tinythoughts</h1>
+        <h1 class="title logo has-text-light is-size-3-mobile">tinythoughts</h1>
         <login-signup-form />
       </div>
     </div>

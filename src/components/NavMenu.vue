@@ -71,4 +71,8 @@ export default {
   position: sticky;
   top: 0;
 }
+
+.logo {
+  margin-right: 10px;
+}
 </style>

@@ -2,7 +2,6 @@
   <section class="hero is-medium" id="features">
     <div class="hero-body">
       <div class="container">
-        <h3 class="title fancy has-text-centered">Features</h3>
         <div class="columns is-mobile">
           <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
             <div class="icon-container">

@@ -31,13 +31,20 @@ ul {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px;
+
+  @media only screen and (max-device-width : 768px) {
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 }
 
-li:not(:last-child) {
-  &:after {
-    content: '•';
-    padding: 0 20px;
+@media only screen and (min-device-width : 768px) {
+  li:not(:last-child) {
+    &:after {
+      content: '•';
+      padding: 0 20px;
+    }
   }
 }
 

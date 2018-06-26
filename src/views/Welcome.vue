@@ -1,8 +1,8 @@
 <template>
   <div>
     <welcome-line-form />
+    <nav-menu :sticky="true" />
     <welcome-hero />
-    <nav-menu :sticky="true" :is-primary="true" />
     <section class="hero is-light is-medium" id="notebook">
       <div class="hero-body">
         <div class="container">

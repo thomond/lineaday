@@ -81,7 +81,10 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 40px;
+
+  @media only screen and (min-device-width : 768px) {
+    padding: 40px;
+  }
 }
 
 .subtitle {
