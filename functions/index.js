@@ -23,7 +23,7 @@ exports.sendNotifications = functions.https.onRequest((req, res) => {
 
   console.log('Checking for notifications for hour ', hour)
 
-  return getUsersForHour(hour)
+  return Promise.all([getUsersForHour(hour), getPrompt()])
     .then(sendNotificationsToAllUsers)
     .then(() => {
       res.end()
@@ -42,22 +42,37 @@ function getUsersForHour(hour) {
     .get()
 }
 
-function sendNotificationsToAllUsers(snapshot) {
+function getPrompt() {
+  const date = moment().format('MMMM D')
+  return admin.firestore()
+    .collection('prompts')
+    .where('date', '==', date)
+    .get()
+}
+
+function sendNotificationsToAllUsers([userSnapshot, promptSnapshot]) {
   let notificationPromises = []
-  snapshot.forEach((snapshot) => {
-    notificationPromises.push(sendNotificationToUser(snapshot))
+
+  const prompts = []
+  promptSnapshot.forEach(snapshot => {
+    prompts.push(snapshot.data())
+  })
+
+  userSnapshot.forEach((snapshot) => {
+    notificationPromises.push(sendNotificationToUser(snapshot, prompts))
   })
 
   return Promise.all(notificationPromises)
 }
 
-function sendNotificationToUser(snapshot) {
+function sendNotificationToUser(snapshot, prompts) {
+  const prompt = prompts.length ? prompts[0].prompt : "It's time to write in your journal today!"
   const user = snapshot.data()
   const tokens = Object.keys(user.messagingTokens || {})
   const payload = {
     notification: {
       title: 'tinythoughts',
-      body: "It's time to write in your journal today!",
+      body: prompt,
       icon: 'https://lineaday-11542.firebaseapp.com/notebook.png',
       click_action: 'https://tinythoughts.me'
     }
