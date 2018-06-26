@@ -5,6 +5,7 @@ import createLogger from 'vuex/dist/logger'
 import auth from './auth'
 import editing from './editing'
 import lines from './lines'
+import prompts from './prompts'
 import site from './site'
 
 Vue.use(Vuex)
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     auth,
     editing,
     lines,
+    prompts,
     site
   },
   mutations: {

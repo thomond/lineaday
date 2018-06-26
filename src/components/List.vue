@@ -6,7 +6,7 @@
         :lines="entry[1]"
         :date="entry[0]" />
     </div>
-    <b-loading :active="linesAreLoading"></b-loading>
+    <b-loading :active="linesAreLoading || promptsAreLoading"></b-loading>
   </div>
 </template>
 
@@ -27,6 +27,7 @@ export default {
     ...mapGetters([
       'lines',
       'linesAreLoading',
+      'promptsAreLoading'
     ]),
   },
   methods: {

@@ -55,6 +55,20 @@
         <div class="columns is-mobile">
           <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
             <div class="icon-container">
+              <b-icon icon="question" :size="iconSize"></b-icon>
+            </div>
+          </div>
+          <div class="column is-two-thirds-tablet is-three-quarters-mobile">
+            <p class="title is-3">Prompts</p>
+            <p class="subtitle is-5">
+              Can't decide what to write about today? We have a different prompt for
+              every day of the year.
+            </p>
+          </div>
+        </div>
+        <div class="columns is-mobile">
+          <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
+            <div class="icon-container">
               <b-icon icon="cloud-download-alt" :size="iconSize"></b-icon>
             </div>
           </div>

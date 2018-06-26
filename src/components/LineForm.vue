@@ -28,6 +28,7 @@
     <b-field grouped position="is-right" v-if="expanded">
       <div class="control">
         <button
+          :disabled="disabled"
           ref="submitButton"
           class="button is-primary is-large is-rounded"
           type="submit">
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { getTagsFromLine } from '@/util'
 
 export default {
@@ -47,8 +48,8 @@ export default {
   props: ['handleBlur', 'handleSubmit'],
   data() {
     return {
+      disabled: false,
       expanded: false,
-      placeholder: 'What do you want to say today?',
       text: '',
     };
   },
@@ -57,9 +58,14 @@ export default {
       this.text = this.getEditingLine.text
       this.expanded = true
       this.$refs.textBox.focus()
+    } else {
+      this.getPrompts()
     }
   },
   methods: {
+    ...mapActions([
+      'getPrompts'
+    ]),
     onBlur(e) {
       if (e.relatedTarget === this.$refs.submitButton) {
         this.onSubmit()
@@ -74,7 +80,9 @@ export default {
       if (this.text.length) {
         this.handleSubmit({ text: this.text, tags: this.tags });
         this.text = ''
+        this.disabled = true
       } else {
+        this.$refs.textBox.focus()
         this.$toast.open({
           message: "You've got to say something!",
           position: 'is-bottom',
@@ -85,8 +93,17 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getEditingLine'
+      'getEditingLine',
+      'prompt',
+      'promptsAreLoading'
     ]),
+    placeholder() {
+      if (this.promptsAreLoading) {
+        return ''
+      }
+
+      return this.prompt
+    },
     tags() {
       return getTagsFromLine(this.text)
     },
