@@ -1,5 +1,6 @@
 <template>
   <div>
+    <welcome-line-form />
     <welcome-hero />
     <nav-menu :sticky="true" :is-primary="true" />
     <section class="hero is-light is-medium" id="notebook">
@@ -44,6 +45,7 @@ import Notebook from '@/components/Notebook.vue'
 import TinyFooter from '@/components/Footer.vue'
 import WelcomeFeatures from '@/components/WelcomeFeatures.vue'
 import WelcomeHero from '@/components/WelcomeHero.vue'
+import WelcomeLineForm from '@/components/WelcomeLineForm.vue'
 import WelcomeTiles from '@/components/WelcomeTiles.vue'
 
 export default {
@@ -56,6 +58,7 @@ export default {
     TinyFooter,
     WelcomeFeatures,
     WelcomeHero,
+    WelcomeLineForm,
     WelcomeTiles,
   },
   data() {

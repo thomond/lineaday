@@ -45,11 +45,11 @@ import { getTagsFromLine } from '@/util'
 
 export default {
   name: 'LineForm',
-  props: ['handleBlur', 'handleSubmit'],
+  props: ['alwaysExpanded', 'handleBlur', 'handleSubmit', 'hidePlaceholder', 'tall'],
   data() {
     return {
       disabled: false,
-      expanded: false,
+      expanded: this.alwaysExpanded,
       text: '',
     };
   },
@@ -58,8 +58,12 @@ export default {
       this.text = this.getEditingLine.text
       this.expanded = true
       this.$refs.textBox.focus()
-    } else {
+    } else if (!this.hidePlaceholder) {
       this.getPrompts()
+    }
+
+    if (this.alwaysExpanded) {
+      this.$refs.textBox.focus()
     }
   },
   methods: {
@@ -70,7 +74,10 @@ export default {
       if (e.relatedTarget === this.$refs.submitButton) {
         this.onSubmit()
       }
-      this.expanded = false
+
+      if (!this.alwaysExpanded) {
+        this.expanded = false
+      }
 
       if (this.handleBlur) {
         this.handleBlur(this.text)
@@ -98,7 +105,7 @@ export default {
       'promptsAreLoading'
     ]),
     placeholder() {
-      if (this.promptsAreLoading) {
+      if (this.promptsAreLoading || this.hidePlaceholder) {
         return ''
       }
 
@@ -108,9 +115,9 @@ export default {
       return getTagsFromLine(this.text)
     },
     rows() {
-      let rows = 2
+      let rows = this.tall ? 3 : 2
       if (this.$mq.above(this.$mv.mobile)) {
-        rows = 1
+        rows -= 1
       }
       return this.expanded ? rows + 1 : rows
     },
