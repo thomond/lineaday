@@ -1,6 +1,5 @@
 <template>
   <div>
-    <notification-banner v-if="isAuthenticated" />
     <router-view v-if="!!encryptionKey === isAuthenticated" />
     <b-loading :is-full-page="true" :active="true" v-else></b-loading>
   </div>
@@ -8,15 +7,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import NavMenu from '@/components/NavMenu.vue'
-import NotificationBanner from '@/components/NotificationBanner.vue'
 
 export default {
   name: 'App',
-  components: {
-    NavMenu,
-    NotificationBanner
-  },
   computed: {
     ...mapGetters([
       'encryptionKey',

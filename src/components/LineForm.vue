@@ -28,7 +28,6 @@
     <b-field grouped position="is-right" v-if="expanded">
       <div class="control">
         <button
-          :disabled="disabled"
           ref="submitButton"
           class="button is-primary is-large is-rounded"
           type="submit">
@@ -45,10 +44,15 @@ import { getTagsFromLine } from '@/util'
 
 export default {
   name: 'LineForm',
-  props: ['alwaysExpanded', 'handleBlur', 'handleSubmit', 'hidePlaceholder', 'tall'],
+  props: [
+    'alwaysExpanded',
+    'handleBlur',
+    'handleSubmit',
+    'hidePlaceholder',
+    'tall'
+  ],
   data() {
     return {
-      disabled: false,
       expanded: this.alwaysExpanded,
       text: '',
     };
@@ -86,8 +90,6 @@ export default {
     onSubmit() {
       if (this.text.length) {
         this.handleSubmit({ text: this.text, tags: this.tags });
-        this.text = ''
-        this.disabled = true
       } else {
         this.$refs.textBox.focus()
         this.$toast.open({

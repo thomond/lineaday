@@ -35,7 +35,7 @@
     </section>
     <tiny-footer />
       <b-modal :active.sync="modalActive" has-modal-card>
-        <welcome-modal />
+        <welcome-modal :line="line" />
       </b-modal>
   </div>
 </template>
@@ -67,12 +67,14 @@ export default {
     WelcomeTiles,
   },
   methods: {
-    handleSubmit() {
+    handleSubmit(line) {
       this.modalActive = true
+      this.line = line
     }
   },
   data() {
     return {
+      line: undefined,
       modalActive: false,
       notebookEntries: [{
         date: 'January 1',

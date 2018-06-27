@@ -1,5 +1,5 @@
 <template>
-  <login-signup-form :starting-tab="1">
+  <login-signup-form :starting-tab="1" :line="line">
     <div class="has-text-centered">
       <h4 class="title">Welcome!</h4>
       <h5 class="subtitle">Sign up or log in to continue</h5>
@@ -12,6 +12,7 @@ import LoginSignupForm from '@/components/LoginSignupForm.vue'
 
 export default {
   name: 'WelcomeModal',
+  props: ['line'],
   components: {
     LoginSignupForm,
   }

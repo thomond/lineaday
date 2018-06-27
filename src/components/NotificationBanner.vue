@@ -55,5 +55,6 @@ export default {
 .right {
   margin-left: 20px;
 }
+
 </style>
 

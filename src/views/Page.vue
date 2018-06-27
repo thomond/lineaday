@@ -1,6 +1,7 @@
 <template>
   <div class="page">
     <nav-menu />
+    <notification-banner v-if="isAuthenticated" />
     <router-view :key="$route.fullPath" class="view" />
     <div class="container links">
       <div class="has-text-right">
@@ -12,12 +13,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import NavMenu from '@/components/NavMenu.vue'
+import NotificationBanner from '@/components/NotificationBanner.vue'
 
 export default {
   name: 'App',
   components: {
     NavMenu,
+    NotificationBanner,
+  },
+  computed: {
+    ...mapGetters([
+      'isAuthenticated',
+    ]),
   },
 };
 </script>
