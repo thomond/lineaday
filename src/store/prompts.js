@@ -3,7 +3,7 @@ import moment from 'moment'
 import { plugins } from '@/firebase'
 
 const initialState = {
-  loading: true,
+  loading: false,
   prompts: []
 }
 

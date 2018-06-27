@@ -27,9 +27,16 @@ export default {
     LoginForm
   },
   props: {
+    classes: {
+      default: '',
+      type: String
+    },
     startingTab: {
       default: 0,
       type: Number
+    },
+    line: {
+      type: Object
     }
   },
   data() {
@@ -43,10 +50,10 @@ export default {
       'userEmailSignUp'
     ]),
     handleSignIn(user) {
-      this.userEmailSignIn(user)
+      this.userEmailSignIn({ user, line: this.line })
     },
     handleSignUp(user) {
-      this.userEmailSignUp(user)
+      this.userEmailSignUp({ user, line: this.line })
     }
   }
 }
@@ -56,5 +63,9 @@ export default {
 .card {
   border-radius: 4px;
   width: 100%;
+
+  @media only screen and (min-device-width : 768px) {
+    min-width: 550px;
+  }
 }
 </style>

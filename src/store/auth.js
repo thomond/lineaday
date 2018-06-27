@@ -102,17 +102,20 @@ const actions = {
     }
     commit('setUserLoading', false)
   },
-  async userEmailSignIn({ dispatch }, { email, password }) {
+  async userEmailSignIn({ dispatch }, { user: { email, password }, line }) {
     try {
       const doc = await firebase.auth().signInWithEmailAndPassword(email, password)
-      dispatch('onUserLogin', doc.user)
+      await dispatch('onUserLogin', doc.user)
+      if (line) {
+        await dispatch('addLine', line)
+      }
       router.push('/home')
     } catch (err) {
       bugsnagClient.notify(err)
       displayError(err)
     }
   },
-  async userEmailSignUp({ commit, dispatch }, { email, password }) {
+  async userEmailSignUp({ commit, dispatch }, { user: { email, password }, line }) {
     commit('setUserLoading', true)
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -127,6 +130,9 @@ const actions = {
       commit('setUser', doc.user)
       commit('toggleNotificationBanner', true)
       dispatch('updateUser', { reminderTime: defaultReminderTime })
+      if (line) {
+        await dispatch('addLine', line)
+      }
       router.push('/home')
     } catch (err) {
       bugsnagClient.notify(err)
