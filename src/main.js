@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
+import vClickOutside from 'v-click-outside'
 import vMediaQuery from 'v-media-query'
 import vueSmoothScroll from 'vue2-smooth-scroll'
 import bugsnagVue from 'bugsnag-vue'
@@ -26,6 +27,8 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(Buefy, {
   defaultIconPack: 'fas',
 })
+
+Vue.use(vClickOutside)
 
 Vue.use(vMediaQuery, {
   variables: {

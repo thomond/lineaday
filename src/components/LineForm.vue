@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit" class="form">
+  <form @submit.prevent="onSubmit" class="form" v-click-outside="onBlur">
     <b-field>
       <b-input
         expanded
@@ -11,7 +11,6 @@
         :placeholder="placeholder"
         :class="{ 'placeholder-colored': !expanded }"
         @focus="expanded = true"
-        @blur="onBlur"
         v-model="text"></b-input>
         <p class="help" v-if="expanded">
           <span v-if="tags.length">
@@ -24,6 +23,28 @@
             add <span class="has-text-primary">#tag</span> to your post.
           </span>
         </p>
+    </b-field>
+    <b-field class="file" v-if="expanded" ref="imageInput">
+      <transition name="fade" mode="out-in">
+        <b-notification
+          class="image-preview"
+          v-if="imageFile"
+          :active="true"
+          @close="deleteImageFile">
+          <img :src="imageData" v-if="imageData" />
+          <p>{{ imageFile[0].name }}</p>
+        </b-notification>
+        <b-upload
+          accept="image/*"
+          v-model="imageFile"
+          drag-drop
+          @input="generatePreviewImage"
+          v-else>
+          <div class="content has-text-centered">
+            <p>Drop your image here or click to upload</p>
+          </div>
+        </b-upload>
+      </transition>
     </b-field>
     <b-field grouped position="is-right" v-if="expanded">
       <div class="control">
@@ -54,6 +75,8 @@ export default {
   data() {
     return {
       expanded: this.alwaysExpanded,
+      imageData: null,
+      imageFile: null,
       text: '',
     };
   },
@@ -74,11 +97,18 @@ export default {
     ...mapActions([
       'getPrompts'
     ]),
-    onBlur(e) {
-      if (e.relatedTarget === this.$refs.submitButton) {
-        this.onSubmit()
+    deleteImageFile() {
+      this.imageFile = null
+      this.imageData = null
+    },
+    generatePreviewImage() {
+      if (this.imageFile && this.imageFile[0].type === 'image/png') {
+        const reader = new FileReader();
+        reader.onload = (e) => { this.imageData = e.target.result };
+        reader.readAsDataURL(this.imageFile[0]);
       }
-
+    },
+    onBlur() {
       if (!this.alwaysExpanded) {
         this.expanded = false
       }
@@ -152,4 +182,24 @@ p.help {
   margin-right: 3px;
 }
 
+.file {
+  justify-content: stretch;
+  padding: 10px 0;
+
+  label {
+    width: 100%;
+
+  }
+
+  .content {
+    padding: 10px;
+  }
+}
+
+.image-preview {
+  p,
+  img {
+    max-width: 150px;
+  }
+}
 </style>

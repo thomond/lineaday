@@ -58,4 +58,8 @@ body, button, input, select, textarea {
 .message a:not(.button):not(.tag) {
   text-decoration: none;
 }
+
+.upload-draggable {
+  width: 100%;
+}
 </style>
