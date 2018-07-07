@@ -1,8 +1,8 @@
 <template>
   <div>
-    <img :src="imageUrl" @click="lightbox = true" />
+    <img :src="imageUrl" @click="lightbox = true" :class="{ thumbnail }" />
     <b-modal :active.sync="lightbox" class="lightbox">
-      <img :src="imageUrl">
+      <img :src="imageUrl" />
     </b-modal>
   </div>
 </template>
@@ -11,7 +11,7 @@
 
 export default {
   name: 'ImageWithLightbox',
-  props: ['imageUrl'],
+  props: ['imageUrl', 'thumbnail'],
   data() {
     return {
       lightbox: false,
@@ -35,5 +35,11 @@ img {
   max-width: 100%;
   object-fit: contain;
   width: 100%;
+}
+
+.thumbnail {
+  height: 200px;
+  width: 200px;
+  object-fit: cover;
 }
 </style>

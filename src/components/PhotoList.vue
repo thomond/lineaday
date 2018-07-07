@@ -1,0 +1,46 @@
+<template>
+  <div>
+    <div v-for="date in lines" :key="date[0]">
+      {{ date[0] }}
+      <div class="columns">
+        <div class="column" v-for="line in date[1]" :key="line.imageUrl">
+          <image-with-lightbox :imageUrl="line.imageUrl" :thumbnail="true" />
+        </div>
+      </div>
+    </div>
+    <b-loading :active="linesAreLoading"></b-loading>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+import ImageWithLightbox from './ImageWithLightbox.vue'
+
+export default {
+  name: 'PhotoList',
+  props: ['tag'],
+  components: {
+    ImageWithLightbox,
+  },
+  mounted() {
+    this.getLines({ tag: this.tag, imagesOnly: true })
+  },
+  computed: {
+    ...mapGetters([
+      'lines',
+      'linesAreLoading',
+      'promptsAreLoading'
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'getLines'
+    ]),
+  },
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+
+</style>

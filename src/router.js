@@ -5,7 +5,9 @@ import firebase from './firebase'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
+import List from './components/List.vue'
 import Page from './views/Page.vue'
+import PhotoList from './components/PhotoList.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import Settings from './views/Settings.vue'
 import Terms from './views/Terms.vue'
@@ -34,11 +36,27 @@ const router = new Router({
       component: Page,
       children: [
         {
-          path: '/home/:tag?',
+          path: '/',
           name: 'home',
           component: Home,
           meta: { requiresAuth: true },
-          props: true
+          props: true,
+          children: [
+            {
+              path: '/home/:tag?',
+              name: 'list',
+              component: List,
+              meta: { requiresAuth: true },
+              props: true,
+            },
+            {
+              path: '/photos/:tag?',
+              name: 'photo-list',
+              component: PhotoList,
+              meta: { requiresAuth: true },
+              props: true,
+            }
+          ]
         },
         {
           path: '/privacy-policy',

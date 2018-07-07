@@ -15,7 +15,7 @@
           <router-link :to="tagUrl(t)" :key="t" v-for="t in tags">#{{ t }}</router-link>
         </div>
         <div class="column is is-three-fifths is is-offset-one-fifth">
-          <list :is-purpleable="isPurpleable" :tag="tag" />
+          <router-view></router-view>
         </div>
         <div class="column is-one-fifth tag-column" v-if="!isMobile">
           <div>
@@ -54,9 +54,6 @@ export default {
     ]),
     isMobile() {
       return this.$mq.below(this.$mv.mobile)
-    },
-    isPurpleable() {
-      return this.hasToday && !this.tag
     },
     loading() {
       return this.userIsLoading || !this.encryptionKey

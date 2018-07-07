@@ -135,13 +135,19 @@ const actions = {
     commit('resetEditing')
     commit('setLinesLoading', false)
   },
-  async getLines({ commit, rootState }, { tag } = {}) {
+  async getLines({ commit, rootState }, { imagesOnly, tag } = {}) {
     const { user, encryptionKey } = rootState.auth
     commit('setLinesLoading', true)
     let snapshotPromise = plugins.db
       .collection('users')
       .doc(user.uid)
       .collection('lines')
+
+    if (imagesOnly) {
+      snapshotPromise = snapshotPromise
+        .where('imageUrl', '>', '')
+        .orderBy('imageUrl', 'desc')
+    }
 
     if (tag) {
       snapshotPromise = snapshotPromise
