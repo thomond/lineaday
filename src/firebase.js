@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/messaging'
+import 'firebase/storage'
 
 import { browserHasPush } from '@/util'
 
@@ -22,7 +23,6 @@ const settings = { timestampsInSnapshots: true }
 db.settings(settings)
 plugins.db = db
 
-
 // messaging
 let messaging
 if (browserHasPush()) {
@@ -31,6 +31,9 @@ if (browserHasPush()) {
 }
 
 plugins.messaging = messaging
+
+// storage
+plugins.storage = firebase.storage()
 
 export default firebase
 

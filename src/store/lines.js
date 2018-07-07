@@ -2,6 +2,7 @@ import moment from 'moment'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import CryptoJS from 'crypto-js'
+import uuidv4 from 'uuid/v4'
 import { plugins } from '@/firebase'
 import { groupByDateFormat } from '@/util'
 
@@ -70,22 +71,39 @@ function encryptText(text, key) {
   return CryptoJS.AES.encrypt(text, key).toString()
 }
 
+async function uploadImage(uid, file) {
+  if (file) {
+    const image = file[0]
+    const storageRef = plugins.storage.ref().child(`user/${uid}/images/${uuidv4()}${image.name}`)
+    const fileSnapshot = await storageRef.put(image)
+    console.log(fileSnapshot)
+
+    return fileSnapshot.ref.getDownloadURL()
+  }
+
+  return Promise.resolve(null)
+}
+
 const actions = {
-  async addLine({ commit, rootState }, { text, tags }) {
+  async addLine({ commit, rootState }, { image, text, tags }) {
     commit('setLinesLoading', true)
     const today = moment()
     const tagObject = getTagObjectFromArray(tags)
     const encryptedText = encryptText(text, rootState.auth.encryptionKey)
+    const { uid } = rootState.auth.user
+    const imageUrl = await uploadImage(uid, image)
+
     const line = {
       createdAt: today.toDate(),
       dayOfWeek: today.day(),
       ...today.toObject(),
+      imageUrl,
       tags: tagObject,
       text: encryptedText,
     }
     const { id } = await plugins.db
       .collection('users')
-      .doc(rootState.auth.user.uid)
+      .doc(uid)
       .collection('lines')
       .add(line)
 
@@ -94,19 +112,24 @@ const actions = {
     commit('setHasToday', true)
     commit('setLinesLoading', false)
   },
-  async editLine({ commit, rootState }, { id, text, tags }) {
+  async editLine({ commit, rootState }, {
+    id, image, imageUrl, text, tags
+  }) {
     commit('setLinesLoading', true)
-
+    const { uid } = rootState.auth.user
+    const newImageUrl = await uploadImage(uid, image) || imageUrl
     const tagObject = getTagObjectFromArray(tags)
+
     const lineRef = plugins.db
       .collection('users')
-      .doc(rootState.auth.user.uid)
+      .doc(uid)
       .collection('lines')
       .doc(id);
 
     const encryptedText = encryptText(text, rootState.auth.encryptionKey)
-    const newLineProps = { text, tags: tagObject }
+    const newLineProps = { imageUrl: newImageUrl, text, tags: tagObject }
     await lineRef.set({ ...newLineProps, text: encryptedText }, { merge: true })
+
     commit('addTags', tags)
     commit('setLine', newLineProps)
     commit('resetEditing')
@@ -142,6 +165,8 @@ const actions = {
 const getters = {
   hasToday: state => state.hasToday,
   lines: state => state.lines,
+  linesWithImages: state => state.lines
+    .filter(date => date[1].filter(line => !!line.imageUrl).length > 0),
   linesAreLoading: state => state.loading,
   tags: state => state.tags
 }

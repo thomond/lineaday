@@ -1,5 +1,6 @@
 import { Toast } from 'buefy'
 import uniq from 'lodash/uniq'
+import moment from 'moment'
 
 export function displayMessage(message) {
   Toast.open({
@@ -25,7 +26,7 @@ export function getTagsFromLine(line) {
 }
 
 export function tagToUrl(tag) {
-  return `/home/${tag.replace('#', '')}`
+  return `${tag.replace('#', '')}`
 }
 
 export const groupByDateFormat = 'MMMM DD'
@@ -34,4 +35,10 @@ export const defaultReminderTime = 0
 
 export function browserHasPush() {
   return 'PushManager' in window
+}
+
+export function getYearForLine(line) {
+  const createdAt = line.createdAt.toDate ?
+    line.createdAt.toDate() : line.createdAt
+  return moment(createdAt).format('YYYY')
 }

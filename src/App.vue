@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view v-if="!!encryptionKey === isAuthenticated" />
+    <router-view v-if="showRouterView" />
     <b-loading :is-full-page="true" :active="true" v-else></b-loading>
   </div>
 </template>
@@ -14,7 +14,11 @@ export default {
     ...mapGetters([
       'encryptionKey',
       'isAuthenticated',
+      'userIsLoading'
     ]),
+    showRouterView() {
+      return ((!!this.encryptionKey === this.isAuthenticated) && !this.userIsLoading)
+    }
   },
 };
 </script>
@@ -56,6 +60,21 @@ body, button, input, select, textarea {
 }
 
 .message a:not(.button):not(.tag) {
+  text-decoration: none;
+}
+
+.upload-draggable {
+  width: 100%;
+}
+
+.lightbox {
+  .modal-content {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.button.is-text {
   text-decoration: none;
 }
 </style>

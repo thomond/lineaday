@@ -16,7 +16,7 @@ import DateDisplay from '@/components/DateDisplay.vue'
 
 export default {
   name: 'List',
-  props: ['isPurpleable', 'tag'],
+  props: ['tag'],
   components: {
     DateDisplay
   },
@@ -25,10 +25,14 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'hasToday',
       'lines',
       'linesAreLoading',
       'promptsAreLoading'
     ]),
+    isPurpleable() {
+      return this.hasToday && !this.tag
+    },
   },
   methods: {
     ...mapActions([

@@ -4,15 +4,20 @@
     <div v-if="isEditing">
       <line-form :handle-blur="handleBlur" :handle-submit="handleSubmit" />
     </div>
-    <div v-else class="word-container">
-      <span v-for="(word, index) in words" :key="index">
-        <span v-if="word.startsWith('#')">
-          <router-link class="has-text-primary link" :to="url(word)">
-            {{ word }}
-          </router-link>
-        </span>
-        <span v-else>{{ word }}</span>
-      </span>
+    <div v-else class="columns">
+      <div v-if="text" class="column">
+        <div class="word-container">
+          <span v-for="(word, index) in words" :key="index">
+            <span v-if="word.startsWith('#')">
+              <tag-link classes="has-text-primary link" :tag="word" :omit-hashtag="true" />
+            </span>
+            <span v-else>{{ word }}</span>
+          </span>
+        </div>
+      </div>
+      <div v-if="imageUrl" :class="{ column: true, 'is-2': !!text }">
+        <image-with-lightbox :image-url="imageUrl" />
+      </div>
     </div>
   </div>
 </template>
@@ -20,14 +25,18 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { tagToUrl } from '@/util'
+import ImageWithLightbox from './ImageWithLightbox.vue'
 import LineForm from './LineForm.vue'
+import TagLink from './TagLink.vue'
 
 export default {
   name: 'LineDisplay',
   components: {
-    LineForm
+    ImageWithLightbox,
+    LineForm,
+    TagLink
   },
-  props: ['id', 'text', 'year'],
+  props: ['id', 'text', 'imageUrl', 'year'],
   computed: {
     ...mapGetters([
       'getEditingLine'
@@ -52,8 +61,12 @@ export default {
         this.resetEditing()
       }
     },
-    handleSubmit({ text, tags }) {
-      this.editLine({ text, tags, id: this.id })
+    handleSubmit({
+      image, imageUrl, text, tags
+    }) {
+      this.editLine({
+        image, imageUrl, text, tags, id: this.id
+      })
     }
   }
 };

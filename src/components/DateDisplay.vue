@@ -21,7 +21,11 @@
         </span>
       </div>
       <p v-for="line in lines" class="subtitle is-5" :key="line.id">
-        <line-display :year="year(line)" :text="line.text" :id="line.id" />
+        <line-display
+          :year="year(line)"
+          :text="line.text"
+          :image-url="line.imageUrl"
+          :id="line.id" />
       </p>
     </div>
   </div>
@@ -30,7 +34,7 @@
 <script>
 import moment from 'moment'
 import { mapGetters, mapMutations } from 'vuex'
-import { groupByDateFormat } from '@/util'
+import { getYearForLine, groupByDateFormat } from '@/util'
 import LineDisplay from './LineDisplay.vue'
 
 export default {
@@ -46,11 +50,7 @@ export default {
     isPurple() {
       return this.isPurpleable && moment().format(groupByDateFormat) === this.date
     },
-    year: () => (line) => {
-      const createdAt = line.createdAt.toDate ?
-        line.createdAt.toDate() : line.createdAt
-      return moment(createdAt).format('YYYY')
-    }
+    year: () => getYearForLine
   },
   methods: {
     ...mapMutations([
@@ -71,7 +71,7 @@ export default {
 }
 
 .message {
-  margin: 20px 0;
+  margin: 30px 0;
 }
 
 .title-container {

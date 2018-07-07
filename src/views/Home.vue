@@ -6,21 +6,26 @@
           <new-line-form v-if="showForm" />
           <div v-if="tag" class="tag-container">
             <h1 class="title is-1 fancy">#{{ tag }}</h1>
-            <router-link to="/home" class="subtitle is-6 has-text-primary">clear</router-link>
+            <router-link
+              append
+              :to="{ params: { tag: undefined } }"
+              class="subtitle is-6 has-text-primary">
+              clear
+            </router-link>
           </div>
         </div>
       </div>
       <div class="columns">
         <div class="column mobile-tags" v-if="isMobile">
-          <router-link :to="tagUrl(t)" :key="t" v-for="t in tags">#{{ t }}</router-link>
+          <tag-link :tag="t" :key="t" v-for="t in tags" />
         </div>
-        <div class="column is is-three-fifths is is-offset-one-fifth">
-          <list :is-purpleable="isPurpleable" :tag="tag" />
+        <div class="column is-three-fifths is-offset-one-fifth">
+          <router-view></router-view>
         </div>
         <div class="column is-one-fifth tag-column" v-if="!isMobile">
           <div>
             <div :key="t" v-for="t in tags">
-              <router-link :to="tagUrl(t)" >#{{ t }}</router-link>
+              <tag-link :tag="t" />
             </div>
           </div>
         </div>
@@ -34,14 +39,15 @@
 import { mapGetters } from 'vuex'
 import NewLineForm from '@/components/NewLineForm.vue'
 import List from '@/components/List.vue'
-import { tagToUrl } from '@/util'
+import TagLink from '@/components/TagLink.vue'
 
 export default {
   name: 'home',
   props: ['tag'],
   components: {
     List,
-    NewLineForm
+    NewLineForm,
+    TagLink,
   },
   computed: {
     ...mapGetters([
@@ -55,16 +61,15 @@ export default {
     isMobile() {
       return this.$mq.below(this.$mv.mobile)
     },
-    isPurpleable() {
-      return this.hasToday && !this.tag
-    },
     loading() {
       return this.userIsLoading || !this.encryptionKey
     },
     showForm() {
-      return !this.linesAreLoading && !this.tag && !this.hasToday
+      return !this.linesAreLoading
+        && !this.tag
+        && !this.hasToday
+        && this.$route.name === 'list'
     },
-    tagUrl: () => tagToUrl
   }
 };
 </script>
@@ -100,7 +105,7 @@ export default {
 }
 
 .tag-column {
-  margin: 20px;
+  margin: 20px 0;
 }
 </style>
 

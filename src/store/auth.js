@@ -9,7 +9,7 @@ import { defaultReminderTime, displayError, displayMessage } from '@/util'
 const initialState = {
   blockedInBrowser: false,
   encryptionKey: null,
-  loading: false,
+  loading: 0,
   settings: {
     reminderTime: defaultReminderTime,
   },
@@ -18,7 +18,7 @@ const initialState = {
 
 const actions = {
   async onUserLogin({ commit, dispatch, state }, authUser) {
-    commit('setUserLoading', true)
+    commit('incrementUserLoading')
     try {
       commit('setUser', authUser)
       await dispatch('getUserSettings')
@@ -33,7 +33,7 @@ const actions = {
       bugsnagClient.notify(err)
       displayError(err)
     }
-    commit('setUserLoading', false)
+    commit('decrementUserLoading')
   },
   async getEncryptionKey({ commit }) {
     try {
@@ -96,7 +96,7 @@ const actions = {
     commit('modifyUserSettings', nonEmptyAttributes)
   },
   async updateUserSettings({ commit, dispatch }, { sendNotifications, reminderTime }) {
-    commit('setUserLoading', true)
+    commit('incrementUserLoading')
     try {
       await dispatch('updateUser', { sendNotifications, reminderTime })
       displayMessage('Notification settings updated!')
@@ -104,9 +104,10 @@ const actions = {
       bugsnagClient.notify(err)
       displayError(err)
     }
-    commit('setUserLoading', false)
+    commit('decrementUserLoading')
   },
-  async userEmailSignIn({ dispatch }, { user: { email, password }, line }) {
+  async userEmailSignIn({ commit, dispatch }, { user: { email, password }, line }) {
+    commit('incrementUserLoading')
     try {
       const doc = await firebase.auth().signInWithEmailAndPassword(email, password)
       await dispatch('onUserLogin', doc.user)
@@ -118,9 +119,10 @@ const actions = {
       bugsnagClient.notify(err)
       displayError(err)
     }
+    commit('decrementUserLoading')
   },
   async userEmailSignUp({ commit, dispatch }, { user: { email, password }, line }) {
-    commit('setUserLoading', true)
+    commit('incrementUserLoading')
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
       const idToken = await doc.user.getIdToken()
@@ -142,7 +144,7 @@ const actions = {
       bugsnagClient.notify(err)
       displayError(err)
     }
-    commit('setUserLoading', false)
+    commit('decrementUserLoading')
   },
   async userSignOut({ commit }) {
     await firebase.auth().signOut()
@@ -158,7 +160,7 @@ const getters = {
   encryptionKey: state => state.encryptionKey,
   isAuthenticated: state => !!state.user,
   userEmail: state => get(state, 'user.email', ''),
-  userIsLoading: state => state.loading,
+  userIsLoading: state => state.loading > 0,
   userSettings: state => state.settings
 }
 
@@ -179,8 +181,11 @@ const mutations = {
   setEncryptionKey(state, key) {
     state.encryptionKey = key
   },
-  setUserLoading(state, isLoading) {
-    state.loading = isLoading
+  incrementUserLoading(state) {
+    state.loading += 1
+  },
+  decrementUserLoading(state) {
+    state.loading -= 1
   },
   setUser(state, { uid, email }) {
     bugsnagClient.user = { uid, email }

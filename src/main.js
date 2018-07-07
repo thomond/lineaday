@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
+import vClickOutside from 'v-click-outside'
 import vMediaQuery from 'v-media-query'
 import vueSmoothScroll from 'vue2-smooth-scroll'
 import bugsnagVue from 'bugsnag-vue'
@@ -12,6 +13,7 @@ import firebase from './firebase'
 import store from './store'
 import './registerServiceWorker'
 import bugsnagClient from './bugsnag'
+import mobileDetect from './plugins/mobileDetect'
 
 Vue.config.productionTip = false
 
@@ -27,6 +29,8 @@ Vue.use(Buefy, {
   defaultIconPack: 'fas',
 })
 
+Vue.use(vClickOutside)
+
 Vue.use(vMediaQuery, {
   variables: {
     mobile: 768
@@ -34,6 +38,8 @@ Vue.use(vMediaQuery, {
 })
 
 Vue.use(vueSmoothScroll)
+
+Vue.use(mobileDetect)
 
 const unsubscribe = firebase.auth()
   .onAuthStateChanged((firebaseUser) => {
