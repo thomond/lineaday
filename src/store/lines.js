@@ -2,6 +2,7 @@ import moment from 'moment'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import CryptoJS from 'crypto-js'
+import uuidv4 from 'uuid/v4'
 import { plugins } from '@/firebase'
 import { groupByDateFormat } from '@/util'
 
@@ -71,8 +72,16 @@ function encryptText(text, key) {
 }
 
 async function uploadImage(uid, file) {
-  const storageRef = plugins.storage.ref().child(`user/${uid}/images`)
-  return storageRef.put(file)
+  if (file) {
+    const image = file[0]
+    const storageRef = plugins.storage.ref().child(`user/${uid}/images/${uuidv4()}${image.name}`)
+    const fileSnapshot = await storageRef.put(image)
+    console.log(fileSnapshot)
+
+    return fileSnapshot.ref.getDownloadURL()
+  }
+
+  return Promise.resolve(null)
 }
 
 const actions = {
@@ -82,12 +91,7 @@ const actions = {
     const tagObject = getTagObjectFromArray(tags)
     const encryptedText = encryptText(text, rootState.auth.encryptionKey)
     const { uid } = rootState.auth.user
-
-    let imageUrl
-    if (image) {
-      const fileSnapshot = await uploadImage(uid, image)
-      imageUrl = await fileSnapshot.ref.getDownloadURL()
-    }
+    const imageUrl = await uploadImage(uid, image)
 
     const line = {
       createdAt: today.toDate(),
@@ -108,19 +112,24 @@ const actions = {
     commit('setHasToday', true)
     commit('setLinesLoading', false)
   },
-  async editLine({ commit, rootState }, { id, text, tags }) {
+  async editLine({ commit, rootState }, {
+    id, image, imageUrl, text, tags
+  }) {
     commit('setLinesLoading', true)
-
+    const { uid } = rootState.auth.user
+    const newImageUrl = await uploadImage(uid, image) || imageUrl
     const tagObject = getTagObjectFromArray(tags)
+
     const lineRef = plugins.db
       .collection('users')
-      .doc(rootState.auth.user.uid)
+      .doc(uid)
       .collection('lines')
       .doc(id);
 
     const encryptedText = encryptText(text, rootState.auth.encryptionKey)
-    const newLineProps = { text, tags: tagObject }
+    const newLineProps = { imageUrl: newImageUrl, text, tags: tagObject }
     await lineRef.set({ ...newLineProps, text: encryptedText }, { merge: true })
+
     commit('addTags', tags)
     commit('setLine', newLineProps)
     commit('resetEditing')

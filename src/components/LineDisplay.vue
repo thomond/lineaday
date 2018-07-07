@@ -5,7 +5,7 @@
       <line-form :handle-blur="handleBlur" :handle-submit="handleSubmit" />
     </div>
     <div v-else class="columns">
-      <div class="column">
+      <div v-if="text" class="column">
         <div class="word-container">
           <span v-for="(word, index) in words" :key="index">
             <span v-if="word.startsWith('#')">
@@ -17,7 +17,7 @@
           </span>
         </div>
       </div>
-      <div v-if="imageUrl" class="column is-one-quarter">
+      <div v-if="imageUrl" :class="{ column: true, 'is-one-quarter': !!text }">
         <image-with-lightbox :image-url="imageUrl" />
       </div>
     </div>
@@ -61,8 +61,12 @@ export default {
         this.resetEditing()
       }
     },
-    handleSubmit({ text, tags }) {
-      this.editLine({ text, tags, id: this.id })
+    handleSubmit({
+      image, imageUrl, text, tags
+    }) {
+      this.editLine({
+        image, imageUrl, text, tags, id: this.id
+      })
     }
   }
 };

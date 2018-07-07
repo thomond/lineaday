@@ -24,15 +24,14 @@
           </span>
         </p>
     </b-field>
-    <b-field class="file" v-if="expanded" ref="imageInput">
+    <b-field class="file" v-if="expanded">
       <transition name="fade" mode="out-in">
         <b-notification
           class="image-preview"
-          v-if="imageFile"
+          v-if="imageSrc"
           :active="true"
           @close="deleteImageFile">
-          <img :src="imageData" v-if="imageData" />
-          <p>{{ imageFile[0].name }}</p>
+          <img :src="imageSrc" v-if="imageSrc" />
         </b-notification>
         <b-upload
           accept="image/*"
@@ -75,7 +74,7 @@ export default {
   data() {
     return {
       expanded: this.alwaysExpanded,
-      imageData: null,
+      imageSrc: null,
       imageFile: null,
       text: '',
     };
@@ -83,6 +82,7 @@ export default {
   mounted() {
     if (this.getEditingLine) {
       this.text = this.getEditingLine.text
+      this.imageSrc = this.getEditingLine.imageUrl
       this.expanded = true
       this.$refs.textBox.focus()
     } else if (!this.hidePlaceholder) {
@@ -99,12 +99,12 @@ export default {
     ]),
     deleteImageFile() {
       this.imageFile = null
-      this.imageData = null
+      this.imageSrc = null
     },
     generatePreviewImage() {
       if (this.imageFile && this.imageFile[0].type === 'image/png') {
         const reader = new FileReader();
-        reader.onload = (e) => { this.imageData = e.target.result };
+        reader.onload = (e) => { this.imageSrc = e.target.result };
         reader.readAsDataURL(this.imageFile[0]);
       }
     },
@@ -118,8 +118,13 @@ export default {
       }
     },
     onSubmit() {
-      if (this.text.length) {
-        this.handleSubmit({ image: this.imageFile[0], text: this.text, tags: this.tags });
+      if (this.text.length || this.imageFile) {
+        this.handleSubmit({
+          image: this.imageFile,
+          imageUrl: this.imageSrc,
+          text: this.text,
+          tags: this.tags
+        });
       } else {
         this.$refs.textBox.focus()
         this.$toast.open({
