@@ -1,5 +1,21 @@
 <template>
   <form @submit.prevent="onSubmit" class="form" v-click-outside="onBlur">
+    <div class="has-text-right">
+      <b-upload
+        @input="handleFileUpload"
+        accept="image/*"
+        v-model="imageFile"
+        v-if="!imageFile && !imageSrc">
+        <b-tooltip
+          label="Add a photo or gif"
+          position="is-bottom"
+          type="is-dark">
+          <a class="button has-text-primary is-text">
+            <b-icon icon="image" pack="far"></b-icon>
+          </a>
+        </b-tooltip>
+      </b-upload>
+    </div>
     <b-field>
       <b-input
         expanded
@@ -24,28 +40,16 @@
           </span>
         </p>
     </b-field>
-    <b-field class="file" v-if="expanded">
-      <transition name="fade" mode="out-in">
-        <b-notification
-          class="image-preview"
-          v-if="imageFile || imageSrc"
-          :active="true"
-          @close="clearImageFile">
-          <img :src="imageSrc" v-if="imageSrc" />
-          <b-loading :is-full-page="false" :active="true" v-else></b-loading>
-        </b-notification>
-        <b-upload
-          accept="image/*"
-          v-model="imageFile"
-          drag-drop
-          @input="handleFileUpload"
-          v-else>
-          <div class="content has-text-centered">
-            <p>{{ imageUploadText }}</p>
-          </div>
-        </b-upload>
-      </transition>
-    </b-field>
+    <div class="file" v-if="expanded">
+      <b-notification
+        class="image-preview"
+        v-if="imageFile || imageSrc"
+        :active="true"
+        @close="clearImageFile">
+        <img :src="imageSrc" v-if="imageSrc" />
+        <b-loading :is-full-page="false" :active="true" v-else></b-loading>
+      </b-notification>
+    </div>
     <b-field grouped position="is-right" v-if="expanded">
       <div class="control">
         <button
@@ -212,15 +216,6 @@ p.help {
 .file {
   justify-content: stretch;
   padding: 10px 0;
-
-  label {
-    width: 100%;
-
-  }
-
-  .content {
-    padding: 10px;
-  }
 }
 
 .image-preview {
@@ -228,5 +223,9 @@ p.help {
   img {
     max-width: 150px;
   }
+}
+
+a.button.is-text {
+  text-decoration: none;
 }
 </style>
