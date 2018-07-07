@@ -119,7 +119,7 @@ export default {
     },
     onSubmit() {
       if (this.text.length) {
-        this.handleSubmit({ text: this.text, tags: this.tags });
+        this.handleSubmit({ image: this.imageFile[0], text: this.text, tags: this.tags });
       } else {
         this.$refs.textBox.focus()
         this.$toast.open({

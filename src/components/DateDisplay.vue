@@ -21,7 +21,11 @@
         </span>
       </div>
       <p v-for="line in lines" class="subtitle is-5" :key="line.id">
-        <line-display :year="year(line)" :text="line.text" :id="line.id" />
+        <line-display
+          :year="year(line)"
+          :text="line.text"
+          :image-url="line.imageUrl"
+          :id="line.id" />
       </p>
     </div>
   </div>

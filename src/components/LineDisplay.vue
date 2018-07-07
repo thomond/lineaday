@@ -4,15 +4,22 @@
     <div v-if="isEditing">
       <line-form :handle-blur="handleBlur" :handle-submit="handleSubmit" />
     </div>
-    <div v-else class="word-container">
-      <span v-for="(word, index) in words" :key="index">
-        <span v-if="word.startsWith('#')">
-          <router-link class="has-text-primary link" :to="url(word)">
-            {{ word }}
-          </router-link>
-        </span>
-        <span v-else>{{ word }}</span>
-      </span>
+    <div v-else class="columns">
+      <div class="column">
+        <div class="word-container">
+          <span v-for="(word, index) in words" :key="index">
+            <span v-if="word.startsWith('#')">
+              <router-link class="has-text-primary link" :to="url(word)">
+                {{ word }}
+              </router-link>
+            </span>
+            <span v-else>{{ word }}</span>
+          </span>
+        </div>
+      </div>
+      <div v-if="imageUrl" class="column is-one-quarter">
+        <image-with-lightbox :image-url="imageUrl" />
+      </div>
     </div>
   </div>
 </template>
@@ -20,14 +27,16 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { tagToUrl } from '@/util'
+import ImageWithLightbox from './ImageWithLightbox.vue'
 import LineForm from './LineForm.vue'
 
 export default {
   name: 'LineDisplay',
   components: {
+    ImageWithLightbox,
     LineForm
   },
-  props: ['id', 'text', 'year'],
+  props: ['id', 'text', 'imageUrl', 'year'],
   computed: {
     ...mapGetters([
       'getEditingLine'

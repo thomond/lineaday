@@ -70,22 +70,36 @@ function encryptText(text, key) {
   return CryptoJS.AES.encrypt(text, key).toString()
 }
 
+async function uploadImage(uid, file) {
+  const storageRef = plugins.storage.ref().child(`user/${uid}/images`)
+  return storageRef.put(file)
+}
+
 const actions = {
-  async addLine({ commit, rootState }, { text, tags }) {
+  async addLine({ commit, rootState }, { image, text, tags }) {
     commit('setLinesLoading', true)
     const today = moment()
     const tagObject = getTagObjectFromArray(tags)
     const encryptedText = encryptText(text, rootState.auth.encryptionKey)
+    const { uid } = rootState.auth.user
+
+    let imageUrl
+    if (image) {
+      const fileSnapshot = await uploadImage(uid, image)
+      imageUrl = await fileSnapshot.ref.getDownloadURL()
+    }
+
     const line = {
       createdAt: today.toDate(),
       dayOfWeek: today.day(),
       ...today.toObject(),
+      imageUrl,
       tags: tagObject,
       text: encryptedText,
     }
     const { id } = await plugins.db
       .collection('users')
-      .doc(rootState.auth.user.uid)
+      .doc(uid)
       .collection('lines')
       .add(line)
 
