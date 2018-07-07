@@ -50,8 +50,12 @@ const actions = {
       .doc(state.user.uid)
       .get()
 
-    const { reminderTime, sendNotifications } = doc.data()
-    commit('modifyUserSettings', { reminderTime, sendNotifications })
+    const data = doc.data()
+
+    if (data) {
+      const { reminderTime, sendNotifications } = data
+      commit('modifyUserSettings', { reminderTime, sendNotifications })
+    }
   },
   async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
     try {
@@ -179,6 +183,9 @@ const mutations = {
     state.loading = isLoading
   },
   setUser(state, payload) {
+    bugsnagClient.user = {
+      id: payload.uuid
+    }
     state.user = payload
   }
 }
