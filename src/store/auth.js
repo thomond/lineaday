@@ -182,11 +182,9 @@ const mutations = {
   setUserLoading(state, isLoading) {
     state.loading = isLoading
   },
-  setUser(state, payload) {
-    bugsnagClient.user = {
-      id: payload.uuid
-    }
-    state.user = payload
+  setUser(state, { uid, email }) {
+    bugsnagClient.user = { uid, email }
+    state.user = { uid, email }
   }
 }
 

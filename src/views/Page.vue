@@ -18,7 +18,7 @@ import NavMenu from '@/components/NavMenu.vue'
 import NotificationBanner from '@/components/NotificationBanner.vue'
 
 export default {
-  name: 'App',
+  name: 'Page',
   components: {
     NavMenu,
     NotificationBanner,
