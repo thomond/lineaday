@@ -66,4 +66,11 @@ body, button, input, select, textarea {
 .upload-draggable {
   width: 100%;
 }
+
+.lightbox {
+  .modal-content {
+    height: 100%;
+    overflow: hidden;
+  }
+}
 </style>

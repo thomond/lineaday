@@ -1,10 +1,8 @@
 <template>
   <div>
     <img :src="imageUrl" @click="lightbox = true" />
-    <b-modal :active.sync="lightbox">
-      <p class="image">
-        <img :src="imageUrl">
-      </p>
+    <b-modal :active.sync="lightbox" class="lightbox">
+      <img :src="imageUrl">
     </b-modal>
   </div>
 </template>
@@ -29,5 +27,13 @@ img {
   &:hover {
     cursor: pointer;
   }
+}
+
+img {
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: 100%;
 }
 </style>
