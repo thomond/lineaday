@@ -28,19 +28,20 @@
       <transition name="fade" mode="out-in">
         <b-notification
           class="image-preview"
-          v-if="imageSrc"
+          v-if="imageFile || imageSrc"
           :active="true"
-          @close="deleteImageFile">
+          @close="clearImageFile">
           <img :src="imageSrc" v-if="imageSrc" />
+          <b-loading :is-full-page="false" :active="true" v-else></b-loading>
         </b-notification>
         <b-upload
           accept="image/*"
           v-model="imageFile"
           drag-drop
-          @input="generatePreviewImage"
+          @input="handleFileUpload"
           v-else>
           <div class="content has-text-centered">
-            <p>Drop your image here or click to upload</p>
+            <p>{{ imageUploadText }}</p>
           </div>
         </b-upload>
       </transition>
@@ -97,16 +98,31 @@ export default {
     ...mapActions([
       'getPrompts'
     ]),
-    deleteImageFile() {
+    clearImageFile() {
       this.imageFile = null
       this.imageSrc = null
     },
-    generatePreviewImage() {
-      if (this.imageFile && this.imageFile[0].type === 'image/png') {
-        const reader = new FileReader();
-        reader.onload = (e) => { this.imageSrc = e.target.result };
-        reader.readAsDataURL(this.imageFile[0]);
+    handleFileUpload() {
+      if (this.imageFile) {
+        if (!this.imageFile[0].type.match('image/')) {
+          this.$toast.open({
+            message: 'File must be an image.',
+            position: 'is-bottom',
+            type: 'is-danger'
+          })
+
+          this.clearImageFile()
+        } else {
+          this.generatePreviewImage()
+        }
       }
+    },
+    generatePreviewImage() {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        this.imageSrc = e.target.result
+      }
+      reader.readAsDataURL(this.imageFile[0])
     },
     onBlur() {
       if (!this.alwaysExpanded) {
@@ -141,6 +157,12 @@ export default {
       'prompt',
       'promptsAreLoading'
     ]),
+    imageUploadText() {
+      if (this.$md.isMobile) {
+        return 'Tap to upload image'
+      }
+      return 'Drop your image here or click to upload'
+    },
     placeholder() {
       if (this.promptsAreLoading || this.hidePlaceholder) {
         return ''

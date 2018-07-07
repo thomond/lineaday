@@ -13,6 +13,7 @@ import firebase from './firebase'
 import store from './store'
 import './registerServiceWorker'
 import bugsnagClient from './bugsnag'
+import mobileDetect from './plugins/mobileDetect'
 
 Vue.config.productionTip = false
 
@@ -37,6 +38,8 @@ Vue.use(vMediaQuery, {
 })
 
 Vue.use(vueSmoothScroll)
+
+Vue.use(mobileDetect)
 
 const unsubscribe = firebase.auth()
   .onAuthStateChanged((firebaseUser) => {
