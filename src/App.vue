@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view v-if="!!encryptionKey === isAuthenticated" />
+    <router-view v-if="showRouterView" />
     <b-loading :is-full-page="true" :active="true" v-else></b-loading>
   </div>
 </template>
@@ -14,7 +14,11 @@ export default {
     ...mapGetters([
       'encryptionKey',
       'isAuthenticated',
+      'userIsLoading'
     ]),
+    showRouterView() {
+      return ((!!this.encryptionKey === this.isAuthenticated) && !this.userIsLoading)
+    }
   },
 };
 </script>
