@@ -5,7 +5,7 @@
         expanded
         size="is-large"
         type="textarea"
-        maxlength="140"
+        maxlength="280"
         ref="textBox"
         :rows="rows"
         :placeholder="placeholder"
