@@ -34,7 +34,7 @@
 <script>
 import moment from 'moment'
 import { mapGetters, mapMutations } from 'vuex'
-import { groupByDateFormat } from '@/util'
+import { getYearForLine, groupByDateFormat } from '@/util'
 import LineDisplay from './LineDisplay.vue'
 
 export default {
@@ -50,11 +50,7 @@ export default {
     isPurple() {
       return this.isPurpleable && moment().format(groupByDateFormat) === this.date
     },
-    year: () => (line) => {
-      const createdAt = line.createdAt.toDate ?
-        line.createdAt.toDate() : line.createdAt
-      return moment(createdAt).format('YYYY')
-    }
+    year: () => getYearForLine
   },
   methods: {
     ...mapMutations([

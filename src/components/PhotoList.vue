@@ -6,7 +6,10 @@
       </div>
       <div class="columns is-multiline is-mobile">
         <div class="column is-narrow" v-for="line in date[1]" :key="line.imageUrl">
-          <image-with-lightbox :imageUrl="line.imageUrl" :thumbnail="true" />
+          <image-with-lightbox
+            :imageUrl="line.imageUrl"
+            :thumbnail="true"
+            :year="year(line)" />
         </div>
       </div>
     </div>
@@ -16,6 +19,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { getYearForLine } from '@/util'
 import ImageWithLightbox from './ImageWithLightbox.vue'
 
 export default {
@@ -33,6 +37,7 @@ export default {
       'linesAreLoading',
       'promptsAreLoading'
     ]),
+    year: () => getYearForLine
   },
   methods: {
     ...mapActions([
@@ -44,5 +49,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+.columns {
+  margin-bottom: 60px;
+}
 </style>
