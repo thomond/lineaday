@@ -14,7 +14,7 @@
         <div class="column mobile-tags" v-if="isMobile">
           <router-link :to="tagUrl(t)" :key="t" v-for="t in tags">#{{ t }}</router-link>
         </div>
-        <div class="column is is-three-fifths is is-offset-one-fifth">
+        <div class="column is-three-fifths is-offset-one-fifth">
           <router-view></router-view>
         </div>
         <div class="column is-one-fifth tag-column" v-if="!isMobile">
@@ -59,7 +59,10 @@ export default {
       return this.userIsLoading || !this.encryptionKey
     },
     showForm() {
-      return !this.linesAreLoading && !this.tag && !this.hasToday
+      return !this.linesAreLoading
+        && !this.tag
+        && !this.hasToday
+        && this.$route.name === 'list'
     },
     tagUrl: () => tagToUrl
   }
@@ -97,7 +100,7 @@ export default {
 }
 
 .tag-column {
-  margin: 20px;
+  margin: 20px 0;
 }
 </style>
 

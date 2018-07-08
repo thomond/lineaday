@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="onSubmit" class="form" v-click-outside="onBlur">
-    <div class="has-text-right">
+    <div class="has-text-right" v-if="expanded">
       <b-upload
         @input="handleFileUpload"
         accept="image/*"

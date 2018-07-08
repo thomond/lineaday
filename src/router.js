@@ -32,7 +32,6 @@ const router = new Router({
     },
     {
       path: '/',
-      name: 'Page',
       component: Page,
       children: [
         {

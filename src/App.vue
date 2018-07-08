@@ -73,4 +73,8 @@ body, button, input, select, textarea {
     overflow: hidden;
   }
 }
+
+.button.is-text {
+  text-decoration: none;
+}
 </style>

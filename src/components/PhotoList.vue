@@ -1,9 +1,11 @@
 <template>
   <div>
     <div v-for="date in lines" :key="date[0]">
-      {{ date[0] }}
-      <div class="columns">
-        <div class="column" v-for="line in date[1]" :key="line.imageUrl">
+      <div>
+        {{ date[0] }}
+      </div>
+      <div class="columns is-multiline is-mobile">
+        <div class="column is-narrow" v-for="line in date[1]" :key="line.imageUrl">
           <image-with-lightbox :imageUrl="line.imageUrl" :thumbnail="true" />
         </div>
       </div>

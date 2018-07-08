@@ -1,8 +1,18 @@
 <template>
   <nav
-    :class="{ navbar: true, sticky: sticky, 'is-primary': isPrimary }"
+    :class="classes"
     role="navigation"
     aria-label="main navigation">
+    <div class="navbar-menu" v-if="isAuthenticated">
+      <router-link to="/home" class="navbar-item" active-class="has-text-primary">
+        <b-icon icon="calendar-alt" pack="far"></b-icon>
+        <p class="icon-label">Timeline</p>
+      </router-link>
+      <router-link to="/photos" class="navbar-item" active-class="has-text-primary">
+        <b-icon icon="images" pack="far"></b-icon>
+        <p class="icon-label">Gallery</p>
+      </router-link>
+    </div>
     <div class="navbar-brand">
       <router-link class="navbar-item" to="/home">
         <span class="logo">tinythoughts</span>
@@ -54,6 +64,14 @@ export default {
       'isAuthenticated',
       'userEmail'
     ]),
+    classes() {
+      return {
+        navbar: true,
+        sticky: this.sticky,
+        'is-primary': this.isPrimary,
+        container: this.$mq.above(this.$mv.mobile)
+      }
+    }
   },
   methods: {
     ...mapActions([
@@ -74,5 +92,9 @@ export default {
 
 .logo {
   margin-right: 10px;
+}
+
+.icon-label {
+  padding-left: 5px;
 }
 </style>

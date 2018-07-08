@@ -38,8 +38,13 @@ img {
 }
 
 .thumbnail {
-  height: 200px;
-  width: 200px;
+  height: 175px;
+  width: 175px;
   object-fit: cover;
+
+  @media only screen and (max-device-width : 768px) {
+    height: 150px;
+    width: 150px;
+  }
 }
 </style>
