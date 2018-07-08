@@ -4,8 +4,11 @@
     <div v-if="isEditing">
       <line-form :handle-blur="handleBlur" :handle-submit="handleSubmit" />
     </div>
-    <div v-else class="columns">
-      <div v-if="text" class="column">
+    <div v-else>
+      <div v-if="imageUrl">
+        <image-with-lightbox :image-url="imageUrl" :thumbnail="true" />
+      </div>
+      <div v-if="text">
         <div class="word-container">
           <span v-for="(word, index) in words" :key="index">
             <span v-if="word.startsWith('#')">
@@ -14,9 +17,6 @@
             <span v-else>{{ word }}</span>
           </span>
         </div>
-      </div>
-      <div v-if="imageUrl" :class="{ column: true, 'is-one-quarter': !!text }">
-        <image-with-lightbox :image-url="imageUrl" />
       </div>
     </div>
   </div>
