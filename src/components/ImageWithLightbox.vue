@@ -1,9 +1,18 @@
 <template>
   <div>
-    <figure :class="{ thumbnail }">
+    <div :class="{ thumbnail }">
+      <div v-if="year" class="is-6 has-text-grey">{{ year }}</div>
       <img :src="imageUrl" @click="lightbox = true" />
-      <figcaption v-if="year" class="has-text-right has-text-white">{{ year }}</figcaption>
-    </figure>
+      <div v-if="tags" class="has-text-right">
+        <router-link
+          :to="url(tag)"
+          v-for="(value, tag) in tags"
+          :key="tag"
+          class="has-text-primary is-size-7">
+          #{{ tag }}
+        </router-link>
+      </div>
+    </div>
     <b-modal :active.sync="lightbox" class="lightbox">
       <img :src="imageUrl" />
     </b-modal>
@@ -11,14 +20,18 @@
 </template>
 
 <script>
+import { tagToUrl } from '@/util'
 
 export default {
   name: 'ImageWithLightbox',
-  props: ['imageUrl', 'thumbnail', 'year'],
+  props: ['imageUrl', 'tags', 'thumbnail', 'year'],
   data() {
     return {
       lightbox: false,
     }
+  },
+  computed: {
+    url: () => tagToUrl
   }
 };
 </script>
@@ -42,33 +55,20 @@ img {
 
 .thumbnail {
   border-radius: 4px;
-  position: relative;
-  height: 175px;
-  width: 175px;
-
-  @media only screen and (max-device-width : 768px) {
-    height: 150px;
-    width: 150px;
-  }
 
   img {
-    height: 100%;
-    width: 100%;
+    height: 175px;
+    min-height: 175px;
+    min-width: 175px;
+    width: 175px;
     object-fit: cover;
-  }
 
-  figcaption {
-    background-color: #000;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    bottom: 0;
-    height: 40px;
-    left: 0;
-    line-height: 40px;
-    opacity: .5;
-    padding: 0 10px;
-    position: absolute;
-    right: 0;
+    @media only screen and (max-device-width : 768px) {
+      height: 150px;
+      min-height: 150px;
+      min-width: 150px;
+      width: 150px;
+    }
   }
 }
 

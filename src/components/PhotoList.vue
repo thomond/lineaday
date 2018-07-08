@@ -1,15 +1,22 @@
 <template>
   <div>
-    <div v-for="date in lines" :key="date[0]">
-      <div>
-        {{ date[0] }}
-      </div>
-      <div class="columns is-multiline is-mobile">
-        <div class="column is-narrow" v-for="line in date[1]" :key="line.imageUrl">
-          <image-with-lightbox
-            :imageUrl="line.imageUrl"
-            :thumbnail="true"
-            :year="year(line)" />
+    <div v-for="date in linesWithImages" :key="date[0]" class="date message">
+      <div class="message-body">
+        <p class="title is-6 fancy">
+          {{ date[0] }}
+        </p>
+        <div class="columns is-multiline is-mobile">
+          <div
+            v-if="line.imageUrl"
+            class="column is-narrow"
+            v-for="line in date[1]"
+            :key="line.imageUrl">
+            <image-with-lightbox
+              :imageUrl="line.imageUrl"
+              :tags="line.tags"
+              :thumbnail="true"
+              :year="year(line)" />
+          </div>
         </div>
       </div>
     </div>
@@ -29,11 +36,11 @@ export default {
     ImageWithLightbox,
   },
   mounted() {
-    this.getLines({ tag: this.tag, imagesOnly: true })
+    this.getLines({ tag: this.tag })
   },
   computed: {
     ...mapGetters([
-      'lines',
+      'linesWithImages',
       'linesAreLoading',
       'promptsAreLoading'
     ]),
@@ -49,7 +56,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.columns {
-  margin-bottom: 60px;
+.date {
+  margin: 20px 0;
 }
 </style>
