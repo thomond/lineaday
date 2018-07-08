@@ -26,7 +26,7 @@ export function getTagsFromLine(line) {
 }
 
 export function tagToUrl(tag) {
-  return `/home/${tag.replace('#', '')}`
+  return `${tag.replace('#', '')}`
 }
 
 export const groupByDateFormat = 'MMMM DD'

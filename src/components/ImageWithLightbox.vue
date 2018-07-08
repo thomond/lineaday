@@ -4,13 +4,11 @@
       <div v-if="year" class="is-6 has-text-grey">{{ year }}</div>
       <img :src="imageUrl" @click="lightbox = true" />
       <div v-if="tags" class="has-text-right">
-        <router-link
-          :to="url(tag)"
+        <tag-link
           v-for="(value, tag) in tags"
+          :tag="tag"
           :key="tag"
-          class="has-text-primary is-size-7">
-          #{{ tag }}
-        </router-link>
+          classes="has-text-primary is-size-7" />
       </div>
     </div>
     <b-modal :active.sync="lightbox" class="lightbox">
@@ -20,18 +18,18 @@
 </template>
 
 <script>
-import { tagToUrl } from '@/util'
+import TagLink from './TagLink.vue'
 
 export default {
   name: 'ImageWithLightbox',
   props: ['imageUrl', 'tags', 'thumbnail', 'year'],
+  components: {
+    TagLink
+  },
   data() {
     return {
       lightbox: false,
     }
-  },
-  computed: {
-    url: () => tagToUrl
   }
 };
 </script>

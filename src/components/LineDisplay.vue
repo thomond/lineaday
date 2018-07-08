@@ -9,9 +9,7 @@
         <div class="word-container">
           <span v-for="(word, index) in words" :key="index">
             <span v-if="word.startsWith('#')">
-              <router-link class="has-text-primary link" :to="url(word)">
-                {{ word }}
-              </router-link>
+              <tag-link classes="has-text-primary link" :tag="word" :omit-hashtag="true" />
             </span>
             <span v-else>{{ word }}</span>
           </span>
@@ -29,12 +27,14 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { tagToUrl } from '@/util'
 import ImageWithLightbox from './ImageWithLightbox.vue'
 import LineForm from './LineForm.vue'
+import TagLink from './TagLink.vue'
 
 export default {
   name: 'LineDisplay',
   components: {
     ImageWithLightbox,
-    LineForm
+    LineForm,
+    TagLink
   },
   props: ['id', 'text', 'imageUrl', 'year'],
   computed: {
