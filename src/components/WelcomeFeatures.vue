@@ -2,7 +2,7 @@
   <section class="hero is-medium" id="features">
     <div class="hero-body">
       <div class="container">
-        <div class="columns is-mobile">
+        <div class="columns is-mobile feature">
           <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
             <div class="icon-container">
               <b-icon icon="bell" :size="iconSize"></b-icon>
@@ -23,7 +23,40 @@
             </div>
           </div>
         </div>
-        <div class="columns is-mobile">
+        <div class="columns is-mobile feature">
+          <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
+            <div class="icon-container">
+              <b-icon icon="camera" :size="iconSize"></b-icon>
+            </div>
+          </div>
+          <div class="column is-two-thirds-tablet is-three-quarters-mobile">
+            <p class="title is-3">Photos</p>
+            <p class="subtitle is-5">
+              Attach a photo or gif to your thought of the day. View photos inline
+              or in the image gallery.
+            </p>
+            <entry date="September 3">
+              <div class="columns">
+                <div class="column is-one-third">
+                  <div class="is-6 has-text-grey">2018</div>
+                  <img :src="girl" />
+                  <div class="has-text-right is-size-7 has-text-primary">#Kate</div>
+                </div>
+                <div class="column is-one-third">
+                  <div class="is-6 has-text-grey">2016</div>
+                  <img :src="toddler" />
+                  <div class="has-text-right is-size-7 has-text-primary">#Kate</div>
+                </div>
+                <div class="column is-one-third">
+                  <div class="is-6 has-text-grey">2014</div>
+                  <img :src="baby" />
+                  <div class="has-text-right is-size-7 has-text-primary">#Kate</div>
+                </div>
+              </div>
+            </entry>
+          </div>
+        </div>
+        <div class="columns is-mobile feature">
           <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
             <div class="icon-container">
               <b-icon icon="hashtag" :size="iconSize"></b-icon>
@@ -37,7 +70,7 @@
             <notebook :entries="hashtagEntries" :small="true" :mobile-entry="0" />
           </div>
         </div>
-        <div class="columns is-mobile">
+        <div class="columns is-mobile feature">
           <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
             <div class="icon-container">
               <b-icon icon="user-secret" :size="iconSize"></b-icon>
@@ -51,7 +84,7 @@
             </p>
           </div>
         </div>
-        <div class="columns is-mobile">
+        <div class="columns is-mobile feature">
           <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
             <div class="icon-container">
               <b-icon icon="question" :size="iconSize"></b-icon>
@@ -65,7 +98,7 @@
             </p>
           </div>
         </div>
-        <div class="columns is-mobile">
+        <div class="columns is-mobile feature">
           <div class="column is-one-third-tablet is-one-quarter-mobile has-text-right">
             <div class="icon-container">
               <b-icon icon="cloud-download-alt" :size="iconSize"></b-icon>
@@ -78,12 +111,12 @@
             </p>
           </div>
         </div>
-        <div class="columns is-centered">
+        <div class="columns is-centered feature">
           <div class="column is-two-thirds is-offset-one-third">
             <p class="title is-3">...and more!</p>
             <p class="subtitle is-5">
               We are continually rolling out new features. Some features coming up
-              include visualizations, image uploads, login with facebook
+              include visualizations, login with facebook
               or google, and more!
             </p>
           </div>
@@ -95,18 +128,26 @@
 </template>
 
 <script>
+import baby from '@/assets/girl1.png'
+import toddler from '@/assets/girl2.png'
+import girl from '@/assets/girl3.png'
 import Notebook from '@/components/Notebook.vue'
 import pushImage from '@/assets/notebook.png'
 import DownArrow from './DownArrow.vue'
+import Entry from './Entry.vue'
 
 export default {
   name: 'WelcomeFeatures',
   components: {
     DownArrow,
+    Entry,
     Notebook
   },
   data() {
     return {
+      baby,
+      toddler,
+      girl,
       pushImage,
       hashtagEntries: [{
         date: 'April 15',
@@ -143,7 +184,7 @@ export default {
   max-width: 800px;
 }
 
-.columns {
+.columns.feature {
   margin-bottom: 80px;
 }
 

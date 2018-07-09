@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="{ thumbnail }">
+    <div :class="{ small, thumbnail }">
       <div v-if="year" class="is-6 has-text-grey">{{ year }}</div>
       <img :src="imageUrl" @click="lightbox = true" />
       <div v-if="tags" class="has-text-right is-size-7">
@@ -22,7 +22,7 @@ import TagLink from './TagLink.vue'
 
 export default {
   name: 'ImageWithLightbox',
-  props: ['imageUrl', 'tags', 'thumbnail', 'year'],
+  props: ['imageUrl', 'small', 'tags', 'thumbnail', 'year'],
   components: {
     TagLink
   },
@@ -52,9 +52,9 @@ img {
 }
 
 .thumbnail {
-  border-radius: 4px;
 
   img {
+    border-radius: 4px;
     height: 175px;
     min-height: 175px;
     min-width: 175px;
@@ -66,6 +66,15 @@ img {
       min-height: 120px;
       min-width: 120px;
       width: 120px;
+    }
+  }
+
+  &.small {
+    img {
+      height: 100px;
+      min-height: 100px;
+      min-width: 100px;
+      width: 100px;
     }
   }
 }

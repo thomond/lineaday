@@ -15,8 +15,11 @@
           </span>
         </div>
       </div>
-      <div v-if="imageUrl" :class="{ column: true, 'is-2': !!text }">
-        <image-with-lightbox :image-url="imageUrl" />
+      <div v-if="imageUrl" :class="{ column: true, 'is-narrow': !!text }">
+        <image-with-lightbox
+          :image-url="imageUrl"
+          :thumbnail="!!text && !isMobile"
+          :small="true" />
       </div>
     </div>
   </div>
@@ -43,6 +46,9 @@ export default {
     ]),
     isEditing() {
       return this.getEditingLine && (this.getEditingLine.id === this.id)
+    },
+    isMobile() {
+      return this.$mq.below(this.$mv.mobile)
     },
     url: () => tagToUrl,
     words() {
