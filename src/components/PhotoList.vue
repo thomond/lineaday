@@ -11,7 +11,14 @@
           v-for="line in date[1]"
           :key="line.imageUrl">
           <div :style="thumbnailStyle(date[1])" class="thumbnail">
-            <div class="is-6 has-text-grey year">{{ year(line) }}</div>
+            <div class="is-6 caption">
+              <span class="year">{{ year(line) }}</span>
+              <tag-link
+                v-for="(value, tag) in line.tags"
+                :tag="tag"
+                :key="tag"
+                classes="has-text-white" />
+            </div>
             <img :src="line.imageUrl" @click="lightboxImageUrl = line.imageUrl" />
           </div>
         </div>
@@ -27,15 +34,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { getYearForLine } from '@/util'
-import Entry from './Entry.vue'
-import ImageWithLightbox from './ImageWithLightbox.vue'
+import TagLink from './TagLink.vue'
 
 export default {
   name: 'PhotoList',
   props: ['tag'],
   components: {
-    Entry,
-    ImageWithLightbox,
+    TagLink
   },
   data() {
     return {
@@ -103,6 +108,21 @@ img {
 
 .title {
   margin: 20px 0 5px;
+}
+
+.caption {
+  background-color: #000;
+  color: #fff;
+  opacity: .5;
+  position: absolute;
+  bottom: 0;
+  padding: 0 5px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 </style>
