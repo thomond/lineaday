@@ -18,8 +18,7 @@
       <div v-if="imageUrl" :class="{ column: true, 'is-narrow': !!text }">
         <image-with-lightbox
           :image-url="imageUrl"
-          :thumbnail="!!text && !isMobile"
-          :small="true" />
+          :thumbnail="!!text && !isMobile" />
       </div>
     </div>
   </div>

@@ -77,4 +77,14 @@ body, button, input, select, textarea {
 .button.is-text {
   text-decoration: none;
 }
+
+.lightbox  {
+  img {
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+}
 </style>

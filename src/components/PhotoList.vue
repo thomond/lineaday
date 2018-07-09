@@ -1,20 +1,24 @@
 <template>
   <div>
-    <entry v-for="date in linesWithImages" :key="date[0]" :date="date[0]">
-      <div class="columns is-multiline is-mobile">
+    <div v-for="date in linesWithImages" :key="date[0]" class="date">
+      <p class="title is-6 fancy">
+        {{ date[0] }}
+      </p>
+      <div class="lines">
         <div
           v-if="line.imageUrl"
-          class="column is-narrow"
+          :style="lineStyle(date[1])"
           v-for="line in date[1]"
           :key="line.imageUrl">
-          <image-with-lightbox
-            :imageUrl="line.imageUrl"
-            :tags="line.tags"
-            :thumbnail="true"
-            :year="year(line)" />
+          <div :style="thumbnailStyle(date[1])" class="thumbnail">
+            <img :src="line.imageUrl" @click="lightboxImageUrl = line.imageUrl" />
+          </div>
         </div>
       </div>
-    </entry>
+    </div>
+    <b-modal :active="!!lightboxImageUrl" @close="handleLightboxClose" class="lightbox">
+      <img :src="lightboxImageUrl" />
+    </b-modal>
     <b-loading :active="linesAreLoading"></b-loading>
   </div>
 </template>
@@ -32,6 +36,11 @@ export default {
     Entry,
     ImageWithLightbox,
   },
+  data() {
+    return {
+      lightboxImageUrl: null,
+    }
+  },
   mounted() {
     this.getLines({ tag: this.tag })
   },
@@ -41,19 +50,58 @@ export default {
       'linesAreLoading',
       'promptsAreLoading'
     ]),
+    lineStyle: () => lines => ({
+      width: `${(1 / Math.min(lines.length, 5)) * 100}%`
+    }),
+    thumbnailStyle: () => lines => ({
+      paddingBottom: lines.length > 1 ? '100%' : '25%',
+    }),
     year: () => getYearForLine
   },
   methods: {
     ...mapActions([
       'getLines'
     ]),
+    handleLightboxClose() {
+      this.lightboxImageUrl = null
+    }
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.date {
-  margin: 20px 0;
+.lines {
+  display: flex;
+  flex-wrap: wrap;
 }
+
+.line {
+  flex: .25;
+}
+
+img {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.thumbnail {
+  overflow: hidden;
+  padding-bottom: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.thumbnail img {
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  width: 100%;
+}
+
+.title {
+  margin: 20px 0 5px;
+}
+
 </style>
