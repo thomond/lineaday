@@ -11,6 +11,7 @@
           v-for="line in date[1]"
           :key="line.imageUrl">
           <div :style="thumbnailStyle(date[1])" class="thumbnail">
+            <div class="is-6 has-text-grey year">{{ year(line) }}</div>
             <img :src="line.imageUrl" @click="lightboxImageUrl = line.imageUrl" />
           </div>
         </div>
