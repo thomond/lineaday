@@ -12,6 +12,7 @@ const initialState = {
   loading: 0,
   settings: {
     reminderTime: defaultReminderTime,
+    subscription: false,
   },
   user: null
 }
@@ -53,8 +54,8 @@ const actions = {
     const data = doc.data()
 
     if (data) {
-      const { reminderTime, sendNotifications } = data
-      commit('modifyUserSettings', { reminderTime, sendNotifications })
+      const { reminderTime, sendNotifications, subscription } = data
+      commit('modifyUserSettings', { reminderTime, sendNotifications, subscription })
     }
   },
   async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
