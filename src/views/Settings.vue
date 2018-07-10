@@ -15,6 +15,9 @@
             <div class="column">
               <p class="title is-4">tinythoughts free</p>
               <p class="subtitle is-6">Upgrade now to get daily image uploads, and more!</p>
+              <p>
+                <router-link to="">Full list of benefits</router-link>
+              </p>
             </div>
             <div class="column is-narrow">
               <button class="button is-primary is-rounded" @click="payOpen = true">Upgrade Now</button>
@@ -32,7 +35,7 @@
         </div>
       </div>
     </div>
-    <b-modal :active.sync="payOpen" has-modal-card>
+    <b-modal :active.sync="payOpen" has-modal-card :can-cancel="['x', 'escape']">
       <stripe-pay />
     </b-modal>
   </div>
