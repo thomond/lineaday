@@ -11,6 +11,7 @@ import PhotoList from './components/PhotoList.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import Settings from './views/Settings.vue'
 import Terms from './views/Terms.vue'
+import Upgrade from './views/Upgrade.vue'
 import Welcome from './views/Welcome.vue'
 
 Vue.use(Router);
@@ -54,7 +55,7 @@ const router = new Router({
               component: PhotoList,
               meta: { requiresAuth: true },
               props: true,
-            }
+            },
           ]
         },
         {
@@ -72,6 +73,11 @@ const router = new Router({
           path: '/terms-and-conditions',
           name: 'Terms',
           component: Terms,
+        },
+        {
+          path: 'upgrade',
+          name: 'Upgrade',
+          component: Upgrade,
         },
       ]
     },

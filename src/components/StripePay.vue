@@ -1,8 +1,6 @@
 <template>
-  <div class="card">
-    <div class="card-content payment" v-if="!submitted">
-      <h1 class="title is-4">tinythoughts premium subscription</h1>
-      <p class="subtitle is-6">You will be billed <strong>$3/month</strong>.</p>
+  <div class="notification">
+    <div class="payment" v-if="!submitted">
       <label class="label">
         Payment details:
         <card class="stripe-card"
@@ -11,12 +9,28 @@
           @change="complete = $event.complete"
         />
       </label>
-      <button
-        class="pay-with-stripe button is-primary"
-        @click="pay"
-        :disabled="!complete">
-        Pay $3 with credit card
-      </button>
+      <p class="disclaimer">
+        <small>
+          By clicking 'subscribe', you will be charged a recurring fee of
+          $3 per month. You can cancel at any time by going to
+          <router-link :to="{ name: 'Settings' }">User Settings</router-link>.
+        </small>
+      </p>
+      <div class="columns">
+        <div class="column">
+          <button
+            class="pay-with-stripe button is-primary"
+            @click="pay"
+            :disabled="!complete">
+            Subscribe
+          </button>
+        </div>
+        <div class="column is-narrow">
+          <a href="https://stripe.com/" target="_blank">
+            <img :src="poweredByStripe" />
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,11 +38,13 @@
 <script>
 import { mapActions } from 'vuex'
 import { Card, createToken } from 'vue-stripe-elements-plus'
+import poweredByStripe from '@/assets/powered_by_stripe.svg'
 
 export default {
   data () {
     return {
       complete: false,
+      poweredByStripe,
       submitted: false,
       stripeOptions: {
         style: {
@@ -71,6 +87,10 @@ export default {
 </script>
 
 <style>
+.container {
+  padding: 0 20px;
+}
+
 .stripe-card.complete {
   border-color: green;
 }
@@ -79,7 +99,6 @@ input,
 .StripeElement {
   display: block;
   margin: 10px 0 20px 0;
-  max-width: 500px;
   padding: 10px 14px;
   font-size: 1em;
   box-shadow:
@@ -101,5 +120,9 @@ input:focus,
 
 .card {
   border-radius: 4px;
+}
+
+.disclaimer {
+  margin: 20px 0;
 }
 </style>
