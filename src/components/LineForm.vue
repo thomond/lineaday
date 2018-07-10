@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit" class="form">
+  <form @submit.prevent="debouncedOnSubmit" class="form">
     <b-field>
       <b-input
         expanded
@@ -40,6 +40,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import debounce from 'lodash/debounce'
 import { getTagsFromLine } from '@/util'
 
 export default {
@@ -76,7 +77,7 @@ export default {
     ]),
     onBlur(e) {
       if (e.relatedTarget === this.$refs.submitButton) {
-        this.onSubmit()
+        this.debouncedOnSubmit()
       }
 
       if (!this.alwaysExpanded) {
@@ -87,6 +88,11 @@ export default {
         this.handleBlur(this.text)
       }
     },
+    // vue sucks
+    // eslint-disable-next-line func-names
+    debouncedOnSubmit: debounce(function () {
+      this.onSubmit()
+    }, 1000),
     onSubmit() {
       if (this.text.length) {
         this.handleSubmit({ text: this.text, tags: this.tags });
