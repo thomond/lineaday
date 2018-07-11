@@ -2,7 +2,7 @@ import axios from 'axios'
 import get from 'lodash/get'
 import omitBy from 'lodash/omitBy'
 import router from '@/router'
-import firebase, { plugins } from '@/firebase'
+import firebase, { addSubscription, getSubscription, plugins } from '@/firebase'
 import bugsnagClient from '@/bugsnag'
 import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
@@ -12,7 +12,12 @@ const initialState = {
   loading: 0,
   settings: {
     reminderTime: defaultReminderTime,
-    subscription: false,
+  },
+  subscription: {
+    last4: null,
+    loading: true,
+    status: false,
+    trialEnd: null,
   },
   user: null
 }
@@ -30,6 +35,8 @@ const actions = {
       } else if (state.settings.sendNotifications === undefined) {
         commit('toggleNotificationBanner', true)
       }
+
+      dispatch('getSubscription')
     } catch (err) {
       bugsnagClient.notify(err)
       displayError(err)
@@ -45,6 +52,15 @@ const actions = {
       console.log(err)
     }
   },
+  async getSubscription({ commit }) {
+    commit('setSubscriptionLoading', true)
+    const subscription = await getSubscription()
+    if (subscription && subscription.data) {
+      const { last4, status, trial_end: trialEnd } = subscription.data
+      commit('modifyUserSubscription', { last4, status, trialEnd })
+    }
+    commit('setSubscriptionLoading', true)
+  },
   async getUserSettings({ commit, state }) {
     const doc = await plugins.db
       .collection('users')
@@ -54,8 +70,8 @@ const actions = {
     const data = doc.data()
 
     if (data) {
-      const { reminderTime, sendNotifications, subscription } = data
-      commit('modifyUserSettings', { reminderTime, sendNotifications, subscription })
+      const { reminderTime, sendNotifications } = data
+      commit('modifyUserSettings', { reminderTime, sendNotifications })
     }
   },
   async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
@@ -153,6 +169,16 @@ const actions = {
     commit('resetLines')
     commit('toggleNotificationBanner', false)
     router.push('/login')
+  },
+  async subscribeUser({ commit }, { token }) {
+    const { trial_end: trialEnd } = await addSubscription({
+      stripePlan: 'premium_monthly',
+      stripeToken: token.id,
+    })
+    commit('modifyUserSettings', { subscription: true, trialEnd })
+
+    displayMessage('Subscription successful!')
+    router.push('/home')
   }
 }
 
@@ -169,6 +195,10 @@ const mutations = {
   modifyUserSettings(state, attributes) {
     const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
     state.settings = { ...state.settings, ...nonEmptyAttributes }
+  },
+  modifyUserSubscription(state, attributes) {
+    const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
+    state.subscription = { ...state.subscription, ...nonEmptyAttributes }
   },
   resetUser(state) {
     state.blockedInBrowser = false
@@ -187,6 +217,9 @@ const mutations = {
   },
   decrementUserLoading(state) {
     state.loading -= 1
+  },
+  setSubscriptionLoading(state, loading) {
+    state.subscription.loading = loading
   },
   setUser(state, { uid, email }) {
     bugsnagClient.user = { uid, email }

@@ -1,5 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const get = require('lodash/get')
 const moment = require('moment')
 const secureCompare = require('secure-compare')
 const uuid = require('uuid/v4')
@@ -210,11 +211,13 @@ exports.addSubscription = functions.https.onCall((data, context) => {
 
   const { uid, token: { email } } = context.auth
 
+  const response = {}
+
   return admin.firestore().collection('users').doc(uid).get()
     .then(snapshot => {
       const user = snapshot.data()
       if (user.stripeId) {
-        return Promise.resolve({ id: stripeId })
+        return Promise.resolve({ id: user.stripeId })
       }
 
       return stripe.customers.create({
@@ -223,18 +226,57 @@ exports.addSubscription = functions.https.onCall((data, context) => {
       })
     })
     .then(customer => {
+      response.last4 = get(customer, 'sources.data[0].last4')
+
       return stripe.subscriptions.create({
         customer: customer.id,
         items: [{
           plan: stripePlan
-        }]
+        }],
+        trial_from_plan: true
       })
     })
     .then(subscription => {
-      const { id, customer } = subscription
+      const { customer, status, trial_end: trialEnd } = subscription
+      response.status = status
+      response.trialEnd = trialEnd
+
       return admin.firestore()
         .collection('users')
         .doc(uid)
-        .set({ stripeId: customer, subscription: id }, { merge: true })
+        .set({ stripeId: customer }, { merge: true })
+    })
+    .then(() => {
+      return response
+    })
+});
+
+exports.getSubscription = functions.https.onCall((data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition',
+      'The function must be called while authenticated.');
+  }
+
+  const { uid } = context.auth
+
+  return admin.firestore().collection('users').doc(uid).get()
+    .then(snapshot => {
+      const { stripeId } = snapshot.data()
+      if (!stripeId) {
+        return Promise.resolve()
+      }
+
+      return stripe.customers.retrieve(stripeId)
+    })
+    .then(customer => {
+      if (customer) {
+        return {
+          last4: get(customer, 'sources.data[0].last4'),
+          status: get(customer, 'subscriptions.data[0].status'),
+          trial_end: get(customer, 'subscriptions.data[0].trial_end')
+        }
+      }
+
+      return
     })
 });

@@ -1,6 +1,11 @@
 <template>
   <div class="notification">
-    <div class="payment" v-if="!submitted">
+    <div class="payment">
+      <div v-if="status === 'failure'" class="message is-error">
+        <div class="message-body">
+          <p>Something went wrong! Please try again.</p>
+        </div>
+      </div>
       <label class="label">
         Payment details:
         <card class="stripe-card"
@@ -21,7 +26,7 @@
           <button
             class="pay-with-stripe button is-primary"
             @click="pay"
-            :disabled="!complete">
+            :disabled="!complete || submitting">
             Subscribe
           </button>
         </div>
@@ -31,21 +36,23 @@
           </a>
         </div>
       </div>
+      <b-loading :is-full-page="false" :active="submitting"></b-loading>
     </div>
   </div>
 </template>
 
 <script>
 import { Card, createToken } from 'vue-stripe-elements-plus'
+import { mapActions } from 'vuex'
 import poweredByStripe from '@/assets/powered_by_stripe.svg'
-import { addSubscription } from '@/firebase'
 
 export default {
   data() {
     return {
       complete: false,
       poweredByStripe,
-      submitted: false,
+      status: null,
+      submitting: false,
       stripeOptions: {
         style: {
           base: {
@@ -69,25 +76,25 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'subscribeUser'
+    ]),
     async pay() {
       try {
+        this.submitting = true
         const data = await createToken()
-        this.submitted = true
-        const response = await this.subscribeUser(data.token)
-        console.log(response)
+        await this.subscribeUser({ token: data.token })
+        this.status = 'success'
       } catch (err) {
+        this.submitting = false
+        this.complete = false
+        this.status = 'failure'
         console.log(err)
         console.log('code', err.code)
         console.log('message', err.message)
         console.log('details', err.details)
       }
     },
-    subscribeUser(token) {
-      return addSubscription({
-        stripePlan: 'premium_monthly',
-        stripeToken: token.id,
-      })
-    }
   }
 }
 </script>

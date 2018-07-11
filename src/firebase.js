@@ -26,6 +26,7 @@ plugins.db = db
 
 // functions
 export const addSubscription = firebase.functions().httpsCallable('addSubscription')
+export const getSubscription = firebase.functions().httpsCallable('getSubscription')
 
 // messaging
 let messaging
