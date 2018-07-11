@@ -153,12 +153,6 @@ const actions = {
     commit('resetLines')
     commit('toggleNotificationBanner', false)
     router.push('/login')
-  },
-  subscribeUser({ state }, { token }) {
-    return axios.post(`${process.env.VUE_APP_API_URL}/subscribe`, {
-      stripeEmail: state.user.email,
-      stripeToken: token.id,
-    })
   }
 }
 

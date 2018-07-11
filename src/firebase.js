@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/functions'
 import 'firebase/messaging'
 import 'firebase/storage'
 
@@ -22,6 +23,9 @@ const db = firebase.firestore()
 const settings = { timestampsInSnapshots: true }
 db.settings(settings)
 plugins.db = db
+
+// functions
+export const addSubscription = firebase.functions().httpsCallable('addSubscription')
 
 // messaging
 let messaging

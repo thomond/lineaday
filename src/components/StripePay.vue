@@ -36,12 +36,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import { Card, createToken } from 'vue-stripe-elements-plus'
 import poweredByStripe from '@/assets/powered_by_stripe.svg'
+import { addSubscription } from '@/firebase'
 
 export default {
-  data () {
+  data() {
     return {
       complete: false,
       poweredByStripe,
@@ -69,18 +69,24 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'subscribeUser'
-    ]),
-    async pay () {
+    async pay() {
       try {
         const data = await createToken()
         this.submitted = true
-        const response = await subscribeUser({ token: data.token })
+        const response = await this.subscribeUser(data.token)
         console.log(response)
-      } catch(err) {
+      } catch (err) {
         console.log(err)
+        console.log('code', err.code)
+        console.log('message', err.message)
+        console.log('details', err.details)
       }
+    },
+    subscribeUser(token) {
+      return addSubscription({
+        stripePlan: 'premium_monthly',
+        stripeToken: token.id,
+      })
     }
   }
 }

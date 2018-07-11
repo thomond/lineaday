@@ -7,6 +7,7 @@ const CryptoJS = require('crypto-js')
 const cors = require('cors')({
   origin: 'https://tinythoughts.me'
 })
+const stripe = require('stripe')(functions.config().stripe.token)
 
 admin.initializeApp(functions.config().firebase)
 
@@ -130,7 +131,7 @@ exports.setEncryptionKey = functions.https.onRequest((req, res) => {
   })
 })
 
-exports.addEncryptionKeyToUsers = functions.https.onRequest((req, res) => {
+const addEncryptionKeyToUsers = functions.https.onRequest((req, res) => {
   admin.auth().listUsers()
     .then((result) => {
       const promises = []
@@ -152,7 +153,7 @@ exports.addEncryptionKeyToUsers = functions.https.onRequest((req, res) => {
     })
 })
 
-exports.encryptTextForUser = functions.https.onRequest((req, res) => {
+const encryptTextForUser = functions.https.onRequest((req, res) => {
   const { userId } = req.body
   let encryptionKey
 
@@ -191,3 +192,49 @@ exports.encryptTextForUser = functions.https.onRequest((req, res) => {
     })
 })
 
+exports.addSubscription = functions.https.onCall((data, context) => {
+  const { stripeToken, stripePlan } = data
+
+  if (!(typeof stripeToken === 'string') || stripeToken.length === 0) {
+    throw new functions.https.HttpsError('invalid-argument', 'Stripe token is invalid.');
+  }
+
+  if (!(typeof stripePlan === 'string') || stripePlan.length === 0) {
+    throw new functions.https.HttpsError('invalid-argument', 'Stripe plan is invalid.');
+  }
+
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition',
+      'The function must be called while authenticated.');
+  }
+
+  const { uid, token: { email } } = context.auth
+
+  return admin.firestore().collection('users').doc(uid).get()
+    .then(snapshot => {
+      const user = snapshot.data()
+      if (user.stripeId) {
+        return Promise.resolve({ id: stripeId })
+      }
+
+      return stripe.customers.create({
+        email: user.email,
+        source: stripeToken
+      })
+    })
+    .then(customer => {
+      return stripe.subscriptions.create({
+        customer: customer.id,
+        items: [{
+          plan: stripePlan
+        }]
+      })
+    })
+    .then(subscription => {
+      const { id, customer } = subscription
+      return admin.firestore()
+        .collection('users')
+        .doc(uid)
+        .set({ stripeId: customer, subscription: id }, { merge: true })
+    })
+});
