@@ -9,21 +9,9 @@
           <div class="subtitle is-6">{{ userEmail }}</div>
         </div>
         <div class="account-option">
-          <h3 class="title is-6">Your plan</h3>
-          <div class="subtitle is-6" v-if="userSettings.subscription">Paid</div>
-          <div class="columns notification" v-else>
-            <div class="column">
-              <p class="title is-4">tinythoughts free</p>
-              <p class="subtitle is-6">Upgrade now to get daily image uploads, and more!</p>
-            </div>
-            <div class="column is-narrow">
-              <router-link
-                :to="{ name: 'Upgrade' }"
-                class="button is-primary is-rounded">
-                Upgrade Now
-              </router-link>
-            </div>
-          </div>
+          <subscription-settings
+            :loading="subscriptionIsLoading"
+            :subscription="userSettings.subscription" />
         </div>
         <hr />
         <notification-settings />
@@ -44,11 +32,13 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import Papa from 'papaparse'
 import NotificationSettings from '@/components/NotificationSettings.vue'
+import SubscriptionSettings from '@/components/SubscriptionSettings.vue'
 
 export default {
   name: 'Settings',
   components: {
     NotificationSettings,
+    SubscriptionSettings
   },
   data() {
     return {
@@ -63,6 +53,7 @@ export default {
   computed: {
     ...mapGetters([
       'lines',
+      'subscriptionIsLoading',
       'userEmail',
       'userSettings'
     ]),

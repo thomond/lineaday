@@ -59,7 +59,7 @@ const actions = {
       const { last4, status, trial_end: trialEnd } = subscription.data
       commit('modifyUserSubscription', { last4, status, trialEnd })
     }
-    commit('setSubscriptionLoading', true)
+    commit('setSubscriptionLoading', false)
   },
   async getUserSettings({ commit, state }) {
     const doc = await plugins.db
@@ -186,6 +186,7 @@ const getters = {
   blockedInBrowser: state => state.blockedInBrowser,
   encryptionKey: state => state.encryptionKey,
   isAuthenticated: state => !!state.user,
+  subscriptionIsLoading: state => state.subscription.loading,
   userEmail: state => get(state, 'user.email', ''),
   userIsLoading: state => state.loading > 0,
   userSettings: state => state.settings
