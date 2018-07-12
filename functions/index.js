@@ -226,7 +226,9 @@ exports.addSubscription = functions.https.onCall((data, context) => {
       })
     })
     .then(customer => {
-      response.last4 = get(customer, 'sources.data[0].last4')
+      const { last4, brand } = getCCInfo(customer)
+      response.last4 = last4
+      response.brand = brand
 
       return stripe.subscriptions.create({
         customer: customer.id,
@@ -237,9 +239,13 @@ exports.addSubscription = functions.https.onCall((data, context) => {
       })
     })
     .then(subscription => {
-      const { customer, status, trial_end: trialEnd } = subscription
+      const {
+        customer,
+        status,
+        trial_end
+      } = subscription
       response.status = status
-      response.trialEnd = trialEnd
+      response.trial_end = trial_end
 
       return admin.firestore()
         .collection('users')
@@ -249,11 +255,14 @@ exports.addSubscription = functions.https.onCall((data, context) => {
     .then(() => {
       return response
     })
+    .catch(err => {
+      return Promise.reject(new functions.https.HttpsError('failed-precondition', err.message, { code: err.code }));
+    })
 });
 
 exports.getSubscription = functions.https.onCall((data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError('failed-precondition',
+    throw new functions.https.HttpsError('unauthenticated',
       'The function must be called while authenticated.');
   }
 
@@ -269,14 +278,56 @@ exports.getSubscription = functions.https.onCall((data, context) => {
       return stripe.customers.retrieve(stripeId)
     })
     .then(customer => {
-      if (customer) {
+      if (customer && customer.sources && customer.sources.data) {
+        const { last4, brand } = getCCInfo(customer)
+
         return {
-          last4: get(customer, 'sources.data[0].last4'),
+          brand,
+          last4,
+          cancel_at_period_end: get(customer, 'subscriptions.data[0].cancel_at_period_end'),
+          current_period_end: get(customer, 'subscriptions.data[0].current_period_end'),
           status: get(customer, 'subscriptions.data[0].status'),
           trial_end: get(customer, 'subscriptions.data[0].trial_end')
         }
       }
 
-      return
+      return null
+    })
+    .catch(err => {
+      return Promise.reject(new functions.https.HttpsError('failed-precondition', err.message, { code: err.code }));
     })
 });
+
+exports.cancelSubscription = functions.https.onCall((data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated',
+      'The function must be called while authenticated.');
+  }
+
+  const { uid } = context.auth
+
+  return admin.firestore().collection('users').doc(uid).get()
+    .then(snapshot => {
+      const { stripeId } = snapshot.data()
+      return stripe.customers.retrieve(stripeId)
+    })
+    .then(customer => {
+      return stripe.subscriptions.del(customer.subscriptions.data[0].id, { at_period_end: true })
+    })
+    .then(({ cancel_at_period_end, current_period_end, status }) => {
+      return {
+        cancel_at_period_end,
+        current_period_end,
+        status
+      }
+    })
+    .catch(err => {
+      return Promise.reject(new functions.https.HttpsError('failed-precondition', err.message, { code: err.code }));
+    })
+});
+
+function getCCInfo(customer) {
+  const defaultSourceId = customer.default_source
+  const { last4, brand } = customer.sources.data.find(source => source.id === defaultSourceId)
+  return { last4, brand }
+}

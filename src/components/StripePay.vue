@@ -1,14 +1,13 @@
 <template>
   <div class="notification">
     <div class="payment">
-      <div v-if="status === 'failure'" class="message is-error">
-        <div class="message-body">
-          <p>Something went wrong! Please try again.</p>
-        </div>
+      <div v-if="message" class="notification is-danger">
+        {{ message }} Please try again.
       </div>
       <label class="label">
         Payment details:
         <card class="stripe-card"
+          ref="stripe"
           :class="{ complete }"
           :stripe="stripeKey"
           @change="complete = $event.complete"
@@ -51,7 +50,7 @@ export default {
     return {
       complete: false,
       poweredByStripe,
-      status: null,
+      message: null,
       submitting: false,
       stripeOptions: {
         style: {
@@ -82,17 +81,14 @@ export default {
     async pay() {
       try {
         this.submitting = true
+        this.message = null
         const data = await createToken()
         await this.subscribeUser({ token: data.token })
-        this.status = 'success'
       } catch (err) {
+        this.$refs.stripe.clear()
         this.submitting = false
         this.complete = false
-        this.status = 'failure'
-        console.log(err)
-        console.log('code', err.code)
-        console.log('message', err.message)
-        console.log('details', err.details)
+        this.message = err.message
       }
     },
   }

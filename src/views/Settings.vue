@@ -11,7 +11,18 @@
         <div class="account-option">
           <subscription-settings
             :loading="subscriptionIsLoading"
-            :subscription="userSettings.subscription" />
+            :subscription="userSubscription"
+            :unsubscribe="unsubscribeUser" />
+        </div>
+        <div class="account-option" v-if="userSubscription.last4">
+          <h3 class="title is-6">Stored Card</h3>
+          <p class="subtitle is-6">
+            <b-icon
+              :icon="brandIcon.icon"
+              :pack="brandIcon.pack"
+              v-if="brandIcon"></b-icon>
+            ****{{ userSubscription.last4 }}
+          </p>
         </div>
         <hr />
         <notification-settings />
@@ -55,14 +66,41 @@ export default {
       'lines',
       'subscriptionIsLoading',
       'userEmail',
-      'userSettings'
+      'userSettings',
+      'userSubscription'
     ]),
     filename() {
       return `tinythoughts_backup_${moment().format()}`
-    }
+    },
+    brandIcon() {
+      const pack = 'fab'
+
+      switch (this.userSubscription.brand.toLowerCase()) {
+        case 'american express':
+          return { icon: 'cc-amex', pack }
+        case 'diners club':
+          return { icon: 'cc-diners-club', pack }
+        case 'discover':
+          return { icon: 'cc-discover', pack }
+        case 'jcb':
+          return { icon: 'cc-jcb', pack }
+        case 'mastercard':
+          return { icon: 'cc-mastercard', pack }
+        case 'unknown':
+        case 'unionpay':
+          return { icon: 'credit-card', pack: 'far' }
+        case 'visa':
+          return { icon: 'cc-visa', pack }
+        default:
+          return null
+      }
+    },
   },
   methods: {
-    ...mapActions(['getLines']),
+    ...mapActions([
+      'unsubscribeUser',
+      'getLines'
+    ]),
     generateCsv() {
       const lines = this.lines.reduce((acc, [date, entries]) => {
         const newLines = entries.map(line =>

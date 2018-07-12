@@ -1,8 +1,9 @@
 import axios from 'axios'
 import get from 'lodash/get'
+import merge from 'lodash/merge'
 import omitBy from 'lodash/omitBy'
 import router from '@/router'
-import firebase, { addSubscription, getSubscription, plugins } from '@/firebase'
+import firebase, { addSubscription, cancelSubscription, getSubscription, plugins } from '@/firebase'
 import bugsnagClient from '@/bugsnag'
 import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
@@ -14,8 +15,12 @@ const initialState = {
     reminderTime: defaultReminderTime,
   },
   subscription: {
+    brand: '',
+    cancelAtPeriodEnd: false,
+    currentPeriodEnd: null,
     last4: null,
     loading: true,
+    periodEnd: null,
     status: false,
     trialEnd: null,
   },
@@ -56,8 +61,7 @@ const actions = {
     commit('setSubscriptionLoading', true)
     const subscription = await getSubscription()
     if (subscription && subscription.data) {
-      const { last4, status, trial_end: trialEnd } = subscription.data
-      commit('modifyUserSubscription', { last4, status, trialEnd })
+      commit('modifyUserSubscription', subscription.data)
     }
     commit('setSubscriptionLoading', false)
   },
@@ -171,14 +175,24 @@ const actions = {
     router.push('/login')
   },
   async subscribeUser({ commit }, { token }) {
-    const { trial_end: trialEnd } = await addSubscription({
+    const { data } = await addSubscription({
       stripePlan: 'premium_monthly',
       stripeToken: token.id,
     })
-    commit('modifyUserSettings', { subscription: true, trialEnd })
+
+    commit('modifyUserSubscription', data)
 
     displayMessage('Subscription successful!')
     router.push('/home')
+  },
+  async unsubscribeUser({ commit }) {
+    commit('setSubscriptionLoading', true)
+    const { data } = await cancelSubscription()
+
+    commit('modifyUserSubscription', data)
+
+    displayMessage('You have been successfully unsubscribed.')
+    commit('setSubscriptionLoading', false)
   }
 }
 
@@ -189,17 +203,25 @@ const getters = {
   subscriptionIsLoading: state => state.subscription.loading,
   userEmail: state => get(state, 'user.email', ''),
   userIsLoading: state => state.loading > 0,
-  userSettings: state => state.settings
+  userSettings: state => state.settings,
+  userSubscription: state => state.subscription
 }
 
 const mutations = {
   modifyUserSettings(state, attributes) {
-    const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
-    state.settings = { ...state.settings, ...nonEmptyAttributes }
+    // const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
+    // state.settings = { ...state.settings, ...nonEmptyAttributes }
+    merge(state.settings, attributes)
   },
-  modifyUserSubscription(state, attributes) {
-    const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
-    state.subscription = { ...state.subscription, ...nonEmptyAttributes }
+  modifyUserSubscription(state, {
+    brand,
+    cancel_at_period_end: cancelAtPeriodEnd,
+    current_period_end: currentPeriodEnd,
+    last4,
+    status,
+    trial_end: trialEnd
+  }) {
+    merge(state.subscription, { brand, cancelAtPeriodEnd, currentPeriodEnd, last4, status, trialEnd })
   },
   resetUser(state) {
     state.blockedInBrowser = false
