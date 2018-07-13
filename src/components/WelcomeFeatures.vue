@@ -121,7 +121,7 @@
             </p>
           </div>
         </div>
-        <down-arrow anchor="signup" :is-primary="true" />
+        <down-arrow anchor="plans" :is-primary="true" />
       </div>
     </div>
   </section>

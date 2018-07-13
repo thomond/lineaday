@@ -1,7 +1,7 @@
 <template>
   <div class="has-text-centered down-arrow">
     <a
-      :class="{ button: !!text, 'is-primary': !!text, 'is-outlined': !!text }"
+      :class="buttonClasses"
       :href="link"
       v-smooth-scroll="{ duration: 600, offset: -50 }">
       <span v-if="text">{{ text }}</span>
@@ -17,13 +17,35 @@
 <script>
 export default {
   name: 'DownArrow',
-  props: ['anchor', 'isPrimary', 'text'],
+  props: {
+    anchor: {
+      type: String
+    },
+    classes: {
+      default: () => {},
+      type: Object
+    },
+    isPrimary: {
+      type: Boolean
+    },
+    text: {
+      type: String,
+    }
+  },
   computed: {
     link() {
       return `#${this.anchor}`
     },
     iconClasses() {
       return `pulse animated infinite ${this.isPrimary ? 'has-text-primary' : 'has-text-light'}`
+    },
+    buttonClasses() {
+      return {
+        button: !!this.text,
+        'is-primary': !!this.text,
+        'is-outlined': !!this.text,
+        ...this.classes
+      }
     }
   }
 };

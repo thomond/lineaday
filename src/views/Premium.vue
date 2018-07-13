@@ -1,13 +1,16 @@
 <template>
   <div>
     <router-view v-if="hasSubscription"></router-view>
-    <div v-if="!hasSubscription && !subscriptionIsLoading" class="needs-subscription">
-      <h3 class="title is-5" v-if="$route.name !== 'premium'">
+    <div v-if="showMessage" class="needs-subscription">
+      <h3 class="title is-5" v-if="isPremiumRoute && !hasSubscription">
         {{ $route.name }} is a <span class="has-text-primary">premium</span> feature.
       </h3>
       <div class="notification">
         <premium-features />
-        <router-link class="button is-primary is-medium" :to="{ name: 'Upgrade' }">
+        <router-link
+          v-if="!hasSubscription"
+          class="button is-primary is-medium"
+          :to="{ name: 'Upgrade' }">
           Subscribe Now!
         </router-link>
       </div>
@@ -29,7 +32,13 @@ export default {
     ...mapGetters([
       'hasSubscription',
       'subscriptionIsLoading',
-    ])
+    ]),
+    isPremiumRoute() {
+      return this.$route.name !== 'premium'
+    },
+    showMessage() {
+      return !this.subscriptionIsLoading && (!this.isPremiumRoute || !this.hasSubscription)
+    }
   }
 };
 </script>

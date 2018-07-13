@@ -184,7 +184,7 @@ const mutations = {
     state.tags = uniq(state.tags.concat(tags)).sort()
   },
   resetLines(state) {
-    state.lines = {}
+    state.lines = []
     state.hasToday = false
   },
   setHasToday(state, payload) {

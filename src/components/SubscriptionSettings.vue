@@ -5,8 +5,8 @@
       <b-loading :is-full-page="false" :active="loading"></b-loading>
       <div class="columns" :style="style">
         <div class="column">
-          <p class="title is-4">
-            tinythoughts <span class="has-text-primary">{{ plan }}</span>
+          <p class="title is-4 fancy">
+            tinythoughts <span :class="plan.class">{{ plan.text }}</span>
           </p>
           <p class="subtitle is-6">
             {{ planDescription }}
@@ -49,7 +49,8 @@ export default {
   props: ['hasSubscription', 'loading', 'resubscribe', 'subscription', 'unsubscribe'],
   computed: {
     plan() {
-      return this.hasSubscription ? 'premium' : 'free'
+      return this.hasSubscription ? { text: 'premium', class: 'has-text-primary' } :
+        { text: 'free', class: 'has-text-grey' }
     },
     planDescription() {
       if (this.subscription.cancelAtPeriodEnd) {

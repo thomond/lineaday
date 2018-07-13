@@ -97,7 +97,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .container {
   padding: 0 20px;
 }
@@ -106,8 +106,7 @@ export default {
   border-color: green;
 }
 
-input,
-.StripeElement {
+input {
   display: block;
   margin: 10px 0 20px 0;
   padding: 10px 14px;
@@ -121,8 +120,7 @@ input,
   background: #fff;
 }
 
-input:focus,
-.StripeElement--focus {
+input:focus {
   box-shadow:
     rgba(50, 50, 93, 0.109804) 0px 4px 6px,
     rgba(0, 0, 0, 0.0784314) 0px 1px 3px;

@@ -87,4 +87,25 @@ body, button, input, select, textarea {
     width: 100%;
   }
 }
+
+.StripeElement {
+  display: block;
+  margin: 10px 0 20px 0;
+  padding: 10px 14px;
+  font-size: 1em;
+  box-shadow:
+    rgba(50, 50, 93, 0.14902) 0px 1px 3px,
+    rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
+  border: 0;
+  outline: 0;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.StripeElement--focus {
+  box-shadow:
+    rgba(50, 50, 93, 0.109804) 0px 4px 6px,
+    rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
+  transition: all 150ms ease;
+}
 </style>

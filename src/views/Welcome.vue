@@ -23,6 +23,7 @@
     </section>
     <welcome-tiles />
     <welcome-features />
+    <welcome-plans />
     <section class="hero is-primary" id="signup">
       <div class="hero-body">
         <div class="columns is-centered">
@@ -49,6 +50,7 @@ import TinyFooter from '@/components/Footer.vue'
 import WelcomeFeatures from '@/components/WelcomeFeatures.vue'
 import WelcomeHero from '@/components/WelcomeHero.vue'
 import WelcomeLineForm from '@/components/WelcomeLineForm.vue'
+import WelcomePlans from '@/components/WelcomePlans.vue'
 import WelcomeModal from '@/components/WelcomeModal.vue'
 import WelcomeTiles from '@/components/WelcomeTiles.vue'
 
@@ -63,6 +65,7 @@ export default {
     WelcomeFeatures,
     WelcomeHero,
     WelcomeLineForm,
+    WelcomePlans,
     WelcomeModal,
     WelcomeTiles,
   },

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 class="title is-2">tinythoughts premium</h1>
+    <h1 class="title is-2 fancy">
+      tinythoughts <span class="has-text-primary">premium</span>
+    </h1>
     <div class="subtitle is-4">
       $3/month
       <div class="is-size-6">Free for the first 30 days!</div>

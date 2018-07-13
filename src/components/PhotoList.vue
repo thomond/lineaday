@@ -56,13 +56,13 @@ export default {
       'linesAreLoading',
       'promptsAreLoading'
     ]),
-    lineStyle: () => lines => {
+    lineStyle: () => (lines) => {
       const numImages = lines.filter(line => !!line.imageUrl).length
       return {
         width: `${(1 / Math.min(numImages, 5)) * 100}%`
       }
     },
-    thumbnailStyle: () => lines => {
+    thumbnailStyle: () => (lines) => {
       const numImages = lines.filter(line => !!line.imageUrl).length
       return {
         paddingBottom: numImages > 1 ? '100%' : '25%',

@@ -23,7 +23,7 @@
               :icon="brandIcon.icon"
               :pack="brandIcon.pack"
               v-if="brandIcon"></b-icon>
-            ****{{ userSubscription.last4 }}
+            ••••{{ userSubscription.last4 }}
           </p>
         </div>
         <hr />
