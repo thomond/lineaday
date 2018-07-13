@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import merge from 'lodash/merge'
 import omitBy from 'lodash/omitBy'
 import router from '@/router'
-import firebase, { addSubscription, cancelSubscription, getSubscription, plugins } from '@/firebase'
+import firebase, { addSubscription, cancelSubscription, getSubscription, plugins, resubscribe } from '@/firebase'
 import bugsnagClient from '@/bugsnag'
 import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
@@ -185,6 +185,15 @@ const actions = {
     displayMessage('Subscription successful!')
     router.push('/home')
   },
+  async resubscribeUser({ commit }) {
+    commit('setSubscriptionLoading', true)
+    const { data } = await resubscribe()
+
+    commit('modifyUserSubscription', data)
+
+    displayMessage('Subscription successful!')
+    commit('setSubscriptionLoading', false)
+  },
   async unsubscribeUser({ commit }) {
     commit('setSubscriptionLoading', true)
     const { data } = await cancelSubscription()
@@ -209,8 +218,6 @@ const getters = {
 
 const mutations = {
   modifyUserSettings(state, attributes) {
-    // const nonEmptyAttributes = omitBy(attributes, attribute => attribute === undefined)
-    // state.settings = { ...state.settings, ...nonEmptyAttributes }
     merge(state.settings, attributes)
   },
   modifyUserSubscription(state, {
@@ -221,7 +228,14 @@ const mutations = {
     status,
     trial_end: trialEnd
   }) {
-    merge(state.subscription, { brand, cancelAtPeriodEnd, currentPeriodEnd, last4, status, trialEnd })
+    merge(state.subscription, {
+      brand,
+      cancelAtPeriodEnd,
+      currentPeriodEnd,
+      last4,
+      status,
+      trialEnd
+    })
   },
   resetUser(state) {
     state.blockedInBrowser = false

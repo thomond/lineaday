@@ -56,12 +56,18 @@ export default {
       'linesAreLoading',
       'promptsAreLoading'
     ]),
-    lineStyle: () => lines => ({
-      width: `${(1 / Math.min(lines.length, 5)) * 100}%`
-    }),
-    thumbnailStyle: () => lines => ({
-      paddingBottom: lines.length > 1 ? '100%' : '25%',
-    }),
+    lineStyle: () => lines => {
+      const numImages = lines.filter(line => !!line.imageUrl).length
+      return {
+        width: `${(1 / Math.min(numImages, 5)) * 100}%`
+      }
+    },
+    thumbnailStyle: () => lines => {
+      const numImages = lines.filter(line => !!line.imageUrl).length
+      return {
+        paddingBottom: numImages > 1 ? '100%' : '25%',
+      }
+    },
     year: () => getYearForLine
   },
   methods: {

@@ -11,6 +11,7 @@
         <div class="account-option">
           <subscription-settings
             :loading="subscriptionIsLoading"
+            :resubscribe="resubscribeUser"
             :subscription="userSubscription"
             :unsubscribe="unsubscribeUser" />
         </div>
@@ -98,6 +99,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'resubscribeUser',
       'unsubscribeUser',
       'getLines'
     ]),

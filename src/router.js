@@ -78,6 +78,7 @@ const router = new Router({
           path: 'upgrade',
           name: 'Upgrade',
           component: Upgrade,
+          meta: { requiresAuth: true },
         },
       ]
     },

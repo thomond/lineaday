@@ -3,9 +3,10 @@
     <div class="columns">
       <div class="column">
         <h1 class="title is-2">tinythoughts premium</h1>
-        <h2 class="subtitle is-4">
+        <div class="subtitle is-4">
           $3/month
-        </h2>
+          <div class="is-size-6">Free for the first 30 days!</div>
+        </div>
         <p>Premium features include:</p>
         <ul class="fa-ul">
           <li>

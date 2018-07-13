@@ -28,6 +28,7 @@ plugins.db = db
 export const addSubscription = firebase.functions().httpsCallable('addSubscription')
 export const cancelSubscription = firebase.functions().httpsCallable('cancelSubscription')
 export const getSubscription = firebase.functions().httpsCallable('getSubscription')
+export const resubscribe = firebase.functions().httpsCallable('resubscribe')
 
 // messaging
 let messaging

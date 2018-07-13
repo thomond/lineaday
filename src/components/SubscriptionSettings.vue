@@ -5,7 +5,9 @@
       <b-loading :is-full-page="false" :active="loading"></b-loading>
       <div class="columns" :style="style">
         <div class="column">
-          <p class="title is-4">tinythoughts {{ plan }}</p>
+          <p class="title is-4">
+            tinythoughts <span class="has-text-primary">{{ plan }}</span>
+          </p>
           <p class="subtitle is-6">
             {{ planDescription }}
           </p>
@@ -13,19 +15,22 @@
         <div class="column is-narrow">
           <button
             @click="unsubscribe"
-            v-if="hasSubscription && !this.subscription.cancelAtPeriodEnd"
+            v-if="hasSubscription && !subscription.cancelAtPeriodEnd"
             :disabled="loading"
-            :class="{ button: true, 'is-loading': loading, 'is-outlined': true, 'is-rounded': true, 'is-small': true }">
+            :class="{ button: true, 'is-loading': loading, 'is-outlined': true,
+              'is-rounded': true, 'is-small': true }">
             Cancel Subscription
           </button>
           <button
-            v-if="hasSubscription && this.subscription.cancelAtPeriodEnd"
+            @click="resubscribe"
+            v-if="hasSubscription && subscription.cancelAtPeriodEnd"
             :disabled="loading"
-            :class="{ button: true, 'is-loading': loading, 'is-rounded': true, 'is-primary': true }">
+            :class="{ button: true, 'is-loading': loading, 'is-rounded': true,
+              'is-primary': true }">
             Resubscribe
           </button>
           <router-link
-            v-else
+            v-if="!hasSubscription"
             :to="{ name: 'Upgrade' }"
             class="button is-primary is-rounded">
             Upgrade Now
@@ -42,7 +47,7 @@ import { hasSubscription } from '@/util'
 
 export default {
   name: 'SubscriptionSettings',
-  props: ['loading', 'subscription', 'unsubscribe'],
+  props: ['loading', 'resubscribe', 'subscription', 'unsubscribe'],
   computed: {
     hasSubscription() {
       return hasSubscription(this.subscription.status)
@@ -53,19 +58,16 @@ export default {
     planDescription() {
       if (this.subscription.cancelAtPeriodEnd) {
         return `Your subscription has been canceled. It will remain active until
-          ${moment.unix(this.subscription.currentPeriodEnd).format('MMMM Do')}. You will not be charged
-          again for this subscription.`
+          ${moment.unix(this.subscription.currentPeriodEnd).format('MMMM Do')}. You will not be charged again for this subscription.`
       }
 
       switch (this.subscription.status) {
         case 'trialing':
-          return `Your trial expires ${moment.unix(this.subscription.trialEnd).fromNow()}.`
+          return `Your trial expires in ${moment.unix(this.subscription.trialEnd).diff(moment(), 'days')} days.`
         case 'active':
           return ''
         case 'past_due':
         case 'unpaid':
-          return 'We experienced an error charging your card. Please correct your card' +
-            'details below.'
         case 'canceled':
         default:
           return 'Upgrade now to get daily image uploads, and more!'

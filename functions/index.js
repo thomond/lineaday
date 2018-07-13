@@ -1,6 +1,7 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const get = require('lodash/get')
+const last = require('lodash/last')
 const moment = require('moment')
 const secureCompare = require('secure-compare')
 const uuid = require('uuid/v4')
@@ -217,7 +218,7 @@ exports.addSubscription = functions.https.onCall((data, context) => {
     .then(snapshot => {
       const user = snapshot.data()
       if (user.stripeId) {
-        return Promise.resolve({ id: user.stripeId })
+        return stripe.customers.retrieve(user.stripeId)
       }
 
       return stripe.customers.create({
@@ -230,12 +231,14 @@ exports.addSubscription = functions.https.onCall((data, context) => {
       response.last4 = last4
       response.brand = brand
 
+      const existingUser = !!customer.subscriptions.data.length
+
       return stripe.subscriptions.create({
         customer: customer.id,
         items: [{
           plan: stripePlan
         }],
-        trial_from_plan: true
+        trial_from_plan: existingUser
       })
     })
     .then(subscription => {
@@ -280,14 +283,15 @@ exports.getSubscription = functions.https.onCall((data, context) => {
     .then(customer => {
       if (customer && customer.sources && customer.sources.data) {
         const { last4, brand } = getCCInfo(customer)
+        const subscription = getSubscription(customer)
 
         return {
           brand,
           last4,
-          cancel_at_period_end: get(customer, 'subscriptions.data[0].cancel_at_period_end'),
-          current_period_end: get(customer, 'subscriptions.data[0].current_period_end'),
-          status: get(customer, 'subscriptions.data[0].status'),
-          trial_end: get(customer, 'subscriptions.data[0].trial_end')
+          cancel_at_period_end: subscription.cancel_at_period_end,
+          current_period_end: subscription.current_period_end,
+          status: subscription.status,
+          trial_end: subscription.trial_end
         }
       }
 
@@ -312,7 +316,8 @@ exports.cancelSubscription = functions.https.onCall((data, context) => {
       return stripe.customers.retrieve(stripeId)
     })
     .then(customer => {
-      return stripe.subscriptions.del(customer.subscriptions.data[0].id, { at_period_end: true })
+      const subscription = getSubscription(customer)
+      return stripe.subscriptions.del(subscription.id, { at_period_end: true })
     })
     .then(({ cancel_at_period_end, current_period_end, status }) => {
       return {
@@ -325,6 +330,39 @@ exports.cancelSubscription = functions.https.onCall((data, context) => {
       return Promise.reject(new functions.https.HttpsError('failed-precondition', err.message, { code: err.code }));
     })
 });
+
+exports.resubscribe = functions.https.onCall((data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated',
+      'The function must be called while authenticated.');
+  }
+
+  const { uid } = context.auth
+
+  return admin.firestore().collection('users').doc(uid).get()
+    .then(snapshot => {
+      const { stripeId } = snapshot.data()
+      return stripe.customers.retrieve(stripeId)
+    })
+    .then(customer => {
+      const subscription = getSubscription(customer)
+      return stripe.subscriptions.update(subscription.id, { cancel_at_period_end: false })
+    })
+    .then(({ cancel_at_period_end, current_period_end, status }) => {
+      return {
+        cancel_at_period_end,
+        current_period_end,
+        status
+      }
+    })
+    .catch(err => {
+      return Promise.reject(new functions.https.HttpsError('failed-precondition', err.message, { code: err.code }));
+    })
+});
+
+function getSubscription(customer) {
+  return last(customer.subscriptions.data) || {}
+}
 
 function getCCInfo(customer) {
   const defaultSourceId = customer.default_source

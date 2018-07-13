@@ -35,8 +35,8 @@
           </a>
         </div>
       </div>
-      <b-loading :is-full-page="false" :active="submitting"></b-loading>
     </div>
+    <b-loading :is-full-page="false" :active="submitting"></b-loading>
   </div>
 </template>
 
