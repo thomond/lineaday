@@ -10,6 +10,7 @@
         </div>
         <div class="account-option">
           <subscription-settings
+            :hasSubscription="hasSubscription"
             :loading="subscriptionIsLoading"
             :resubscribe="resubscribeUser"
             :subscription="userSubscription"
@@ -64,6 +65,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'hasSubscription',
       'lines',
       'subscriptionIsLoading',
       'userEmail',

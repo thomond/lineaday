@@ -43,15 +43,11 @@
 
 <script>
 import moment from 'moment'
-import { hasSubscription } from '@/util'
 
 export default {
   name: 'SubscriptionSettings',
-  props: ['loading', 'resubscribe', 'subscription', 'unsubscribe'],
+  props: ['hasSubscription', 'loading', 'resubscribe', 'subscription', 'unsubscribe'],
   computed: {
-    hasSubscription() {
-      return hasSubscription(this.subscription.status)
-    },
     plan() {
       return this.hasSubscription ? 'premium' : 'free'
     },

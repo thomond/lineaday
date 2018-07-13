@@ -208,6 +208,7 @@ const actions = {
 const getters = {
   blockedInBrowser: state => state.blockedInBrowser,
   encryptionKey: state => state.encryptionKey,
+  hasSubscription: state => ['trialing', 'active'].includes(state.subscription.status),
   isAuthenticated: state => !!state.user,
   subscriptionIsLoading: state => state.subscription.loading,
   userEmail: state => get(state, 'user.email', ''),

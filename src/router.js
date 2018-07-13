@@ -8,6 +8,7 @@ import NotFound from './views/NotFound.vue'
 import List from './components/List.vue'
 import Page from './views/Page.vue'
 import PhotoList from './components/PhotoList.vue'
+import Premium from './views/Premium.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import Settings from './views/Settings.vue'
 import Terms from './views/Terms.vue'
@@ -50,11 +51,20 @@ const router = new Router({
               props: true,
             },
             {
-              path: '/photos/:tag?',
-              name: 'photo-list',
-              component: PhotoList,
+              path: 'premium',
+              name: 'premium',
+              component: Premium,
               meta: { requiresAuth: true },
               props: true,
+              children: [
+                {
+                  path: 'photos/:tag?',
+                  name: 'Gallery',
+                  component: PhotoList,
+                  meta: { requiresAuth: true },
+                  props: true,
+                },
+              ]
             },
           ]
         },
@@ -75,7 +85,7 @@ const router = new Router({
           component: Terms,
         },
         {
-          path: 'upgrade',
+          path: '/premium/upgrade',
           name: 'Upgrade',
           component: Upgrade,
           meta: { requiresAuth: true },

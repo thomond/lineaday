@@ -6,7 +6,8 @@
       </div>
       <label class="label">
         Payment details:
-        <card class="stripe-card"
+        <card
+          class="stripe-card"
           ref="stripe"
           :class="{ complete }"
           :stripe="stripeKey"
@@ -49,6 +50,7 @@ export default {
   data() {
     return {
       complete: false,
+      remount: true,
       poweredByStripe,
       message: null,
       submitting: false,

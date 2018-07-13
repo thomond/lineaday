@@ -8,7 +8,7 @@
         <router-link to="/home" class="navbar-item has-text-primary" active-class="is-bold">
           Timeline
         </router-link>
-        <router-link to="/photos" class="navbar-item has-text-primary" active-class="is-bold">
+        <router-link to="/premium/photos" class="navbar-item has-text-primary" active-class="is-bold">
           Gallery
         </router-link>
       </div>
