@@ -27,6 +27,10 @@ export default {
 <style scoped lang="scss">
 .container {
   margin-top: 100px;
+
+  @media only screen and (max-device-width : 768px) {
+    margin: 10px;
+  }
 }
 </style>
 

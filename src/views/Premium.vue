@@ -4,6 +4,7 @@
     <div v-if="showMessage" class="needs-subscription">
       <h3 class="title is-5" v-if="isPremiumRoute && !hasSubscription">
         {{ $route.name }} is a <span class="has-text-primary">premium</span> feature.
+        Please upgrade to continue.
       </h3>
       <div class="notification">
         <premium-features />
@@ -54,6 +55,11 @@ export default {
 
   .button {
     align-self: flex-end;
+    margin-top: 10px;
+
+      @media only screen and (max-device-width : 768px) {
+        align-self: center;
+      }
   }
 }
 </style>
