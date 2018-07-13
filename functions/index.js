@@ -218,7 +218,7 @@ exports.addSubscription = functions.https.onCall((data, context) => {
     .then(snapshot => {
       const user = snapshot.data()
       if (user.stripeId) {
-        return stripe.customers.retrieve(user.stripeId)
+        return stripe.customers.update(user.stripeId, { source: stripeToken })
       }
 
       return stripe.customers.create({
