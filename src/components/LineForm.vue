@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="debouncedOnSubmit" class="form" v-click-outside="onBlur">
+  <div v-click-outside="onBlur">
     <div class="has-text-right" v-if="expanded">
       <b-upload
         @input="handleFileUpload"
@@ -16,51 +16,53 @@
         </b-tooltip>
       </b-upload>
     </div>
-    <b-field>
-      <b-input
-        expanded
-        size="is-large"
-        type="textarea"
-        maxlength="280"
-        ref="textBox"
-        :rows="rows"
-        :placeholder="placeholder"
-        :class="{ 'placeholder-colored': !expanded }"
-        @focus="expanded = true"
-        v-model="text"></b-input>
-        <p class="help" v-if="expanded">
-          <span v-if="tags.length">
-            <span class="has-text-primary hashtag"
-              v-for="tag in tags"
-              :key="tag">#{{ tag }}</span>
-          </span>
-          <span v-else>
-            Hint: type <b-tag rounded>#tag</b-tag> to
-            add <span class="has-text-primary">#tag</span> to your post.
-          </span>
-        </p>
-    </b-field>
-    <div class="file" v-if="expanded">
-      <b-notification
-        class="image-preview"
-        v-if="imageFile || imageSrc"
-        :active="true"
-        @close="clearImageFile">
-        <img :src="imageSrc" v-if="imageSrc" />
-        <b-loading :is-full-page="false" :active="true" v-else></b-loading>
-      </b-notification>
-    </div>
-    <b-field grouped position="is-right" v-if="expanded">
-      <div class="control">
-        <button
-          ref="submitButton"
-          class="button is-primary is-large is-rounded"
-          type="submit">
-          Save
-        </button>
+    <form @submit.prevent="debouncedOnSubmit" class="form">
+      <b-field>
+        <b-input
+          expanded
+          size="is-large"
+          type="textarea"
+          maxlength="280"
+          ref="textBox"
+          :rows="rows"
+          :placeholder="placeholder"
+          :class="{ 'placeholder-colored': !expanded }"
+          @focus="expanded = true"
+          v-model="text"></b-input>
+          <p class="help" v-if="expanded">
+            <span v-if="tags.length">
+              <span class="has-text-primary hashtag"
+                v-for="tag in tags"
+                :key="tag">#{{ tag }}</span>
+            </span>
+            <span v-else>
+              Hint: type <b-tag rounded>#tag</b-tag> to
+              add <span class="has-text-primary">#tag</span> to your post.
+            </span>
+          </p>
+      </b-field>
+      <div class="file" v-if="expanded">
+        <b-notification
+          class="image-preview"
+          v-if="imageFile || imageSrc"
+          :active="true"
+          @close="clearImageFile">
+          <img :src="imageSrc" v-if="imageSrc" />
+          <b-loading :is-full-page="false" :active="true" v-else></b-loading>
+        </b-notification>
       </div>
-    </b-field>
-  </form>
+      <b-field grouped position="is-right" v-if="expanded">
+        <div class="control">
+          <button
+            ref="submitButton"
+            class="button is-primary is-large is-rounded"
+            type="submit">
+            Save
+          </button>
+        </div>
+      </b-field>
+    </form>
+</div>
 </template>
 
 <script>
