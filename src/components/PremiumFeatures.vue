@@ -5,7 +5,7 @@
     </h1>
     <div class="subtitle is-4 is-size-5-mobile">
       $3/month
-      <div class="is-size-6">Free for the first 30 days!</div>
+      <div class="is-size-6">Free for the first 2 weeks!</div>
     </div>
     <p>Premium features include:</p>
     <ul class="fa-ul">

@@ -10,7 +10,7 @@
               </h4>
               <div class="subtitle is-6 has-text-centered">
                 $3/month
-                <div class="is-size-6">Free for the first 30 days!</div>
+                <div class="is-size-6">Free for the first 2 weeks!</div>
               </div>
               <ul class="fa-ul">
                 <li>
@@ -47,7 +47,7 @@
               </h4>
               <div class="subtitle is-6 has-text-centered secret">
                 $3/month
-                <div class="is-size-6">Free for the first 30 days!</div>
+                <div class="is-size-6">Free for the first 2 weeks!</div>
               </div>
               <ul class="fa-ul">
                 <li>
