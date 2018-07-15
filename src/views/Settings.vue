@@ -16,7 +16,7 @@
             :subscription="userSubscription"
             :unsubscribe="unsubscribeUser" />
         </div>
-        <div class="account-option" v-if="userSubscription.last4">
+        <div class="account-option" v-if="hasSubscription">
           <h3 class="title is-6">Stored Card</h3>
           <p class="subtitle is-6">
             <b-icon

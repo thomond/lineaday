@@ -42,8 +42,3 @@ export function getYearForLine(line) {
     line.createdAt.toDate() : line.createdAt
   return moment(createdAt).format('YYYY')
 }
-
-// ['trialing', 'active', 'past_due', 'canceled', 'unpaid']
-export function hasSubscription(state) {
-  return ['trialing', 'active'].includes(state)
-}

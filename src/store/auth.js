@@ -11,6 +11,7 @@ const initialState = {
   encryptionKey: null,
   loading: 0,
   settings: {
+    imageCount: 0,
     reminderTime: defaultReminderTime,
   },
   subscription: {
@@ -73,8 +74,7 @@ const actions = {
     const data = doc.data()
 
     if (data) {
-      const { reminderTime, sendNotifications } = data
-      commit('modifyUserSettings', { reminderTime, sendNotifications })
+      commit('modifyUserSettings', data)
     }
   },
   async requestMessagingPermission({ commit, dispatch }, { notify = false } = {}) {
@@ -200,10 +200,15 @@ const actions = {
   }
 }
 
+const FREE_IMAGE_COUNT = 5
+const hasSubscription = status => ['trialing', 'active'].includes(status)
+
 const getters = {
   blockedInBrowser: state => state.blockedInBrowser,
   encryptionKey: state => state.encryptionKey,
-  hasSubscription: state => ['trialing', 'active'].includes(state.subscription.status),
+  hasMaxImages: state => !hasSubscription(state.subscription.status) &&
+    (state.settings.imageCount >= FREE_IMAGE_COUNT),
+  hasSubscription: state => hasSubscription(state.subscription.status),
   isAuthenticated: state => !!state.user,
   subscriptionIsLoading: state => state.subscription.loading,
   userEmail: state => get(state, 'user.email', ''),
@@ -213,8 +218,8 @@ const getters = {
 }
 
 const mutations = {
-  modifyUserSettings(state, attributes) {
-    merge(state.settings, attributes)
+  modifyUserSettings(state, { imageCount, reminderTime, sendNotifications }) {
+    merge(state.settings, { imageCount, reminderTime, sendNotifications })
   },
   modifyUserSubscription(state, {
     brand,

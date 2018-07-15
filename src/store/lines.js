@@ -4,7 +4,9 @@ import uniq from 'lodash/uniq'
 import CryptoJS from 'crypto-js'
 import uuidv4 from 'uuid/v4'
 import { plugins } from '@/firebase'
+import router from '@/router'
 import { groupByDateFormat } from '@/util'
+import { Snackbar } from 'buefy'
 
 const initialState = {
   hasToday: false,
@@ -84,8 +86,25 @@ async function uploadImage(uid, file) {
   return Promise.resolve(null)
 }
 
+function openSubscribeSnackbar() {
+  Snackbar.open({
+    message: 'You have reached the max free image uploads for this month',
+    type: 'is-primary',
+    position: 'is-bottom',
+    actionText: 'Upgrade',
+    duration: 6000,
+    onAction: () => {
+      router.push({ name: 'Upgrade' })
+    }
+  })
+}
+
 const actions = {
-  async addLine({ commit, rootState }, { image, text, tags }) {
+  async addLine({ commit, rootGetters, rootState }, { image, text, tags }) {
+    if (image && rootGetters.hasMaxImages) {
+      return openSubscribeSnackbar()
+    }
+
     commit('setLinesLoading', true)
     const today = moment()
     const tagObject = getTagObjectFromArray(tags)
@@ -111,10 +130,16 @@ const actions = {
     commit('addTags', tags)
     commit('setHasToday', true)
     commit('setLinesLoading', false)
+
+    return null
   },
-  async editLine({ commit, rootState }, {
+  async editLine({ commit, rootGetters, rootState }, {
     id, image, imageUrl, text, tags
   }) {
+    if (image && rootGetters.hasMaxImages) {
+      return openSubscribeSnackbar()
+    }
+
     commit('setLinesLoading', true)
     const { uid } = rootState.auth.user
     const newImageUrl = await uploadImage(uid, image) || imageUrl
@@ -134,6 +159,8 @@ const actions = {
     commit('setLine', newLineProps)
     commit('resetEditing')
     commit('setLinesLoading', false)
+
+    return null
   },
   async getLines({ commit, rootState }, { tag } = {}) {
     const { user, encryptionKey } = rootState.auth
