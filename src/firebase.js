@@ -25,10 +25,13 @@ db.settings(settings)
 plugins.db = db
 
 // functions
-export const addSubscription = firebase.functions().httpsCallable('addSubscription')
-export const cancelSubscription = firebase.functions().httpsCallable('cancelSubscription')
-export const getSubscription = firebase.functions().httpsCallable('getSubscription')
-export const resubscribe = firebase.functions().httpsCallable('resubscribe')
+export const functions = {
+  addSubscription: firebase.functions().httpsCallable('addSubscription'),
+  cancelSubscription: firebase.functions().httpsCallable('cancelSubscription'),
+  getSubscription: firebase.functions().httpsCallable('getSubscription'),
+  resubscribe: firebase.functions().httpsCallable('resubscribe'),
+  setEncryptionKey: firebase.functions().httpsCallable('setEncryptionKey'),
+}
 
 // messaging
 let messaging

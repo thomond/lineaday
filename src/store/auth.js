@@ -1,9 +1,8 @@
-import axios from 'axios'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
 import omitBy from 'lodash/omitBy'
 import router from '@/router'
-import firebase, { addSubscription, cancelSubscription, getSubscription, plugins, resubscribe } from '@/firebase'
+import firebase, { functions, plugins } from '@/firebase'
 import bugsnagClient from '@/bugsnag'
 import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
@@ -59,7 +58,7 @@ const actions = {
   },
   async getSubscription({ commit }) {
     commit('setSubscriptionLoading', true)
-    const subscription = await getSubscription()
+    const subscription = await functions.getSubscription()
     if (subscription && subscription.data) {
       commit('modifyUserSubscription', subscription.data)
     }
@@ -147,11 +146,7 @@ const actions = {
     try {
       const doc = await firebase.auth().createUserWithEmailAndPassword(email, password)
       const idToken = await doc.user.getIdToken()
-      const { data } = await axios.post(`${process.env.VUE_APP_API_URL}/setEncryptionKey`, {
-        data: {
-          idToken
-        }
-      })
+      const { data } = await functions.setEncryptionKey({ idToken })
       firebase.auth().currentUser.getIdToken(true)
       commit('setEncryptionKey', data.encryptionKey)
       commit('setUser', doc.user)
@@ -175,7 +170,7 @@ const actions = {
     router.push('/login')
   },
   async subscribeUser({ commit }, { token }) {
-    const { data } = await addSubscription({
+    const { data } = await functions.addSubscription({
       stripePlan: 'premium_monthly',
       stripeToken: token.id,
     })
@@ -187,7 +182,7 @@ const actions = {
   },
   async resubscribeUser({ commit }) {
     commit('setSubscriptionLoading', true)
-    const { data } = await resubscribe()
+    const { data } = await functions.resubscribe()
 
     commit('modifyUserSubscription', data)
 
@@ -196,7 +191,7 @@ const actions = {
   },
   async unsubscribeUser({ commit }) {
     commit('setSubscriptionLoading', true)
-    const { data } = await cancelSubscription()
+    const { data } = await functions.cancelSubscription()
 
     commit('modifyUserSubscription', data)
 
