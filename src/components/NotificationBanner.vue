@@ -41,7 +41,7 @@ export default {
     ]),
     no() {
       this.toggleNotificationBanner()
-      this.updateUserSettings({ sendNotifications: false })
+      this.updateUserSettings({ sendNotifications: false, silent: true })
     },
     yes() {
       this.toggleNotificationBanner()

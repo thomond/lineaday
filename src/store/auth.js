@@ -115,8 +115,10 @@ const actions = {
       .set(nonEmptyAttributes, { merge: true })
     commit('modifyUserSettings', nonEmptyAttributes)
   },
-  async updateUserSettings({ commit, dispatch }, { sendNotifications, reminderTime }) {
-    commit('incrementUserLoading')
+  async updateUserSettings({ commit, dispatch }, { sendNotifications, reminderTime, silent }) {
+    if (!silent) {
+      commit('incrementUserLoading')
+    }
     try {
       await dispatch('updateUser', { sendNotifications, reminderTime })
       displayMessage('Notification settings updated!')
@@ -152,6 +154,8 @@ const actions = {
       commit('setUser', doc.user)
       commit('toggleNotificationBanner', true)
       dispatch('updateUser', { reminderTime: defaultReminderTime })
+      commit('setSubscriptionLoading', false)
+
       if (line) {
         await dispatch('addLine', line)
       }
