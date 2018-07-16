@@ -89,23 +89,31 @@ body, button, input, select, textarea {
 }
 
 .StripeElement {
+  color: #363636;
   display: block;
   margin: 10px 0 20px 0;
-  padding: 10px 14px;
   font-size: 1em;
-  box-shadow:
-    rgba(50, 50, 93, 0.14902) 0px 1px 3px,
-    rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
-  border: 0;
-  outline: 0;
+  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  border: 1px solid transparent;
   border-radius: 4px;
+  outline: 0;
+  border-color: #dbdbdb;
   background: #fff;
+  line-height: 1.5;
+  padding-bottom: calc(0.375em - 1px);
+  padding-left: calc(0.625em - 1px);
+  padding-right: calc(0.625em - 1px);
+  padding-top: calc(0.375em - 1px);
 }
 
 .StripeElement--focus {
-  box-shadow:
-    rgba(50, 50, 93, 0.109804) 0px 4px 6px,
-    rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
-  transition: all 150ms ease;
+  border-color: #7957d5;
+  box-shadow: 0 0 0 0.125em rgba(121, 87, 213, 0.25);
+}
+
+.coupon-input {
+  input {
+    text-transform: uppercase;
+  }
 }
 </style>

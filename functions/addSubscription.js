@@ -4,7 +4,7 @@ const admin = require('./init')
 const { stripe, getCCInfo } = require('./stripeUtils')
 
 const addSubscription = functions.https.onCall((data, context) => {
-  const { stripeToken, stripePlan } = data
+  const { coupon, stripeToken, stripePlan } = data
 
   if (!(typeof stripeToken === 'string') || stripeToken.length === 0) {
     throw new functions.https.HttpsError('invalid-argument', 'Stripe token is invalid.');
@@ -21,6 +21,10 @@ const addSubscription = functions.https.onCall((data, context) => {
 
   const { uid, token: { email } } = context.auth
 
+  let uppercaseCoupon
+  if (coupon) {
+    uppercaseCoupon = coupon.toUpperCase()
+  }
   const response = {}
 
   return admin.firestore().collection('users').doc(uid).get()
@@ -43,6 +47,7 @@ const addSubscription = functions.https.onCall((data, context) => {
       const existingUser = !!customer.subscriptions.data.length
 
       return stripe.subscriptions.create({
+        coupon: uppercaseCoupon,
         customer: customer.id,
         items: [{
           plan: stripePlan

@@ -1,6 +1,6 @@
 <template>
   <div v-click-outside="onBlur">
-    <div class="has-text-right" v-if="expanded">
+    <div class="has-text-right" v-if="expanded && !hidePlaceholder">
       <b-upload
         @input="handleFileUpload"
         accept="image/*"

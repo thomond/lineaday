@@ -14,6 +14,9 @@
           @change="complete = $event.complete"
         />
       </label>
+      <b-field label="Coupon Code">
+        <b-input v-model="coupon" class="coupon-input"></b-input>
+      </b-field>
       <p class="disclaimer">
         <small>
           By clicking 'subscribe', you will be charged a recurring fee of
@@ -50,10 +53,12 @@ export default {
   data() {
     return {
       complete: false,
+      coupon: '',
       remount: true,
       poweredByStripe,
       message: null,
       submitting: false,
+      stripeKey: process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY,
       stripeOptions: {
         style: {
           base: {
@@ -67,15 +72,6 @@ export default {
     }
   },
   components: { Card },
-  computed: {
-    stripeKey() {
-      if (process.env.NODE_ENV === 'production') {
-        return process.env.VUE_APP_STRIPE_PUBLISHABLE_PRODUCTION_KEY
-      }
-
-      return process.env.VUE_APP_STRIPE_PUBLISHABLE_TEST_KEY
-    }
-  },
   methods: {
     ...mapActions([
       'subscribeUser'
@@ -85,7 +81,7 @@ export default {
         this.submitting = true
         this.message = null
         const data = await createToken()
-        await this.subscribeUser({ token: data.token })
+        await this.subscribeUser({ token: data.token, coupon: this.coupon })
       } catch (err) {
         this.$refs.stripe.clear()
         this.submitting = false
@@ -104,27 +100,6 @@ export default {
 
 .stripe-card.complete {
   border-color: green;
-}
-
-input {
-  display: block;
-  margin: 10px 0 20px 0;
-  padding: 10px 14px;
-  font-size: 1em;
-  box-shadow:
-    rgba(50, 50, 93, 0.14902) 0px 1px 3px,
-    rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
-  border: 0;
-  outline: 0;
-  border-radius: 4px;
-  background: #fff;
-}
-
-input:focus {
-  box-shadow:
-    rgba(50, 50, 93, 0.109804) 0px 4px 6px,
-    rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
-  transition: all 150ms ease;
 }
 
 .card {

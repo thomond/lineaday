@@ -173,8 +173,9 @@ const actions = {
     commit('toggleNotificationBanner', false)
     router.push('/login')
   },
-  async subscribeUser({ commit }, { token }) {
+  async subscribeUser({ commit }, { coupon, token }) {
     const { data } = await functions.addSubscription({
+      coupon,
       stripePlan: 'premium_monthly',
       stripeToken: token.id,
     })

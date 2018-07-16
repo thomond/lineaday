@@ -176,10 +176,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.hero {
-  background-color: #f5f5f57d;
-}
-
 .container {
   max-width: 800px;
 }

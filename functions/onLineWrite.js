@@ -1,7 +1,7 @@
 const functions = require('firebase-functions')
 const admin = require('./init')
 
-const { stripe, hasImageThisMonth } = require('./stripeUtils')
+const { hasImageThisMonth } = require('./stripeUtils')
 
 module.exports = functions.firestore
   .document('users/{userId}/lines/{lineId}')

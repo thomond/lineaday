@@ -1,5 +1,5 @@
 <template>
-  <div class="hero is-medium" id="plans">
+  <div class="hero is-medium is-light" id="plans">
     <div class="hero-body">
       <div class="container">
         <div class="columns">
@@ -8,11 +8,16 @@
               <h4 class="title is-4 fancy has-text-centered">
                 tinythoughts <span class="has-text-primary">premium</span>
               </h4>
-              <div class="subtitle is-6 has-text-centered">
+              <div class="subtitle is-3 has-text-centered">
                 $3/month
-                <div class="is-size-6">Free for the first 2 weeks!</div>
               </div>
               <ul class="fa-ul">
+                <li>
+                  <span class="fa-li">
+                    <i class="fas fa-angle-double-right has-text-primary"></i>
+                  </span>
+                  Free for the first 14 days
+                </li>
                 <li>
                   <span class="fa-li">
                     <i class="fas fa-angle-double-right has-text-primary"></i>
@@ -29,13 +34,19 @@
                   <span class="fa-li">
                     <i class="fas fa-angle-double-right has-text-primary"></i>
                   </span>
-                  Unlimited text entries
+                  Daily text entries
                 </li>
                 <li>
                   <span class="fa-li">
                     <i class="fas fa-angle-double-right has-text-primary"></i>
                   </span>
                   Daily push notifications*
+                </li>
+                <li>
+                  <span class="fa-li">
+                    <i class="fas fa-angle-double-right has-text-primary"></i>
+                  </span>
+                  Cancel any time
                 </li>
               </ul>
             </div>
@@ -45,9 +56,8 @@
               <h4 class="title is-4 fancy has-text-centered">
                 tinythoughts <span class="has-text-grey">free</span>
               </h4>
-              <div class="subtitle is-6 has-text-centered secret">
-                $3/month
-                <div class="is-size-6">Free for the first 2 weeks!</div>
+              <div class="subtitle is-3 has-text-centered">
+                free forever!
               </div>
               <ul class="fa-ul">
                 <li>
@@ -60,7 +70,7 @@
                   <span class="fa-li">
                     <i class="fas fa-angle-double-right has-text-primary"></i>
                   </span>
-                  Unlimited text entries
+                  Daily text entries
                 </li>
                 <li>
                   <span class="fa-li">
@@ -109,10 +119,6 @@ export default {
 
 .disclaimer {
   margin-top: 40px;
-}
-
-.secret {
-  visibility: hidden;
 }
 
 li {
