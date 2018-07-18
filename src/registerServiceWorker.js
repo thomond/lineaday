@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { register } from 'register-service-worker';
-import { Toast } from 'buefy'
+import { Snackbar } from 'buefy'
 
 if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
@@ -14,10 +14,15 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated() {
       console.log('New content is available; please refresh.');
-      Toast.open({
-        duration: 600000,
-        message: 'New content is available; please refresh the page.',
+      Snackbar.open({
+        message: 'New content is available!',
         position: 'is-bottom',
+        actionText: 'Refresh',
+        indefinite: true,
+        type: 'is-primary',
+        onAction: () => {
+          window.location.reload(true)
+        }
       })
     },
     offline() {

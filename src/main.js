@@ -15,7 +15,7 @@ import bugsnagClient from './bugsnag'
 
 Vue.config.productionTip = false
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && process.env.VUE_APP_GOOGLE_ANALYTICS_ID) {
   bugsnagClient.use(bugsnagVue(Vue))
   Vue.use(VueAnalytics, {
     id: process.env.VUE_APP_GOOGLE_ANALYTICS_ID,

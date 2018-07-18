@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "lineaday-11542"
+    "default": "lineaday-11542",
+    "dev": "tinythoughts-dev"
   }
 }
