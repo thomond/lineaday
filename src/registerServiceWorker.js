@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
     cached() {
       console.log('Content has been cached for offline use.');
     },
-    updated() {
+    updated(registration) {
       console.log('New content is available; please refresh.');
       Snackbar.open({
         message: 'New content is available!',
@@ -20,7 +20,8 @@ if (process.env.NODE_ENV === 'production') {
         actionText: 'Refresh',
         indefinite: true,
         type: 'is-primary',
-        onAction: () => {
+        onAction: async () => {
+          await registration.skipWaiting()
           window.location.reload(true)
         }
       })

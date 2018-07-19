@@ -6,6 +6,17 @@ import firebase, { functions, plugins } from '@/firebase'
 import bugsnagClient from '@/bugsnag'
 import { defaultReminderTime, displayError, displayMessage } from '@/util'
 
+const subscriptionInitialState = {
+  brand: '',
+  cancelAtPeriodEnd: false,
+  currentPeriodEnd: null,
+  last4: null,
+  loading: true,
+  periodEnd: null,
+  status: false,
+  trialEnd: null,
+}
+
 const initialState = {
   blockedInBrowser: false,
   encryptionKey: null,
@@ -14,16 +25,7 @@ const initialState = {
     imageCount: 0,
     reminderTime: defaultReminderTime,
   },
-  subscription: {
-    brand: '',
-    cancelAtPeriodEnd: false,
-    currentPeriodEnd: null,
-    last4: null,
-    loading: true,
-    periodEnd: null,
-    status: false,
-    trialEnd: null,
-  },
+  subscription: subscriptionInitialState,
   user: null
 }
 
@@ -248,6 +250,7 @@ const mutations = {
     state.encryptionKey = null
     state.settings = {}
     state.user = null
+    state.subscription = { ...subscriptionInitialState }
   },
   setBlockedInBrowser(state, blockedInBrowser) {
     state.blockedInBrowser = blockedInBrowser
