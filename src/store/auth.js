@@ -25,7 +25,7 @@ const initialState = {
     imageCount: 0,
     reminderTime: defaultReminderTime,
   },
-  subscription: subscriptionInitialState,
+  subscription: { ...subscriptionInitialState },
   user: null
 }
 

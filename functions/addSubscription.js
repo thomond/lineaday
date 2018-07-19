@@ -52,7 +52,7 @@ const addSubscription = functions.https.onCall((data, context) => {
         items: [{
           plan: stripePlan
         }],
-        trial_from_plan: existingUser
+        trial_from_plan: !existingUser
       })
     })
     .then(subscription => {
