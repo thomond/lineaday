@@ -7,6 +7,7 @@ node_modules
 .env.*
 .runtimeconfig.json
 tinythoughts.json
+tinythoughts-dev.json
 appengine/app.yaml
 
 # Log files

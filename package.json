@@ -10,11 +10,13 @@
     "deploy:dev": "vue-cli-service build --mode development && firebase deploy -P dev"
   },
   "dependencies": {
+    "add": "^2.0.6",
     "axios": "^0.18.0",
     "buefy": "^0.6.6",
     "bugsnag-js": "^4.7.2",
     "bugsnag-vue": "^1.0.1",
     "crypto-js": "^3.1.9-1",
+    "expo-server-sdk": "^2.4.0",
     "firebase": "^5.0.4",
     "lodash": "^4.17.10",
     "mobile-detect": "^1.4.2",
@@ -30,7 +32,8 @@
     "vue-stripe-elements-plus": "^0.2.8",
     "vue2-smooth-scroll": "^1.0.3",
     "vuex": "^3.0.1",
-    "webpack-bugsnag-plugins": "^1.2.0"
+    "webpack-bugsnag-plugins": "^1.2.0",
+    "yarn": "^1.7.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.15",
